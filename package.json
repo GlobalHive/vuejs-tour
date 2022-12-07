@@ -1,0 +1,37 @@
+{
+  "name": "vuejs-tour",
+  "version": "0.0.1",
+  "description": "VueJS Tour is a lightweight, simple and customizable tour plugin. It provides a quick and easy way to guide your users through your application.",
+  "author": "Global Hive <support@globalhive.de>",
+  "license": "MIT",
+  "main": "./dist/VueJSTour.umd.js",
+  "module": "./dist/VueJSTour.es.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/globalhive/vuejs-tour.git"
+  },
+  "keywords": [
+    "vue",
+    "vuejs",
+    "vue.js",
+    "vuejs-tour",
+    "vuejs-tour.js",
+    "tour"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/VueJSTour.es.js",
+      "require": "./dist/VueJSTour.umd.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "vue": "^3.2.41"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.2.0",
+    "vite": "^3.2.3"
+  }
+}
