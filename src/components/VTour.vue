@@ -1,5 +1,5 @@
 <template>
-  <div id="vjt-tooltip" role="tooltip" data-hidden>
+  <div id="vjt-tooltip" data-hidden role="tooltip">
     <slot name="content" v-bind="{getCurrentStepContent}">
       <div v-html="getCurrentStepContent"></div>
     </slot>
@@ -56,21 +56,17 @@ defineExpose({
   startTour,
   nextStep,
   prevStep,
-  endTour
+  endTour,
+  resetTour
 });
 
 async function startTour() {
+  if (localStorage.getItem("vjt-tour") === "true") return;
   await setTimeout(() => {
     document.getElementById("vjt-tooltip").removeAttribute("data-hidden");
     popper.value = createPopper(document.querySelector(`${getStep.value.target}`), document.getElementById("vjt-tooltip"), {
       placement: `${getStep.value.placement ? getStep.value.placement : "top"}`,
       modifiers: [
-        {
-          name: "arrow",
-          options: {
-            element: document.getElementById("vjt-arrow")
-          }
-        },
         {
           name: "offset",
           options: {
@@ -104,6 +100,13 @@ function endTour() {
   document.getElementById("vjt-tooltip").setAttribute("data-hidden", "");
   document.querySelector(".vjt-highlight").classList.remove("vjt-highlight");
   popper.value.destroy();
+  localStorage.setItem("vjt-tour", "true");
+}
+
+function resetTour() {
+  currentStep.value = 0;
+  localStorage.removeItem("vjt-tour");
+  startTour();
 }
 
 function highlightTarget(lastStep = null) {
