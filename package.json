@@ -1,6 +1,6 @@
 {
-  "name": "vuejs-tour",
-  "version": "0.0.1",
+  "name": "@globalhive/vuejs-tour",
+  "version": "0.0.4",
   "description": "VueJS Tour is a lightweight, simple and customizable tour plugin. It provides a quick and easy way to guide your users through your application.",
   "author": "Global Hive <support@globalhive.de>",
   "license": "MIT",
@@ -8,7 +8,7 @@
   "module": "./dist/VueJSTour.es.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/globalhive/vuejs-tour.git"
+    "url": "git+https://github.com/globalhive/vuejs-tour.git"
   },
   "keywords": [
     "vue",
@@ -22,16 +22,26 @@
     ".": {
       "import": "./dist/VueJSTour.es.js",
       "require": "./dist/VueJSTour.umd.js"
-    }
+    },
+    "./dist/style.css": "./dist/style.css"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
+    "@popperjs/core": "^2.11.6",
     "vue": "^3.2.41"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.2.0",
+    "sass": "^1.56.1",
     "vite": "^3.2.3"
+  },
+  "bugs": {
+    "url": "https://github.com/globalhive/vuejs-tour/issues"
+  },
+  "homepage": "https://github.com/globalhive/vuejs-tour#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
