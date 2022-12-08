@@ -1,5 +1,5 @@
 <template>
-  <div id="vjt-tooltip" role="tooltip">
+  <div id="vjt-tooltip" role="tooltip" data-hidden>
     <slot name="content" v-bind="{getCurrentStepContent}">
       <div v-html="getCurrentStepContent"></div>
     </slot>

@@ -63,7 +63,8 @@ const steps = [
 </script>
 ```
 
-For a more detailed documentation, checkout the [docs for vuejs-tour](https://github.com/GlobalHive/vuejs-tour/wiki).
+***Documentation is still in progress.***
+
 ## Something Missing?
 
 If you have a feature request or found a bug, [let us know](https://github.com/globalhive/vuejs-tour/issues) by submitting an issue.
