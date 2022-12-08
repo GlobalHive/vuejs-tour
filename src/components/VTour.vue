@@ -81,6 +81,7 @@ async function startTour() {
 
 async function nextStep() {
   if (currentStep.value < maxSteps.value) {
+    getStep.value.onNext ? await getStep.value.onNext() : null;
     currentStep.value++;
     recalculatePopper(currentStep.value - 1);
     return;
@@ -88,12 +89,12 @@ async function nextStep() {
   endTour();
 }
 
-function prevStep() {
+async function prevStep() {
   if (currentStep.value > 0) {
+    getStep.value.onPrev ? await getStep.value.onPrev() : null;
     currentStep.value--;
     recalculatePopper(currentStep.value + 1);
   }
-
 }
 
 function endTour() {
@@ -139,6 +140,7 @@ $vjt__tooltip_font_size: 13px;
 $vjt__tooltip_arrow_size: 8px;
 $vjt__tooltip_background: #333;
 $vjt__tooltip_border_radius: 4px;
+$vjt__tooltip_max_width: 300px;
 
 $vjt__highlight_margin: 4px;
 $vjt__highlight_padding: 4px;
@@ -166,6 +168,7 @@ $vjt__action_button_background: transparent;
   border-radius: $vjt__tooltip_border_radius;
   font-size: $vjt__tooltip_font_size;
   z-index: $vjt__tooltip_z_index;
+  max-width: $vjt__tooltip_max_width;
 }
 
 #vjt-tooltip[data-popper-placement^='top'] {
