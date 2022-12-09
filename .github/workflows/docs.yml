@@ -17,18 +17,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
-        with:
-          run_install: true
-
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.5.1
         with:
-          cache: pnpm
+          cache: package-lock.json
 
+      - name: Insall npm
+        run: npm install
+        
       - name: Build VuePress site
-        run: pnpm docs:build
+        run: npm run docs:build
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.4.1
