@@ -5,7 +5,7 @@
   "author": "Global Hive <support@globalhive.de>",
   "private": false,
   "license": "MIT",
-  "homepage": "https://github.com/globalhive/vuejs-tour#readme",
+  "homepage": "https://globalhive.github.io/vuejs-tour/",
   "type": "module",
   "main": "dist/vuejs-tour.umd.cjs",
   "module": "dist/vuejs-tour.js",
