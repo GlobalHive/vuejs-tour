@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.0...v1.0.1) (2022-12-09)
+
+
+### Miscellaneous Chores
+
+* release 1.0.1 ([6bafa91](https://github.com/GlobalHive/vuejs-tour/commit/6bafa912848ba5a53751c028e8752242a093cad7))
+
 ## 1.0.0 (2022-12-09)
 
 
