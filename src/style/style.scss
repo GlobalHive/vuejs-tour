@@ -1,0 +1,89 @@
+@use "sass:math";
+@import "variables";
+
+[data-hidden] {
+  display: none;
+}
+
+#vjt-tooltip {
+  background-color: $vjt__tooltip_background;
+  color: $vjt__tooltip_color;
+  padding: 0.5rem;
+  border-radius: $vjt__tooltip_border_radius;
+  font-size: $vjt__tooltip_font_size;
+  z-index: $vjt__tooltip_z_index;
+  max-width: $vjt__tooltip_max_width;
+}
+
+#vjt-tooltip[data-popper-placement^='top'] {
+  #vjt-arrow {
+    bottom: math.div(-$vjt__tooltip_arrow_size, 2);
+  }
+}
+
+#vjt-tooltip[data-popper-placement^='bottom'] {
+  #vjt-arrow {
+    top: math.div(-$vjt__tooltip_arrow_size, 2);
+  }
+}
+
+#vjt-tooltip[data-popper-placement^='left'] {
+  #vjt-arrow {
+    right: math.div(-$vjt__tooltip_arrow_size, 2);
+  }
+}
+
+#vjt-tooltip[data-popper-placement^='right'] {
+  #vjt-arrow {
+    left: math.div(-$vjt__tooltip_arrow_size, 2);
+  }
+}
+
+#vjt-arrow {
+  width: $vjt__tooltip_arrow_size;
+  height: $vjt__tooltip_arrow_size;
+  position: absolute;
+  z-index: -1;
+
+  &::before {
+    content: "";
+    width: $vjt__tooltip_arrow_size;
+    height: $vjt__tooltip_arrow_size;
+    background-color: $vjt__tooltip_background;
+    transform: rotate(45deg);
+    position: absolute;
+  }
+}
+
+.vjt-highlight {
+  border: $vjt__highlight_border;
+  border-radius: $vjt__highlight_border_radius;
+  padding: $vjt__highlight_padding;
+  margin: $vjt__highlight_margin;
+  box-shadow: 0 0 10px $vjt__highlight_color;
+}
+
+.vjt-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  gap: 0.5rem;
+
+  button {
+    width: 100%;
+    padding: 0.25rem 1rem;
+    border: $vjt__action_button_border;
+    border-radius: $vjt__action_button_border_radius;
+    background-color: $vjt__action_button_background;
+    color: $vjt__action_button_color;
+    font-size: $vjt__action_button_font_size;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $vjt__action_button_background_hover;
+      color: $vjt__action_button_color_hover;
+    }
+  }
+}

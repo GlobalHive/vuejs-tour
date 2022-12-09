@@ -3,45 +3,63 @@
   "version": "0.1.2",
   "description": "VueJS Tour is a lightweight, simple and customizable tour plugin. It provides a quick and easy way to guide your users through your application.",
   "author": "Global Hive <support@globalhive.de>",
+  "private": false,
   "license": "MIT",
-  "main": "./dist/VueJSTour.umd.js",
-  "module": "./dist/VueJSTour.es.js",
+  "homepage": "https://github.com/globalhive/vuejs-tour#readme",
+  "type": "module",
+  "main": "dist/vuejs-tour.umd.cjs",
+  "module": "dist/vuejs-tour.js",
+  "style": "dist/style.css",
+  "sass": "src/style/style.scss",
+  "files": [
+    "dist/*",
+    "src/**/*"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/vuejs-tour.js",
+      "require": "./dist/vuejs-tour.umd.cjs"
+    },
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    },
+    "./src/style/style.scss": {
+      "import": "./src/style/style.scss",
+      "require": "./src/style/style.scss"
+    }
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.2.0",
+    "sass": "^1.56.1",
+    "vite": "^3.2.3",
+    "vuepress": "^2.0.0-beta.54"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.6",
+    "vue": "^3.2.41"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/globalhive/vuejs-tour.git"
+    "url": "https://github.com/globalhive/vuejs-tour.git"
+  },
+  "bugs": {
+    "url": "https://github.com/globalhive/vuejs-tour/issues"
   },
   "keywords": [
     "vue",
     "vuejs",
     "vue.js",
     "vuejs-tour",
-    "vuejs-tour.js",
-    "tour"
-  ],
-  "exports": {
-    ".": {
-      "import": "./dist/VueJSTour.es.js",
-      "require": "./dist/VueJSTour.umd.js"
-    },
-    "./dist/style.css": "./dist/style.css"
-  },
-  "files": [
-    "dist"
-  ],
-  "dependencies": {
-    "@popperjs/core": "^2.11.6",
-    "vue": "^3.2.41"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^3.2.0",
-    "sass": "^1.56.1",
-    "vite": "^3.2.3"
-  },
-  "bugs": {
-    "url": "https://github.com/globalhive/vuejs-tour/issues"
-  },
-  "homepage": "https://github.com/globalhive/vuejs-tour#readme",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+    "tour",
+    "vuetour",
+    "vue-tour",
+    "vue3-tour",
+    "vue3tour"
+  ]
 }
