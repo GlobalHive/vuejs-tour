@@ -6,30 +6,18 @@ on:
 
 jobs:
   build:
-    name: Build Docs
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3.1.0
-        with:
-          fetch-depth: 0
-          
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3.5.1
-
-      - name: Install npm
-        run: npm ci
-        
-      - name: Build VuePress site
-        run: npm run docs:build
-  deploy:
-    name: Deploy Docs
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm run docs:build
+      
+  deploy-docs:
     needs: build
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.4.1
+      - uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           folder: docs/.vuepress/dist
         env:
