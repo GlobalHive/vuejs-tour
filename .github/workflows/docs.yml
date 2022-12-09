@@ -19,8 +19,6 @@ jobs:
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.5.1
-        with:
-          cache: package-lock.json
 
       - name: Insall npm
         run: npm install
