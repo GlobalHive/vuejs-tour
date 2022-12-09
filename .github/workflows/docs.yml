@@ -25,7 +25,7 @@ jobs:
   deploy:
     name: Deploy Docs
     needs: build
-    runs-on: ubuntu-laster
+    runs-on: ubuntu-latest
     
     steps:
       - name: Deploy to GitHub Pages
