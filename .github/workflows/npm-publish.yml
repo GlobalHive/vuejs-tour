@@ -15,6 +15,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
       - run: npm ci
+      - run: vite build
 
   publish-npm:
     needs: build
