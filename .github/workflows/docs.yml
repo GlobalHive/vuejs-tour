@@ -1,4 +1,4 @@
-name: Create Docs
+name: create-docs
 on:
   release:
     types: [created]
