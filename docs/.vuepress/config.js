@@ -10,7 +10,17 @@ export default defineUserConfig({
     vuePluginOptions: {},
   }),
   theme: defaultTheme({
+    logo: 'https://vuejs.org/images/logo.png',
     repo: 'globalhive/vuejs-tour',
+    docsRepo: 'globalhive/vuejs-tour',
+    docsDir: 'docs',
+    docsBranch: 'master',
+    navbar: [
+      {
+        text: 'API',
+        link: '/guide/props',
+      }
+    ],
     sidebar: [
       {
         text: 'Introduction',
