@@ -128,7 +128,7 @@ function recalculatePopper(lastStep) {
     duration: 500,
     offset: -100
   });
-  highlightTarget(lastStep);
+  props.highlight ? highlightTarget(lastStep) : null;
 }
 
 onMounted(() => {
