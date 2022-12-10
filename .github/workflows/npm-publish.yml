@@ -1,9 +1,8 @@
 on:
-  workflow_run:
-    workflows: ["release-please"]
-    types:
-      - completed
-
+  push:
+    branches: ['master']
+  workflow_dispatch:
+    
 name: npm-publish
 jobs:
   build:
@@ -15,6 +14,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run vite:build
+      - run: sass src/style/style.scss dist/style.css --style compressed
+      - uses: gha-utilities/sass-build@v0
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
