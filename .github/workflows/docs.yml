@@ -1,8 +1,10 @@
-name: create-docs
 on:
-  release:
-    types: [created]
+  workflow_run:
+    workflows: ["release-please"]
+    types:
+      - completed
 
+name: create-docs
 jobs:
   build:
     runs-on: ubuntu-latest
