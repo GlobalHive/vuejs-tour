@@ -15,7 +15,6 @@ jobs:
       - run: npm ci
       - run: npm run vite:build
       - run: sass src/style/style.scss dist/style.css --style compressed
-      - uses: gha-utilities/sass-build@v0
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
