@@ -14,7 +14,10 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run vite:build
-      - run: sass src/style/style.scss dist/style.css --style compressed
+      - uses: gha-utilities/sass-build@v0.4.10
+        with:
+          source: src/style/styles.scss
+          path: dist/style.css
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
