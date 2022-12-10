@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.1...v1.0.2) (2022-12-10)
+
+
+### Bug Fixes
+
+* fixed build action ([82c5f1f](https://github.com/GlobalHive/vuejs-tour/commit/82c5f1f5206fbcaca7642d844ed965accf59f8ef))
+
 ## [1.0.1](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.0...v1.0.1) (2022-12-09)
 
 
