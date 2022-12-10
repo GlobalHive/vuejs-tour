@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.3...v1.0.4) (2022-12-10)
+
+
+### Bug Fixes
+
+* **workflows:** workflows not running automatically ([a02959f](https://github.com/GlobalHive/vuejs-tour/commit/a02959fbce96d5f03f277fc07358c5f4405b5ed4))
+
 ## [1.0.3](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.2...v1.0.3) (2022-12-10)
 
 
