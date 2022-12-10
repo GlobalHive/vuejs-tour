@@ -10,7 +10,7 @@
 > VueJS Tour is a lightweight, simple and customizable tour plugin.
 > It provides a quick and easy way to guide your users through your application.
 
-<img src="./vuejs-tour.gif" width="100%"/>
+<a href="https://globalhive.github.io/vuejs-tour/"><img src="./vuejs-tour.gif" width="100%"/></a>
 
 ## Table of Contents
 
