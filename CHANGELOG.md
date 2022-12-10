@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.5](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.4...v1.0.5) (2022-12-10)
+
+
+### Bug Fixes
+
+* **style:** variables not set to default ([fad38fe](https://github.com/GlobalHive/vuejs-tour/commit/fad38fe840953b52dbd8038c7000781ea64191b6))
+* **workflows:** workflows not running automatically, temporarely set to manual ([36f826f](https://github.com/GlobalHive/vuejs-tour/commit/36f826f5bfd350155c2a55341d97e0be6edee848))
+
 ## [1.0.4](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.3...v1.0.4) (2022-12-10)
 
 
