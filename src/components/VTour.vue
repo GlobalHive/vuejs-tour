@@ -115,10 +115,12 @@ function resetTour() {
 }
 
 function highlightTarget(lastStep = null) {
-  document.querySelector(`${getStep.value.target}`).classList.add("vjt-highlight");
-  if (lastStep != null) {
-    document.querySelector(`${props.steps[lastStep].target}`).classList.remove("vjt-highlight");
-  }
+  let _nextStep = document.querySelector(`${getStep.value?.target}`);
+  let _lastStep = document.querySelector(`${props.steps[lastStep]?.target}`);
+  if(_nextStep === _lastStep) return;
+
+  _nextStep.classList.add("vjt-highlight");
+  if (_lastStep != null) _lastStep.classList.remove("vjt-highlight");
 }
 
 function recalculatePopper(lastStep) {
