@@ -17,6 +17,7 @@
 <script setup>
 import { createPopper } from "@popperjs/core";
 import { computed, onMounted, ref } from "vue";
+import jump from "jump.js";
 
 const popper = ref(null);
 
@@ -123,6 +124,10 @@ function recalculatePopper(lastStep) {
   });
   popper.value.state.elements.reference = document.querySelector(`${getStep.value.target}`);
   popper.value.update();
+  jump(document.querySelector(`${getStep.value.target}`), {
+    duration: 500,
+    offset: -100
+  });
   highlightTarget(lastStep);
 }
 
