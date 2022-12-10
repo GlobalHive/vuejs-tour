@@ -80,6 +80,7 @@
     font-size: $vjt__action_button_font_size;
     font-weight: 500;
     transition: all 0.2s ease-in-out;
+    cursor: pointer;
 
     &:hover {
       background-color: $vjt__action_button_background_hover;

@@ -17,6 +17,7 @@
 <script setup>
 import { createPopper } from "@popperjs/core";
 import { computed, onMounted, ref } from "vue";
+import jump from "jump.js";
 
 const popper = ref(null);
 
@@ -102,6 +103,9 @@ function endTour() {
   document.querySelector(".vjt-highlight").classList.remove("vjt-highlight");
   popper.value.destroy();
   localStorage.setItem("vjt-tour", "true");
+  jump(document.body, {
+    duration: 500,
+  });
 }
 
 function resetTour() {
@@ -111,10 +115,12 @@ function resetTour() {
 }
 
 function highlightTarget(lastStep = null) {
-  document.querySelector(`${getStep.value.target}`).classList.add("vjt-highlight");
-  if (lastStep != null) {
-    document.querySelector(`${props.steps[lastStep].target}`).classList.remove("vjt-highlight");
-  }
+  let _nextStep = document.querySelector(`${getStep.value?.target}`);
+  let _lastStep = document.querySelector(`${props.steps[lastStep]?.target}`);
+  if(_nextStep === _lastStep) return;
+
+  _nextStep.classList.add("vjt-highlight");
+  if (_lastStep != null) _lastStep.classList.remove("vjt-highlight");
 }
 
 function recalculatePopper(lastStep) {
@@ -123,7 +129,11 @@ function recalculatePopper(lastStep) {
   });
   popper.value.state.elements.reference = document.querySelector(`${getStep.value.target}`);
   popper.value.update();
-  highlightTarget(lastStep);
+  jump(document.querySelector(`${getStep.value.target}`), {
+    duration: 500,
+    offset: -100
+  });
+  props.highlight ? highlightTarget(lastStep) : null;
 }
 
 onMounted(() => {
