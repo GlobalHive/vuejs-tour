@@ -1,8 +1,7 @@
 on:
-  push:
+  merge_group:
     branches: ['master']
-  workflow_dispatch:
-    
+
 name: npm-publish
 jobs:
   build:

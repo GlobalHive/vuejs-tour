@@ -1,8 +1,5 @@
 on:
-  workflow_run:
-    workflows: ["release-please"]
-    types:
-      - completed
+  workflow_dispatch:
 
 name: create-docs
 jobs:

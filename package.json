@@ -30,7 +30,7 @@
     }
   },
   "scripts": {
-    "vite:build": "vite build & sass src/style/style.scss dist/style.css --style compressed",
+    "vite:build": "vite build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "test": "echo \"Error: no test specified\" && exit 1"
