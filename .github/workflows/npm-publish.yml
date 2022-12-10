@@ -16,7 +16,7 @@ jobs:
       - run: npm run vite:build
       - uses: gha-utilities/sass-build@v0.4.10
         with:
-          source: src/style/styles.scss
+          source: src/style/style.scss
           destination: dist/style.css
       - run: npm publish
         env:
