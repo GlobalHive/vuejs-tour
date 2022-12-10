@@ -17,7 +17,7 @@ jobs:
       - uses: gha-utilities/sass-build@v0.4.10
         with:
           source: src/style/styles.scss
-          path: dist/style.css
+          destination: dist/style.css
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
