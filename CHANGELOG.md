@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.5...v1.1.0) (2022-12-10)
+
+
+### Features
+
+* **docs:** Included tour example ([7796e69](https://github.com/GlobalHive/vuejs-tour/commit/7796e6968aa19bb02b07fd50741d5f34a4f23ebd))
+* **jumpjs:** Added jump.js for smooth scrolling ([8001f5c](https://github.com/GlobalHive/vuejs-tour/commit/8001f5c59fd0d4969fa41808007bf9467cd6e986))
+
+
+### Bug Fixes
+
+* **component:** Button cursor not pointer ([3aea1f3](https://github.com/GlobalHive/vuejs-tour/commit/3aea1f3e5eada4ec07cfe56ed19d45e583d90aa0))
+* **component:** Page not scrolling to top after tour ([f47ad5b](https://github.com/GlobalHive/vuejs-tour/commit/f47ad5b84265c9cfa9ee81af3a2d8a6d958779fd))
+* **component:** Removing highlight ([d35877b](https://github.com/GlobalHive/vuejs-tour/commit/d35877bb00703c45566ad85113791643086a1883))
+* **component:** Target highlighted even without highlight prop ([bcfd70a](https://github.com/GlobalHive/vuejs-tour/commit/bcfd70a46d9e9a10f43ce7be279b81cd88d686aa))
+
 ## [1.0.5](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.4...v1.0.5) (2022-12-10)
 
 
