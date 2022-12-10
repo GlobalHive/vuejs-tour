@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.2...v1.0.3) (2022-12-10)
+
+
+### Bug Fixes
+
+* **build:** style.css not included by vite ([6bf83bb](https://github.com/GlobalHive/vuejs-tour/commit/6bf83bbd790c800117fada2ea20f45ec6345524a))
+* **workflows:** workflows not running automatically ([9041f03](https://github.com/GlobalHive/vuejs-tour/commit/9041f0355b23faea469123cb52cd54c217bb6a66))
+
 ## [1.0.2](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.1...v1.0.2) (2022-12-10)
 
 
