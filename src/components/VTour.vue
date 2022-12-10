@@ -103,6 +103,9 @@ function endTour() {
   document.querySelector(".vjt-highlight").classList.remove("vjt-highlight");
   popper.value.destroy();
   localStorage.setItem("vjt-tour", "true");
+  jump(document.body, {
+    duration: 500,
+  });
 }
 
 function resetTour() {
