@@ -85,4 +85,5 @@ onMounted(() => {
 </script>
 ```
 
-The `target` property of the step object can be any valid [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors).
+The `target` property of the step object can be any valid [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors).<br>
+If the target is not found, the step will be skipped.

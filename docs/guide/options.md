@@ -8,7 +8,8 @@ VueJS Tour is written for Vue 3 composition api. There are no plans to support V
 
 ### `target`
 
-The `target` property can be any valid [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors).
+The `target` property can be any valid [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors).<br>
+If the target is not found, the step will be skipped.
 
 - Type: `string`
 - Default: `undefined`
