@@ -159,3 +159,24 @@ const steps = [
 ::: tip
 The new step placement will be calculated after the `Promise` is resolved.
 :::
+
+### `onShow`
+
+The `onShow` property is used to execute a function after the step is shown.<br>
+
+```vue{9-11}
+<script setup>
+const steps = [
+  {
+    target: '#target',
+    content: 'This is the content of the step',
+    placement: 'top',
+    onNext: () => {...},
+    onPrev: () => {...},
+    onShow: () => {
+      console.log('Step is shown');
+    },
+  }
+];
+</script>
+```

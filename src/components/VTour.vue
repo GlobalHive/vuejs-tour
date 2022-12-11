@@ -122,8 +122,7 @@ function highlightTarget(lastStep = null) {
   _nextStep.classList.add("vjt-highlight");
   if (_lastStep != null) _lastStep.classList.remove("vjt-highlight");
 }
-
-function recalculatePopper(lastStep) {
+async function recalculatePopper(lastStep) {
   popper.value.setOptions({
     placement: `${getStep.value.placement ? getStep.value.placement : "top"}`
   });
@@ -134,6 +133,7 @@ function recalculatePopper(lastStep) {
     offset: -100
   });
   props.highlight ? highlightTarget(lastStep) : null;
+  getStep.value.onShow ? await getStep.value.onShow() : null;
 }
 
 onMounted(() => {
