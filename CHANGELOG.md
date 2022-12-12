@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.2.0...v1.3.0) (2022-12-12)
+
+
+### Features
+
+* **callbacks:** Added onTourStart and onTourEnd callback ([008f798](https://github.com/GlobalHive/vuejs-tour/commit/008f7985608ba1d9aaa8853b8b7d147011a02902))
+
 ## [1.2.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.1.0...v1.2.0) (2022-12-12)
 
 
