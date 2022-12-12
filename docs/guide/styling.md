@@ -12,28 +12,27 @@ VueJS Tour uses `scss` for styling. You can override the default styles by using
 @import "@globalhive/vuejs-tour/src/style/style.scss";
 ```
 
-| Variable                               | Default             |
-|----------------------------------------|---------------------|
-| `$vjt__tooltip_color`                  | #fff                |
-| `$vjt__tooltip_z_index`                | 9999                |
-| `$vjt__tooltip_font_size`              | 13px                |
-| `$vjt__tooltip_arrow_size`             | 8px                 |
-| `$vjt__tooltip_background`             | #333                |
-| `$vjt__tooltip_border_radius`          | 4px                 |
-| `$vjt__tooltip_max_width`              | 300px               |
-| `$vjt__highlight_margin`               | 4px                 |
-| `$vjt__highlight_padding`              | 4px                 |
-| `$vjt__highlight_color`                | #0EA5E9FF           |
-| `$vjt__highlight_border_radius`        | 4px                 |
-| `$vjt__highlight_border`               | 1px solid #0EA5E9FF |
-| `$vjt__action_button_color`            | #fff                |
-| `$vjt__action_button_font_size`        | 13px                |
-| `$vjt__action_button_color_hover`      | #fff                |
-| `$vjt__action_button_padding`          | 4px 16px            |
-| `$vjt__action_button_border_radius`    | 4px                 |
-| `$vjt__action_button_background_hover` | #000                |
-| `$vjt__action_button_border`           | 1px solid #fff      |
-| `$vjt__action_button_background`       | transparent         |
+| Variable                               | Default                         |
+|----------------------------------------|---------------------------------|
+| `$vjt__tooltip_color`                  | #fff                            |
+| `$vjt__tooltip_z_index`                | 9999                            |
+| `$vjt__tooltip_font_size`              | 13px                            |
+| `$vjt__tooltip_arrow_size`             | 8px                             |
+| `$vjt__tooltip_background`             | #333                            |
+| `$vjt__tooltip_border_radius`          | 4px                             |
+| `$vjt__tooltip_max_width`              | 300px                           |
+| `$vjt__highlight_offset`               | 4px                             |
+| `$vjt__highlight_color`                | #0EA5E9FF                       |
+| `$vjt__highlight_outline_radius`       | 4px                             |
+| `$vjt__highlight_outline`              | 1px solid $vjt__highlight_color |
+| `$vjt__action_button_color`            | #fff                            |
+| `$vjt__action_button_font_size`        | 13px                            |
+| `$vjt__action_button_color_hover`      | #fff                            |
+| `$vjt__action_button_padding`          | 4px 16px                        |
+| `$vjt__action_button_border_radius`    | 4px                             |
+| `$vjt__action_button_background_hover` | #000                            |
+| `$vjt__action_button_border`           | 1px solid #fff                  |
+| `$vjt__action_button_background`       | transparent                     |
 
 ::: tip
 Override the variables before importing the scss file.<br>
@@ -73,11 +72,10 @@ $vjt__tooltip_background: #333;
 $vjt__tooltip_border_radius: 4px;
 $vjt__tooltip_max_width: 300px;
 
-$vjt__highlight_margin: 4px;
-$vjt__highlight_padding: 4px;
-$vjt__highlight_color: #0EA5E9FF;
-$vjt__highlight_border_radius: 4px;
-$vjt__highlight_border: 1px solid #0EA5E9FF;
+$vjt__highlight_offset: 4px !default;
+$vjt__highlight_color: #0EA5E9FF !default;
+$vjt__highlight_outline_radius: 4px !default;
+$vjt__highlight_outline: 1px solid $vjt__highlight_color !default;
 
 $vjt__action_button_color: #fff;
 $vjt__action_button_font_size: 13px;
@@ -143,11 +141,9 @@ $vjt__action_button_background: transparent;
 }
 
 .vjt-highlight {
-  border: $vjt__highlight_border;
-  border-radius: $vjt__highlight_border_radius;
-  padding: $vjt__highlight_padding;
-  margin: $vjt__highlight_margin;
-  box-shadow: 0 0 10px $vjt__highlight_color;
+  outline: $vjt__highlight_outline;
+  outline-offset: $vjt__highlight_offset;
+  border-radius: $vjt__highlight_outline_radius;
 }
 
 .vjt-actions {

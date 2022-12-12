@@ -56,11 +56,9 @@
 }
 
 .vjt-highlight {
-  border: $vjt__highlight_border;
-  border-radius: $vjt__highlight_border_radius;
-  padding: $vjt__highlight_padding;
-  margin: $vjt__highlight_margin;
-  box-shadow: 0 0 10px $vjt__highlight_color;
+  outline: $vjt__highlight_outline;
+  outline-offset: $vjt__highlight_offset;
+  border-radius: $vjt__highlight_outline_radius;
 }
 
 .vjt-actions {

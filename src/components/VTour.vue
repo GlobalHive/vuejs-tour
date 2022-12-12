@@ -1,12 +1,12 @@
 <template>
   <div id="vjt-tooltip" data-hidden role="tooltip">
-    <slot name="content" v-bind="{getCurrentStepContent}">
-      <div v-html="getCurrentStepContent"></div>
+    <slot name="content" v-bind="{ step }">
+      <div v-html="step.getCurrentStep.content"></div>
     </slot>
     <slot name="actions" v-bind="{ endTour, nextStep, prevStep }">
       <div class="vjt-actions">
         <button type="button" @click.prevent="endTour">Skip</button>
-        <button v-if="currentStep > 0" type="button" @click.prevent="prevStep">Back</button>
+        <button v-if="step.currentStep > 0" type="button" @click.prevent="prevStep">Back</button>
         <button type="button" v-text="getNextText" @click.prevent="nextStep"></button>
       </div>
     </slot>
@@ -16,23 +16,25 @@
 
 <script setup>
 import { createPopper } from "@popperjs/core";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import jump from "jump.js";
 
 const popper = ref(null);
-
-const currentStep = ref(0);
+const step = reactive({
+  currentStep: 0,
+  lastStep: null,
+  getCurrentStep: computed(() => {
+    return props.steps[step.currentStep];
+  }),
+  getLastStep: computed(() => {
+    return props.steps[step.lastStep];
+  }),
+});
 const maxSteps = computed(() => {
   return props.steps.length - 1;
 });
-const getStep = computed(() => {
-  return props.steps[currentStep.value];
-});
 const getNextText = computed(() => {
-  return currentStep.value === maxSteps.value ? "Finish" : "Next";
-});
-const getCurrentStepContent = computed(() => {
-  return getStep.value.content;
+  return step.currentStep === maxSteps.value ? "Finish" : "Next";
 });
 
 const props = defineProps({
@@ -65,8 +67,8 @@ async function startTour() {
   if (localStorage.getItem("vjt-tour") === "true") return;
   await setTimeout(() => {
     document.getElementById("vjt-tooltip").removeAttribute("data-hidden");
-    popper.value = createPopper(document.querySelector(`${getStep.value.target}`), document.getElementById("vjt-tooltip"), {
-      placement: `${getStep.value.placement ? getStep.value.placement : "top"}`,
+    popper.value = createPopper(document.querySelector(`${step.getCurrentStep.target}`), document.getElementById("vjt-tooltip"), {
+      placement: `${step.getCurrentStep.placement ? step.getCurrentStep.placement : "top"}`,
       modifiers: [
         {
           name: "offset",
@@ -80,21 +82,36 @@ async function startTour() {
   }, props.startDelay);
 }
 
+function highlightTarget() {
+  let _currentStep = document.querySelector(`${step.getCurrentStep.target}`);
+  let _lastStep = document.querySelector(`${step.getLastStep.target}`);
+  _currentStep.classList.add("vjt-highlight");
+  if (_lastStep != null && _currentStep !== _lastStep) _lastStep.classList.remove("vjt-highlight");
+}
+
 async function nextStep() {
-  if (currentStep.value < maxSteps.value) {
-    getStep.value.onNext ? await getStep.value.onNext() : null;
-    currentStep.value++;
-    recalculatePopper(currentStep.value - 1);
+  if (step.currentStep < maxSteps.value) {
+    step.getCurrentStep.onNext ? await step.getCurrentStep.onNext() : null;
+    step.lastStep = step.currentStep;
+    step.currentStep++;
+    while(document.querySelector(`${step.getCurrentStep.target}`) === null) {
+      step.currentStep++;
+    }
+    recalculatePopper();
     return;
   }
   endTour();
 }
 
 async function prevStep() {
-  if (currentStep.value > 0) {
-    getStep.value.onPrev ? await getStep.value.onPrev() : null;
-    currentStep.value--;
-    recalculatePopper(currentStep.value + 1);
+  if (step.currentStep > 0) {
+    step.getCurrentStep.onPrev ? await step.getCurrentStep.onPrev() : null;
+    step.lastStep = step.currentStep;
+    step.currentStep--;
+    while(document.querySelector(`${step.getCurrentStep.target}`) === null) {
+      step.currentStep--;
+    }
+    recalculatePopper();
   }
 }
 
@@ -109,31 +126,24 @@ function endTour() {
 }
 
 function resetTour() {
-  currentStep.value = 0;
+  step.currentStep = 0;
+  step.lastStep = 0;
   localStorage.removeItem("vjt-tour");
   startTour();
 }
 
-function highlightTarget(lastStep = null) {
-  let _nextStep = document.querySelector(`${getStep.value?.target}`);
-  let _lastStep = document.querySelector(`${props.steps[lastStep]?.target}`);
-  if(_nextStep === _lastStep) return;
-
-  _nextStep.classList.add("vjt-highlight");
-  if (_lastStep != null) _lastStep.classList.remove("vjt-highlight");
-}
-
-function recalculatePopper(lastStep) {
+async function recalculatePopper() {
   popper.value.setOptions({
-    placement: `${getStep.value.placement ? getStep.value.placement : "top"}`
+    placement: `${step.getCurrentStep.placement ? step.getCurrentStep.placement : "top"}`
   });
-  popper.value.state.elements.reference = document.querySelector(`${getStep.value.target}`);
+  popper.value.state.elements.reference = document.querySelector(`${step.getCurrentStep.target}`);
   popper.value.update();
-  jump(document.querySelector(`${getStep.value.target}`), {
+  jump(document.querySelector(`${step.getCurrentStep.target}`), {
     duration: 500,
     offset: -100
   });
-  props.highlight ? highlightTarget(lastStep) : null;
+  props.highlight ? highlightTarget() : null;
+  step.getCurrentStep.onShow ? await step.getCurrentStep.onShow() : null;
 }
 
 onMounted(() => {
