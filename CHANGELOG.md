@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.1.0...v1.2.0) (2022-12-12)
+
+
+### Features
+
+* **options:** Added onShow() option - resolves [#10](https://github.com/GlobalHive/vuejs-tour/issues/10) ([b2d88e8](https://github.com/GlobalHive/vuejs-tour/commit/b2d88e8ebe0dfad1fb7ec208b64dc6f107af1e61))
+
+
+### Bug Fixes
+
+* **highlight:** Changed highlight border to outline to not take more space ([87b1cdf](https://github.com/GlobalHive/vuejs-tour/commit/87b1cdf07d9dad9d3a30fbb4cfd1ee3685f35648))
+* **steps:** Fixed steps breaking when targets aren't found - fixes [#9](https://github.com/GlobalHive/vuejs-tour/issues/9) ([9c3d9f8](https://github.com/GlobalHive/vuejs-tour/commit/9c3d9f876ece96890addc9d0c219ebc1b4cc1b8b))
+
 ## [1.1.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.0.5...v1.1.0) (2022-12-10)
 
 
