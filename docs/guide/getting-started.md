@@ -26,7 +26,7 @@ npm install @globalhive/vuejs-tour
 import { createApp } from "vue";
 import App from "./App.vue";
 import VueJsTour from '@globalhive/vuejs-tour';
-import '@globalhive/vuejs-tour/dist/vuejs-tour.css';
+import '@globalhive/vuejs-tour/dist/style.css';
 
 const app = createApp(App)
   .use(VueJsTour)
