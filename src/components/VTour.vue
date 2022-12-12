@@ -55,6 +55,7 @@ const props = defineProps({
     default: false
   }
 });
+const emit = defineEmits(["onTourStart", "onTourEnd"]);
 defineExpose({
   startTour,
   nextStep,
@@ -79,16 +80,15 @@ async function startTour() {
       ]
     });
     props.highlight ? highlightTarget() : null;
+    emit("onTourStart");
   }, props.startDelay);
 }
-
 function highlightTarget() {
   let _currentStep = document.querySelector(`${step.getCurrentStep.target}`);
   let _lastStep = document.querySelector(`${step.getLastStep.target}`);
   _currentStep.classList.add("vjt-highlight");
   if (_lastStep != null && _currentStep !== _lastStep) _lastStep.classList.remove("vjt-highlight");
 }
-
 async function nextStep() {
   if (step.currentStep < maxSteps.value) {
     step.getCurrentStep.onNext ? await step.getCurrentStep.onNext() : null;
@@ -102,7 +102,6 @@ async function nextStep() {
   }
   endTour();
 }
-
 async function prevStep() {
   if (step.currentStep > 0) {
     step.getCurrentStep.onPrev ? await step.getCurrentStep.onPrev() : null;
@@ -114,7 +113,6 @@ async function prevStep() {
     recalculatePopper();
   }
 }
-
 function endTour() {
   document.getElementById("vjt-tooltip").setAttribute("data-hidden", "");
   document.querySelector(".vjt-highlight").classList.remove("vjt-highlight");
@@ -123,15 +121,14 @@ function endTour() {
   jump(document.body, {
     duration: 500,
   });
+  emit("onTourEnd");
 }
-
 function resetTour() {
   step.currentStep = 0;
   step.lastStep = 0;
   localStorage.removeItem("vjt-tour");
   startTour();
 }
-
 async function recalculatePopper() {
   popper.value.setOptions({
     placement: `${step.getCurrentStep.placement ? step.getCurrentStep.placement : "top"}`
