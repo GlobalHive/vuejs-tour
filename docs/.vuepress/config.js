@@ -35,7 +35,7 @@ export default defineUserConfig({
       {
         text: 'VueJS Tour API',
         collapsible: true,
-        children: [ 'props', 'options', 'methods', 'styling' ],
+        children: [ 'props', 'options', 'methods', 'callbacks', 'styling' ],
       },
       ],
   }),
