@@ -30,7 +30,4 @@ const steps = [...];
 <br>
 <br>
 
-```js
-console.log('TODO: Add highlight example image here')
-```
-![Placeholder for the highlight example. Source: codemyui.com](https://codemyui.com/wp-content/uploads/2017/11/Strike-Off-ToDo-List-Animation.gif "TODO Gif")
+![Highlight example gif](https://raw.githubusercontent.com/GlobalHive/vuejs-tour/master/highlight.gif)
