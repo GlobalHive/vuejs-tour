@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.0...v1.3.1) (2022-12-12)
+
+
+### Bug Fixes
+
+* **docs:** Fixed wrong css import ([fa5d356](https://github.com/GlobalHive/vuejs-tour/commit/fa5d356115f5adf8781f25be396c6b7b96db9a60))
+
 ## [1.3.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.2.0...v1.3.0) (2022-12-12)
 
 
