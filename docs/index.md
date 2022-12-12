@@ -17,11 +17,13 @@ features:
   details: VueJS Tour uses sass/scss to make it easy to customize the look of your tour.
 ---
 
-<VTour :steps="steps" ref="tour" highlight/>
+<VTour :steps="steps" ref="tour" highlight @onTourEnd='onTourEnd'/>
 
 <script setup>
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 const tour = ref(null);
+const router = useRouter();
 const steps = [
     {
         target: ".hero img",
@@ -49,6 +51,9 @@ const steps = [
 onMounted(() => {
         tour.value.resetTour();
 });
+const onTourEnd = () => {
+    router.push("/guide/getting-started");
+};
 </script>
 <style lang="scss">
     @import "../src/style/style.scss";

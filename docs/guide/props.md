@@ -5,11 +5,11 @@ VueJS Tour is written for Vue 3 composition api. There are no plans to support V
 :::
 
 |     Prop     |   Type    |   Default   | Required | Description                                                                 |
-|:------------:|:---------:|:-----------:|:---:|-----------------------------------------------------------------------------|
-|   `steps`    |  `Array`  | `undefined` | `true` | An array of steps to be used in the tour.                                   |
-| `autoStart`  | `Boolean` |   `false`   | `false` | If `true`, the tour will start automatically when the component is mounted. |
-| `startDelay` | `Number`  |     `0`     | `false` | If set, the tour will start after x miliseconds.                            |
-| `highlight`  | `Boolean` |   `false`   | `false` | If `true`, the target will get highlighted.                                 |
+|:------------:|:---------:|:-----------:|:--------:|-----------------------------------------------------------------------------|
+|   `steps`    |  `Array`  | `undefined` |  `true`  | An array of steps to be used in the tour.                                   |
+| `autoStart`  | `Boolean` |   `false`   | `false`  | If `true`, the tour will start automatically when the component is mounted. |
+| `startDelay` | `Number`  |     `0`     | `false`  | If set, the tour will start after x miliseconds.                            |
+| `highlight`  | `Boolean` |   `false`   | `false`  | If `true`, the target will get highlighted.                                 |
 
 ## Example
 
