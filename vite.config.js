@@ -16,6 +16,7 @@ export default defineConfig({
       external: [
         'vue',
         '@popperjs/core',
+        'jump.js'
       ],
       output: {
         // Provide global variables to use in the UMD build
@@ -23,6 +24,7 @@ export default defineConfig({
         globals: {
           vue: 'vue',
           '@popperjs/core': 'popper',
+          'jump.js': 'jump'
         },
       },
     },
