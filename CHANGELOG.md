@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.2](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.1...v1.3.2) (2022-12-18)
+
+
+### Bug Fixes
+
+* **readme:** Fixed shields url ([3ce98c4](https://github.com/GlobalHive/vuejs-tour/commit/3ce98c433a5493892eb7723e8893004c2d590257))
+* **vite:** Excluded jump.js from build ([7ef4cff](https://github.com/GlobalHive/vuejs-tour/commit/7ef4cff868d01fb26ac70eef38a4ff2aa61fe86d))
+
 ## [1.3.1](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.0...v1.3.1) (2022-12-12)
 
 
