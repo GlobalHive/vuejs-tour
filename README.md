@@ -1,8 +1,8 @@
 # VueJS Tour
 
 [![license](https://img.shields.io/github/license/globalhive/vuejs-tour)](https://github.com/GlobalHive/vuejs-tour/blob/master/LICENSE)
-[![docs](https://img.shields.io/github/workflow/status/globalhive/vuejs-tour/docs?label=docs)](https://github.com/GlobalHive/vuejs-tour/actions/workflows/docs.yml)
-[![build](https://img.shields.io/github/workflow/status/globalhive/vuejs-tour/npm-publish)](https://www.npmjs.com/package/@globalhive/vuejs-tour)
+[![docs](https://img.shields.io/github/actions/workflow/status/globalhive/vuejs-tour/docs.yml?branch=master&label=docs)](https://github.com/GlobalHive/vuejs-tour/actions/workflows/docs.yml)
+[![build](https://img.shields.io/github/actions/workflow/status/globalhive/vuejs-tour/npm-publish.yml?branch=master)](https://www.npmjs.com/package/@globalhive/vuejs-tour)
 [![open issues](https://img.shields.io/github/issues-raw/globalhive/vuejs-tour)](https://github.com/GlobalHive/vuejs-tour/issues)<br>
 [![version](https://img.shields.io/npm/v/@globalhive/vuejs-tour)](https://www.npmjs.com/package/@globalhive/vuejs-tour)
 [![downloads](https://img.shields.io/npm/dt/@globalhive/vuejs-tour)](https://www.npmjs.com/package/@globalhive/vuejs-tour)
