@@ -1,13 +1,13 @@
 # Getting Started
 
 ::: warning
-VueJS Tour is written for Vue 3 composition api. There are no plans to support Vue 2.x
+VueJS Tour is written for Vue 3. There are no plans to support Vue 2.x
 :::
 
 ## Prerequisites
 
 * [Node.js](https://nodejs.org/)
-* [Vue 3 (Composition API)](https://vuejs.org/guide/introduction.html#composition-api)
+* [Vue 3](https://vuejs.org/guide/introduction.html#composition-api)
 
 ## Installation
 
@@ -33,4 +33,4 @@ const app = createApp(App)
   .mount("#app");
 ```
 Everything is ready! Now you can use VueJS Tour in your application.
-Next, learn how to [create a tour](guide/create-a-tour).
+Next, learn how to [create a tour](/create-a-tour).
