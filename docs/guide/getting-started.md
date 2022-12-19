@@ -33,4 +33,4 @@ const app = createApp(App)
   .mount("#app");
 ```
 Everything is ready! Now you can use VueJS Tour in your application.
-Next, learn how to [create a tour](vuejs-tour/guide/create-a-tour).
+Next, learn how to [create a tour](guide/create-a-tour).
