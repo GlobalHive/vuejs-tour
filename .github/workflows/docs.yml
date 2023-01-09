@@ -1,6 +1,4 @@
 on:
-  release:
-    types: ['released']
   workflow_dispatch:
 
 name: create-docs
