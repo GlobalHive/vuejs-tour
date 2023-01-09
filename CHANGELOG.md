@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.3](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.2...v1.3.3) (2023-01-09)
+
+
+### Bug Fixes
+
+* **component:** Fixed exception when tour finishes [#18](https://github.com/GlobalHive/vuejs-tour/issues/18) ([9d745cf](https://github.com/GlobalHive/vuejs-tour/commit/9d745cfdfd3b545045954a0beac7c124aa72478c))
+* **docs:** Fixed create a tour link ([cc1cbf1](https://github.com/GlobalHive/vuejs-tour/commit/cc1cbf1286617a972d3bd7536f6d19393cca9090))
+
 ## [1.3.2](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.1...v1.3.2) (2022-12-18)
 
 
