@@ -115,7 +115,7 @@ async function prevStep() {
 }
 function endTour() {
   document.getElementById("vjt-tooltip").setAttribute("data-hidden", "");
-  document.querySelector(".vjt-highlight").classList.remove("vjt-highlight");
+  document.querySelector(".vjt-highlight")?.classList.remove("vjt-highlight");
   popper.value.destroy();
   localStorage.setItem("vjt-tour", "true");
   jump(document.body, {
