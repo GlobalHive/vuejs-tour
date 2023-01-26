@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.4](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.3...v1.3.4) (2023-01-26)
+
+
+### Bug Fixes
+
+* **component:** Fixed error on first step / no highlight [#20](https://github.com/GlobalHive/vuejs-tour/issues/20) ([968e37a](https://github.com/GlobalHive/vuejs-tour/commit/968e37a75f01629aac71c44f510cd9bdb33d4080))
+
 ## [1.3.3](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.2...v1.3.3) (2023-01-09)
 
 
