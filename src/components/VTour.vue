@@ -85,7 +85,7 @@ async function startTour() {
 }
 function highlightTarget() {
   let _currentStep = document.querySelector(`${step.getCurrentStep.target}`);
-  let _lastStep = document.querySelector(`${step.getLastStep.target}`);
+  let _lastStep = document.querySelector(`${step.getLastStep?.target}`);
   _currentStep.classList.add("vjt-highlight");
   if (_lastStep != null && _currentStep !== _lastStep) _lastStep.classList.remove("vjt-highlight");
 }

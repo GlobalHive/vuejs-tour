@@ -30,6 +30,8 @@
     }
   },
   "scripts": {
+    "build": "npm run vite:build && npm run sass:build",
+    "sass:build": "sass src/style/style.scss dist/style.css",
     "vite:build": "vite build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
