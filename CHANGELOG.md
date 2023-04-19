@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.5](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.4...v1.3.5) (2023-04-19)
+
+
+### Bug Fixes
+
+* **component:** Hide Previous button on #actions overwrite [#25](https://github.com/GlobalHive/vuejs-tour/issues/25) ([dec6fae](https://github.com/GlobalHive/vuejs-tour/commit/dec6fae969dadc8b617378ff7ce2a4e26cdc6d87))
+
 ## [1.3.4](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.3...v1.3.4) (2023-01-26)
 
 
