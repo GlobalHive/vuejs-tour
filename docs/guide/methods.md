@@ -144,7 +144,7 @@ The `nextStep();` method is used to move to the next step in the tour.
   <div>
     ...
     <VTour :steps="steps" autoStart>
-        <template #actions="{ nextStep, prevStep, endTour }">
+        <template #actions="{ nextStep, prevStep, endTour, step }">
             <button type="button" @click.prevent="nextStep">Next Step</button>
         </template>
     </VTour>

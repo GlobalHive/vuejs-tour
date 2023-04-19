@@ -3,10 +3,10 @@
     <slot name="content" v-bind="{ step }">
       <div v-html="step.getCurrentStep.content"></div>
     </slot>
-    <slot name="actions" v-bind="{ endTour, nextStep, prevStep }">
+    <slot name="actions" v-bind="{ endTour, nextStep, prevStep, step }">
       <div class="vjt-actions">
         <button type="button" @click.prevent="endTour">Skip</button>
-        <button v-if="step.currentStep > 0" type="button" @click.prevent="prevStep">Back</button>
+        <button v-if="step.currentStep > 0" type="button" v-text="props.buttonLabels.prev" @click.prevent="prevStep"></button>
         <button type="button" v-text="getNextText" @click.prevent="nextStep"></button>
       </div>
     </slot>
@@ -34,7 +34,7 @@ const maxSteps = computed(() => {
   return props.steps.length - 1;
 });
 const getNextText = computed(() => {
-  return step.currentStep === maxSteps.value ? "Finish" : "Next";
+  return step.currentStep === maxSteps.value ? props.buttonLabels.finish : props.buttonLabels.next;
 });
 
 const props = defineProps({
@@ -53,7 +53,18 @@ const props = defineProps({
   highlight: {
     type: Boolean,
     default: false
-  }
+  },
+  buttonLabels: {
+    type: Object,
+    default: () => {
+      return {
+        next: "Next",
+        prev: "Back",
+        finish: "Finish",
+        skip: "Skip"
+      };
+    }
+  },
 });
 const emit = defineEmits(["onTourStart", "onTourEnd"]);
 defineExpose({
