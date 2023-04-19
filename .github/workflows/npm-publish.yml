@@ -12,7 +12,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run vite:build
-      - uses: gha-utilities/sass-build@v0.4.10
+      - uses: gha-utilities/sass-build@v0.5.1
         with:
           source: src/style/style.scss
           destination: dist/style.css
