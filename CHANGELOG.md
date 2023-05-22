@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.6](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.5...v1.3.6) (2023-05-22)
+
+
+### Bug Fixes
+
+* **component:** Skip text is hardcoded, should be read from component's props ([c7152a5](https://github.com/GlobalHive/vuejs-tour/commit/c7152a5beb8c03df16cd932def561ade4446ade9))
+* **docs:** Document incorrect about buttonLabel property which should be buttonLabels instead [#27](https://github.com/GlobalHive/vuejs-tour/issues/27) ([a30f9dc](https://github.com/GlobalHive/vuejs-tour/commit/a30f9dc0d1e9330c97038c7a1c3a4baa02378d80))
+
 ## [1.3.5](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.4...v1.3.5) (2023-04-19)
 
 
