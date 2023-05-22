@@ -5,7 +5,7 @@
     </slot>
     <slot name="actions" v-bind="{ endTour, nextStep, prevStep, step }">
       <div class="vjt-actions">
-        <button type="button" @click.prevent="endTour">Skip</button>
+        <button type="button" @click.prevent="endTour" v-text="props.buttonLabels.skip"></button>
         <button v-if="step.currentStep > 0" type="button" v-text="props.buttonLabels.prev" @click.prevent="prevStep"></button>
         <button type="button" v-text="getNextText" @click.prevent="nextStep"></button>
       </div>
