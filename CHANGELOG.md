@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.7](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.6...v1.3.7) (2023-10-16)
+
+
+### Bug Fixes
+
+* **version:** Updated version number ([8d3c1b9](https://github.com/GlobalHive/vuejs-tour/commit/8d3c1b9e6450c41607d8b2f08c8e5ee273f2414d))
+
 ## [1.3.6](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.5...v1.3.6) (2023-05-22)
 
 
