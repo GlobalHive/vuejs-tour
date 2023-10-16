@@ -87,3 +87,25 @@ onMounted(() => {
 
 The `target` property of the step object can be any valid [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors).<br>
 If the target is not found, the step will be skipped.
+
+## Using multiple tours
+
+To use multiple tours at once use the `name` prop.
+
+```vue{7}
+<template>
+  <div>
+    <div id="selectByID">Selected by its id 'selectByID'</div>
+    <p class="selectByClass">Telected by its class 'selectByClass'</p>
+    <button data-step="3">Selected by the 'data-step="3"' attribute</button>
+
+    <VTour :steps="steps" name="FirstTour" autoStart/>
+  </div>
+</template>
+
+<script setup>
+const steps = [...];
+</script>
+```
+
+This will create a separate localstorage entry if the tour is finished or skipped, so the tour will not start again.
