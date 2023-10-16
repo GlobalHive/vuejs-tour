@@ -180,7 +180,7 @@ const steps = [...];
 
 ### `endTour();`
 
-The `endTour();` method creates a `localStore` variable, called `vjt-tour`, to prevent the tour from starting again,
+The `endTour();` method creates a `localStore` variable, called `vjt-default` if you didn't provide a name, to prevent the tour from starting again,
 destroys the `PopperJS` instance and hides the step, ending the tour.
 
 ```vue{5-7}

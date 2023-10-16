@@ -38,6 +38,10 @@ const getNextText = computed(() => {
 });
 
 const props = defineProps({
+  name:{
+    type: String,
+    default: "default"
+  },
   steps: {
     type: Array,
     required: true
@@ -76,7 +80,7 @@ defineExpose({
 });
 
 async function startTour() {
-  if (localStorage.getItem("vjt-tour") === "true") return;
+  if (localStorage.getItem("vjt-" + props.name) === "true") return;
   await setTimeout(() => {
     document.getElementById("vjt-tooltip").removeAttribute("data-hidden");
     popper.value = createPopper(document.querySelector(`${step.getCurrentStep.target}`), document.getElementById("vjt-tooltip"), {
@@ -128,7 +132,7 @@ function endTour() {
   document.getElementById("vjt-tooltip").setAttribute("data-hidden", "");
   document.querySelector(".vjt-highlight")?.classList.remove("vjt-highlight");
   popper.value.destroy();
-  localStorage.setItem("vjt-tour", "true");
+  localStorage.setItem("vjt-" + props.name, "true");
   jump(document.body, {
     duration: 500,
   });
@@ -137,7 +141,7 @@ function endTour() {
 function resetTour() {
   step.currentStep = 0;
   step.lastStep = 0;
-  localStorage.removeItem("vjt-tour");
+  localStorage.removeItem("vjt-" + props.name);
   startTour();
 }
 async function recalculatePopper() {
