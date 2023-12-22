@@ -112,7 +112,7 @@ async function nextStep() {
     while(document.querySelector(`${step.getCurrentStep.target}`) === null) {
       step.currentStep++;
     }
-    recalculatePopper();
+    await recalculatePopper();
     return;
   }
   endTour();
@@ -125,7 +125,7 @@ async function prevStep() {
     while(document.querySelector(`${step.getCurrentStep.target}`) === null) {
       step.currentStep--;
     }
-    recalculatePopper();
+    await recalculatePopper();
   }
 }
 function endTour() {
@@ -145,11 +145,11 @@ function resetTour() {
   startTour();
 }
 async function recalculatePopper() {
-  popper.value.setOptions({
+  await popper.value.setOptions({
     placement: `${step.getCurrentStep.placement ? step.getCurrentStep.placement : "top"}`
   });
   popper.value.state.elements.reference = document.querySelector(`${step.getCurrentStep.target}`);
-  popper.value.update();
+  await popper.value.update();
   jump(document.querySelector(`${step.getCurrentStep.target}`), {
     duration: 500,
     offset: -100
