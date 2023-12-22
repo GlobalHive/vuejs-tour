@@ -6,16 +6,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install and Build
+        uses: actions/setup-node@v3
         with:
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm run vite:build
-      - uses: gha-utilities/sass-build@v0.5.1
+        run : |
+          npm ci
+          npm run vite:build
+
+      - name: Sass Build
+        uses: gha-utilities/sass-build@v0.5.1
         with:
           source: src/style/style.scss
           destination: dist/style.css
-      - run: npm publish
+
+      - name: Publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
