@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.8](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.7...v1.3.8) (2023-12-22)
+
+
+### Bug Fixes
+
+* **VTour:** Fixed non async code ([aa583c6](https://github.com/GlobalHive/vuejs-tour/commit/aa583c652599bf7794492933113a479ef5647f58))
+
 ## [1.3.7](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.6...v1.3.7) (2023-10-16)
 
 
