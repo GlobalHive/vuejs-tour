@@ -1,12 +1,7 @@
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
-permissions:
-  contents: write
-
-name: create-docs
+name: 3 Create Docs
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,9 +9,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install and Build
+      - name: Setup Node
         uses: actions/setup-node@v3
-        run: |
+
+      - name: Build
+        run : |
           npm ci
           npm run docs:build
 
