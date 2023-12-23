@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
 
-name: release-please
+name: 1 Release Please
 jobs:
   release-please:
     runs-on: ubuntu-latest
