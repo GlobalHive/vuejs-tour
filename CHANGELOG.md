@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.9](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.8...v1.3.9) (2023-12-23)
+
+
+### Bug Fixes
+
+* **actions:** Fixed docs action ([959394c](https://github.com/GlobalHive/vuejs-tour/commit/959394cc422fe6343c9e4776375d8e1e72d82b7a))
+* **actions:** Fixed npm action ([ada714f](https://github.com/GlobalHive/vuejs-tour/commit/ada714fab6bac6396c7c8da041ab4963950339e8))
+* **actions:** Fixed release action ([3ca0fbb](https://github.com/GlobalHive/vuejs-tour/commit/3ca0fbba1160dbcaa719cff74d82bb4c521363ba))
+
 ## [1.3.8](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.7...v1.3.8) (2023-12-22)
 
 
