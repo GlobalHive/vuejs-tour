@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.9...v1.4.0) (2023-12-29)
+
+
+### Features
+
+* **VTour:** Added saveToLocalStorage prop ([885bc8b](https://github.com/GlobalHive/vuejs-tour/commit/885bc8bf77489de4a139db9cb5a7bc5a5aca7092))
+
 ## [1.3.9](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.8...v1.3.9) (2023-12-23)
 
 
