@@ -69,6 +69,10 @@ const props = defineProps({
       };
     }
   },
+  saveToLocalStorage: {
+    type: String,
+    default: 'end'
+  }
 });
 const emit = defineEmits(["onTourStart", "onTourEnd"]);
 defineExpose({
@@ -80,8 +84,22 @@ defineExpose({
 });
 
 async function startTour() {
-  if (localStorage.getItem("vjt-" + props.name) === "true") return;
-  await setTimeout(() => {
+  switch (props.saveToLocalStorage){
+    case 'end':
+      if (localStorage.getItem("vjt-" + props.name) === "true") return;
+      break;
+    case 'step':
+      if (localStorage.getItem("vjt-" + props.name) === "true") return;
+      if (localStorage.getItem("vjt-" + props.name)) {
+        step.currentStep = localStorage.getItem("vjt-" + props.name);
+        step.lastStep = (localStorage.getItem("vjt-" + props.name) - 1) >= 0 ? localStorage.getItem("vjt-" + props.name) - 1 : 0;
+        break;
+      }
+      break;
+    default:
+      break;
+  }
+  setTimeout(() => {
     document.getElementById("vjt-tooltip").removeAttribute("data-hidden");
     popper.value = createPopper(document.querySelector(`${step.getCurrentStep.target}`), document.getElementById("vjt-tooltip"), {
       placement: `${step.getCurrentStep.placement ? step.getCurrentStep.placement : "top"}`,
@@ -109,6 +127,7 @@ async function nextStep() {
     step.getCurrentStep.onNext ? await step.getCurrentStep.onNext() : null;
     step.lastStep = step.currentStep;
     step.currentStep++;
+    if(props.saveToLocalStorage === 'step') localStorage.setItem("vjt-" + props.name, step.currentStep);
     while(document.querySelector(`${step.getCurrentStep.target}`) === null) {
       step.currentStep++;
     }
@@ -122,6 +141,7 @@ async function prevStep() {
     step.getCurrentStep.onPrev ? await step.getCurrentStep.onPrev() : null;
     step.lastStep = step.currentStep;
     step.currentStep--;
+    if(props.saveToLocalStorage === 'step') localStorage.setItem("vjt-" + props.name, step.currentStep);
     while(document.querySelector(`${step.getCurrentStep.target}`) === null) {
       step.currentStep--;
     }
@@ -132,7 +152,7 @@ function endTour() {
   document.getElementById("vjt-tooltip").setAttribute("data-hidden", "");
   document.querySelector(".vjt-highlight")?.classList.remove("vjt-highlight");
   popper.value.destroy();
-  localStorage.setItem("vjt-" + props.name, "true");
+  if(props.saveToLocalStorage === 'end' || props.saveToLocalStorage === 'step') localStorage.setItem("vjt-" + props.name, "true");
   jump(document.body, {
     duration: 500,
   });
@@ -141,7 +161,7 @@ function endTour() {
 function resetTour() {
   step.currentStep = 0;
   step.lastStep = 0;
-  localStorage.removeItem("vjt-" + props.name);
+  if(props.saveToLocalStorage === 'end' || props.saveToLocalStorage === 'step') localStorage.setItem("vjt-" + props.name, "true");
   startTour();
 }
 async function recalculatePopper() {
