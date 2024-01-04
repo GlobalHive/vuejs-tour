@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.4.0...v1.5.0) (2024-01-04)
+
+
+### Features
+
+* **VTour:** Added goToStep function ([2f4e8b2](https://github.com/GlobalHive/vuejs-tour/commit/2f4e8b22292bf9baa1b95f7df55e19379d17ab33))
+
+
+### Bug Fixes
+
+* **actions:** Fixed workflow automation ([28d458b](https://github.com/GlobalHive/vuejs-tour/commit/28d458b354d6ba32e93e5488266ee034131a6c18))
+
 ## [1.4.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.3.9...v1.4.0) (2023-12-29)
 
 
