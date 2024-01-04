@@ -19,6 +19,7 @@ import { createPopper } from "@popperjs/core";
 import { computed, onMounted, reactive, ref } from "vue";
 import jump from "jump.js";
 
+const tourStarted = ref(false);
 const popper = ref(null);
 const step = reactive({
   currentStep: 0,
@@ -80,6 +81,7 @@ defineExpose({
   nextStep,
   prevStep,
   endTour,
+  goToStep,
   resetTour
 });
 
@@ -114,6 +116,7 @@ async function startTour() {
     });
     props.highlight ? highlightTarget() : null;
     emit("onTourStart");
+    tourStarted.value = true;
   }, props.startDelay);
 }
 function highlightTarget() {
@@ -158,6 +161,19 @@ function endTour() {
   });
   emit("onTourEnd");
 }
+
+async function goToStep(nextStep){
+  if(tourStarted.value === false) await startTour();
+  step.getCurrentStep.onNext ? await step.getCurrentStep.onNext() : null;
+  step.lastStep = nextStep - 1 >= 0 ? nextStep - 1 : 0;
+  step.currentStep = nextStep;
+  if(props.saveToLocalStorage === 'step') localStorage.setItem("vjt-" + props.name, step.currentStep);
+  while(document.querySelector(`${step.getCurrentStep.target}`) === null) {
+    step.currentStep++;
+  }
+  await recalculatePopper();
+}
+
 function resetTour() {
   step.currentStep = 0;
   step.lastStep = 0;
