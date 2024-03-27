@@ -5,6 +5,16 @@
   display: none;
 }
 
+#vjt-backdrop{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $vjt__backdrop_background;
+    z-index: $vjt__backdrop_z_index;
+}
+
 #vjt-tooltip {
   background-color: $vjt__tooltip_background;
   color: $vjt__tooltip_color;

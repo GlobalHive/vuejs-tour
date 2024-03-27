@@ -1,4 +1,5 @@
 <template>
+  <div id="vjt-backdrop" data-hidden></div>
   <div id="vjt-tooltip" data-hidden role="tooltip">
     <slot name="content" v-bind="{ step }">
       <div v-html="step.getCurrentStep.content"></div>
@@ -46,6 +47,10 @@ const props = defineProps({
   steps: {
     type: Array,
     required: true
+  },
+  backdrop: {
+    type: Boolean,
+    default: false
   },
   autoStart: {
     type: Boolean,
@@ -110,6 +115,7 @@ async function startTour() {
   }
   // Starting tour
   setTimeout(() => {
+    if(props.backdrop === true) document.getElementById("vjt-backdrop").removeAttribute("data-hidden");
     document.getElementById("vjt-tooltip").removeAttribute("data-hidden");
     popper.value = createPopper(document.querySelector(`${step.getCurrentStep.target}`), document.getElementById("vjt-tooltip"), {
       placement: `${step.getCurrentStep.placement ? step.getCurrentStep.placement : "top"}`,
