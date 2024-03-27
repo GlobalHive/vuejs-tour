@@ -86,6 +86,7 @@ defineExpose({
 });
 
 async function startTour() {
+  // Switching save mode
   switch (props.saveToLocalStorage){
     case 'end':
       if (localStorage.getItem("vjt-" + props.name) === "true") return;
@@ -101,6 +102,13 @@ async function startTour() {
     default:
       break;
   }
+  // Checking if target exists
+  if(document.querySelector(`${step.getCurrentStep.target}`) === null) {
+    step.currentStep++;
+    startTour();
+    return;
+  }
+  // Starting tour
   setTimeout(() => {
     document.getElementById("vjt-tooltip").removeAttribute("data-hidden");
     popper.value = createPopper(document.querySelector(`${step.getCurrentStep.target}`), document.getElementById("vjt-tooltip"), {
@@ -132,6 +140,7 @@ async function nextStep() {
     step.currentStep++;
     if(props.saveToLocalStorage === 'step') localStorage.setItem("vjt-" + props.name, step.currentStep);
     while(document.querySelector(`${step.getCurrentStep.target}`) === null) {
+      if(step.currentStep <= maxSteps.value) return endTour();
       step.currentStep++;
     }
     await recalculatePopper();
