@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.5.0...v1.6.0) (2024-03-27)
+
+
+### Features
+
+* **VTour:** Added prop 'backdrop' to enable a backdrop / disabling controls [#45](https://github.com/GlobalHive/vuejs-tour/issues/45) ([a5e21f9](https://github.com/GlobalHive/vuejs-tour/commit/a5e21f91a75f2c311919473ec6cb6a4422a8d531))
+
+
+### Bug Fixes
+
+* **npm:** Updated packages ([081b0b7](https://github.com/GlobalHive/vuejs-tour/commit/081b0b7c269a2155a9073da8f6ac4c8acfada8a3))
+* **VTour:** Fixed backdrop not disabling after tour end ([d122180](https://github.com/GlobalHive/vuejs-tour/commit/d122180adeba3f05f689685175522b927c507c51))
+* **VTour:** Fixed tour showing on error (No Target) [#48](https://github.com/GlobalHive/vuejs-tour/issues/48) ([6b3f664](https://github.com/GlobalHive/vuejs-tour/commit/6b3f664e6f2087011e27cd15312662ee0ee8c8bf))
+
 ## [1.5.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.4.0...v1.5.0) (2024-01-04)
 
 
