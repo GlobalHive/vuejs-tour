@@ -1,4 +1,5 @@
 <template>
+  <div id="vjt-backdrop" data-hidden></div>
   <div id="vjt-tooltip" data-hidden role="tooltip">
     <slot name="content" v-bind="{ step }">
       <div v-html="step.getCurrentStep.content"></div>
@@ -47,6 +48,10 @@ const props = defineProps({
     type: Array,
     required: true
   },
+  backdrop: {
+    type: Boolean,
+    default: false
+  },
   autoStart: {
     type: Boolean,
     default: false
@@ -86,6 +91,7 @@ defineExpose({
 });
 
 async function startTour() {
+  // Switching save mode
   switch (props.saveToLocalStorage){
     case 'end':
       if (localStorage.getItem("vjt-" + props.name) === "true") return;
@@ -101,7 +107,15 @@ async function startTour() {
     default:
       break;
   }
+  // Checking if target exists
+  if(document.querySelector(`${step.getCurrentStep.target}`) === null) {
+    step.currentStep++;
+    startTour();
+    return;
+  }
+  // Starting tour
   setTimeout(() => {
+    if(props.backdrop === true) document.getElementById("vjt-backdrop").removeAttribute("data-hidden");
     document.getElementById("vjt-tooltip").removeAttribute("data-hidden");
     popper.value = createPopper(document.querySelector(`${step.getCurrentStep.target}`), document.getElementById("vjt-tooltip"), {
       placement: `${step.getCurrentStep.placement ? step.getCurrentStep.placement : "top"}`,
@@ -132,6 +146,7 @@ async function nextStep() {
     step.currentStep++;
     if(props.saveToLocalStorage === 'step') localStorage.setItem("vjt-" + props.name, step.currentStep);
     while(document.querySelector(`${step.getCurrentStep.target}`) === null) {
+      if(step.currentStep <= maxSteps.value) return endTour();
       step.currentStep++;
     }
     await recalculatePopper();
