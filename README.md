@@ -56,7 +56,7 @@ Make sure to check out the [documentation](https://globalhive.github.io/vuejs-to
 Add the VueJS Tour component anywhere in your app. It is recommended to add it to `App.vue`
 and create the required steps using `<script setup>` syntax.
 
-```
+```vue
 <template>
   <div>
     <div id="selectByID">Selected by its id 'selectByID'</div>
@@ -91,7 +91,7 @@ const steps = [
 
 To start the tour, you can use the `autoStart` prop...
 
-```
+```vue
 <template>
   <div>
     <div id="selectByID">Selected by its id 'selectByID'</div>
@@ -109,7 +109,7 @@ const steps = [...];
 
 ...or call the `startTour()` method on the component instance.
 
-```
+```vue
 <template>
   <div>
     <div id="selectByID">Selected by its id 'selectByID'</div>
