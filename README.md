@@ -27,6 +27,9 @@
 
 ## Installation
 
+<ins><b>Looking for a nuxt version?</b></ins><br>
+[Nuxt version (Special thanks to BayBreezy)](https://github.com/BayBreezy/nuxt-tour)
+
 This section will guide you through the process of installing VueJS Tour.
 
 * Step 1: Go to your project directory and install VueJS Tour using npm:
