@@ -168,6 +168,7 @@ async function prevStep() {
 }
 function endTour() {
   document.getElementById("vjt-tooltip").setAttribute("data-hidden", "");
+  document.getElementById("vjt-backdrop").setAttribute("data-hidden", "");
   document.querySelector(".vjt-highlight")?.classList.remove("vjt-highlight");
   popper.value.destroy();
   if(props.saveToLocalStorage === 'end' || props.saveToLocalStorage === 'step') localStorage.setItem("vjt-" + props.name, "true");
