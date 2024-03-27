@@ -12,27 +12,29 @@ VueJS Tour uses `scss` for styling. You can override the default styles by using
 @import "@globalhive/vuejs-tour/src/style/style.scss";
 ```
 
-| Variable                               | Default                         |
-|----------------------------------------|---------------------------------|
-| `$vjt__tooltip_color`                  | #fff                            |
-| `$vjt__tooltip_z_index`                | 9999                            |
-| `$vjt__tooltip_font_size`              | 13px                            |
-| `$vjt__tooltip_arrow_size`             | 8px                             |
-| `$vjt__tooltip_background`             | #333                            |
-| `$vjt__tooltip_border_radius`          | 4px                             |
-| `$vjt__tooltip_max_width`              | 300px                           |
-| `$vjt__highlight_offset`               | 4px                             |
-| `$vjt__highlight_color`                | #0EA5E9FF                       |
-| `$vjt__highlight_outline_radius`       | 4px                             |
-| `$vjt__highlight_outline`              | 1px solid $vjt__highlight_color |
-| `$vjt__action_button_color`            | #fff                            |
-| `$vjt__action_button_font_size`        | 13px                            |
-| `$vjt__action_button_color_hover`      | #fff                            |
-| `$vjt__action_button_padding`          | 4px 16px                        |
-| `$vjt__action_button_border_radius`    | 4px                             |
-| `$vjt__action_button_background_hover` | #000                            |
-| `$vjt__action_button_border`           | 1px solid #fff                  |
-| `$vjt__action_button_background`       | transparent                     |
+| Variable                                | Default                         |
+|-----------------------------------------|---------------------------------|
+| `$vjt__tooltip_color`                   | #fff                            |
+| `$vjt__tooltip_z_index`                 | 9999                            |
+| `$vjt__tooltip_font_size`               | 13px                            |
+| `$vjt__tooltip_arrow_size`              | 8px                             |
+| `$vjt__tooltip_background`              | #333                            |
+| `$vjt__tooltip_border_radius`           | 4px                             |
+| `$vjt__tooltip_max_width`               | 300px                           |
+| `$vjt__highlight_offset`                | 4px                             |
+| `$vjt__highlight_color`                 | #0EA5E9FF                       |
+| `$vjt__highlight_outline_radius`        | 4px                             |
+| `$vjt__highlight_outline`               | 1px solid $vjt__highlight_color |
+| `$vjt__action_button_color`             | #fff                            |
+| `$vjt__action_button_font_size`         | 13px                            |
+| `$vjt__action_button_color_hover`       | #fff                            |
+| `$vjt__action_button_padding`           | 4px 16px                        |
+| `$vjt__action_button_border_radius`     | 4px                             |
+| `$vjt__action_button_background_hover`  | #000                            |
+| `$vjt__action_button_border`            | 1px solid #fff                  |
+| `$vjt__action_button_background`        | transparent                     |
+| `$vjt__backdrop_z_index`                | 9998                            |
+| `$vjt__backdrop_background`             | rgba(0, 0, 0, 0.5)              |
 
 ::: tip
 Override the variables before importing the scss file.<br>
