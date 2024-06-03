@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/GlobalHive/vuejs-tour/compare/v1.6.0...v1.6.1) (2024-06-03)
+
+
+### Bug Fixes
+
+* **VTour:** Fixed not resetting on resetTour() [#54](https://github.com/GlobalHive/vuejs-tour/issues/54) ([fbfc970](https://github.com/GlobalHive/vuejs-tour/commit/fbfc970a83105863f9b614ca006ed9f200142055))
+
 ## [1.6.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.5.0...v1.6.0) (2024-03-27)
 
 
