@@ -193,7 +193,7 @@ async function goToStep(nextStep){
 function resetTour() {
   step.currentStep = 0;
   step.lastStep = 0;
-  if(props.saveToLocalStorage === 'end' || props.saveToLocalStorage === 'step') localStorage.setItem("vjt-" + props.name, "true");
+  if(props.saveToLocalStorage === 'end' || props.saveToLocalStorage === 'step') localStorage.removeItem("vjt-" + props.name);
   startTour();
 }
 async function recalculatePopper() {
