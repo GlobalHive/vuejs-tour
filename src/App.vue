@@ -12,6 +12,22 @@ const steps: ITourStep[] = [
     target: '[data-step="1"]',
     content: 'This is the second step',
   },
+  {
+    target: '[data-step="2"]',
+    content: 'This is the second step',
+  },
+  {
+    target: '[data-step="3"]',
+    content: 'This is the second step',
+  },
+  {
+    target: '[data-step="4"]',
+    content: 'This is the second step',
+  },
+  {
+    target: '[data-step="5"]',
+    content: 'This is the fifth step',
+  },
 ]
 </script>
 
