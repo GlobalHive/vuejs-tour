@@ -1,20 +1,32 @@
 {
   "name": "@globalhive/vuejs-tour",
-  "version": "1.6.1",
+  "version": "2.0.1",
   "description": "VueJS Tour is a lightweight, simple and customizable tour plugin. It provides a quick and easy way to guide your users through your application.",
   "author": "Global Hive <support@globalhive.de>",
-  "private": false,
   "license": "MIT",
-  "homepage": "https://globalhive.github.io/vuejs-tour/",
   "type": "module",
   "main": "dist/vuejs-tour.umd.cjs",
   "module": "dist/vuejs-tour.js",
-  "style": "dist/style.css",
-  "sass": "src/style/style.scss",
-  "files": [
-    "dist/*",
-    "src/**/*"
+  "keywords": [
+    "vue",
+    "vuejs",
+    "vue.js",
+    "vuejs-tour",
+    "tour",
+    "vuetour",
+    "vue-tour",
+    "vue3-tour",
+    "vue3tour",
+    "tour"
   ],
+  "homepage": "https://globalhive.github.io/vuejs-tour/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/globalhive/vuejs-tour.git"
+  },
+  "bugs": {
+    "url": "https://github.com/globalhive/vuejs-tour/issues"
+  },
   "exports": {
     ".": {
       "import": "./dist/vuejs-tour.js",
@@ -29,42 +41,33 @@
       "require": "./src/style/style.scss"
     }
   },
+  "files": [
+    "dist",
+    "src/style"
+  ],
   "scripts": {
-    "build": "npm run vite:build && npm run sass:build && npm pack",
-    "sass:build": "sass src/style/style.scss dist/style.css",
-    "vite:build": "vite build",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.4",
-    "@vuepress/bundler-vite": "^2.0.0-rc.7",
-    "sass": "^1.72.0",
-    "vite": "^5.2.6",
-    "vuepress": "^2.0.0-beta.54"
+    "dev": "vite",
+    "preview": "vite preview",
+    "build": "pnpm build-only && pnpm build::sass && pnpm pack",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build --force",
+    "build::types": "vue-tsc --emitDeclarationOnly",
+    "build::sass": "sass src/style/style.scss dist/style.css"
   },
   "dependencies": {
-    "@popperjs/core": "^2.11.8",
-    "jump.js": "^1.0.2",
-    "vue": "^3.4.21"
+    "nanopop": "^2.4.2",
+    "vue": "^3.4.29"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/globalhive/vuejs-tour.git"
-  },
-  "bugs": {
-    "url": "https://github.com/globalhive/vuejs-tour/issues"
-  },
-  "keywords": [
-    "vue",
-    "vuejs",
-    "vue.js",
-    "vuejs-tour",
-    "tour",
-    "vuetour",
-    "vue-tour",
-    "vue3-tour",
-    "vue3tour"
-  ]
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^20.14.5",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "@vue/tsconfig": "^0.5.1",
+    "npm-run-all2": "^6.2.0",
+    "sass": "^1.77.6",
+    "typescript": "~5.4.0",
+    "vite": "^5.3.1",
+    "vite-plugin-dts": "^3.9.1",
+    "vue-tsc": "^2.0.21"
+  }
 }

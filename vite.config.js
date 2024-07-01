@@ -1,33 +1,24 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
-
-// https://vitejs.dev/config/
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
+import vue from '@vitejs/plugin-vue';
 export default defineConfig({
-  build: {
-    lib: {
-      entry: resolve(__dirname, 'src/index.js'),
-      name: 'VueJsTour',
-      fileName: 'vuejs-tour',
-    },
-    rollupOptions: {
-      // make sure to externalize deps that shouldn't be bundled
-      // into your library
-      external: [
-        'vue',
-        '@popperjs/core',
-        'jump.js'
-      ],
-      output: {
-        // Provide global variables to use in the UMD build
-        // for externalized deps
-        globals: {
-          vue: 'vue',
-          '@popperjs/core': 'popper',
-          'jump.js': 'jump'
+    build: {
+        lib: {
+            entry: resolve(__dirname, 'src/main.ts'),
+            name: 'VueJSTour',
+            formats: ['es', 'umd'],
+            fileName: 'vuejs-tour',
         },
-      },
+        rollupOptions: {
+            external: ['vue', 'nanopop'],
+            output: {
+                globals: {
+                    'vue': 'vue',
+                    'nanopop': 'nanopop',
+                },
+            },
+        },
     },
-  },
-  plugins: [vue()],
-})
+    plugins: [dts(), vue()]
+});
