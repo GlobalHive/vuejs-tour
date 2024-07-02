@@ -5,17 +5,18 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
     build: {
         lib: {
-            entry: resolve(__dirname, 'src/main.ts'),
+            entry: resolve(__dirname, 'src/vuejs-tour.ts'),
             name: 'VueJSTour',
             formats: ['es', 'umd'],
             fileName: 'vuejs-tour',
         },
         rollupOptions: {
-            external: ['vue', 'nanopop'],
+            external: ['vue', 'nanopop', 'jump.js'],
             output: {
                 globals: {
                     'vue': 'vue',
                     'nanopop': 'nanopop',
+                    'jump.js': 'jump.js'
                 },
             },
         },

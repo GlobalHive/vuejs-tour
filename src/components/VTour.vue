@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {createPopper, type NanoPop} from "nanopop";
-import {computed, type ComputedRef, onMounted, type Reactive, reactive, type Ref, ref, useSlots} from "vue";
+import {computed, type ComputedRef, onMounted, type Reactive, reactive, type Ref, ref} from "vue";
 import type {ITourStep} from "../Types.ts";
+import jump from "jump.js";
 
 export interface IVTourProps {
-  name?: string;
+  name?: string,
   steps: ITourStep[];
   backdrop?: boolean;
   autoStart?: boolean;
@@ -13,35 +14,48 @@ export interface IVTourProps {
   margin?: number;
   buttonLabels?: {
     next: string;
-    prev: string;
+    back: string;
     done: string;
     skip: string;
   };
   saveToLocalStorage?: 'never' | 'step' | 'end';
+  canSkip?: boolean;
+  hideArrow?: boolean;
 }
-interface IVTourData {
+export interface IVTourData {
   currentStep: number;
   lastStep: number;
   getCurrentStep: ComputedRef<ITourStep>;
   getLastStep: ComputedRef<ITourStep>;
 }
 
-const _VTour: Ref<NanoPop | undefined> = ref();
-const _Tooltip: Ref<HTMLElement | undefined> = ref();
+const _VTour: Ref<NanoPop | undefined> = ref(undefined);
+const _Tooltip: Ref<HTMLElement | undefined> = ref(undefined);
 const _CurrentStep: Reactive<IVTourData> = reactive({
   currentStep: 0,
   lastStep: 0,
   getCurrentStep: computed(() => props.steps[_CurrentStep.currentStep]),
   getLastStep: computed(() => props.steps[_CurrentStep.lastStep]),
 });
-const props = defineProps<IVTourProps>()
-const slots = useSlots()
+const props = defineProps<IVTourProps>();
 const emit = defineEmits<{
   onTourStart: [],
   onTourEnd: []
 }>()
+defineExpose({
+  startTour,
+  nextStep,
+  lastStep,
+  endTour,
+  goToStep,
+  resetTour
+});
+const getNextLabel: ComputedRef<String> = computed(() => {
+  if(_CurrentStep.currentStep === props.steps.length - 1) return props.buttonLabels?.done || 'Done';
+  return props.buttonLabels?.next || 'Next';
+});
 
-function startTour(){
+function startTour(): void{
   if(localStorage.getItem('vjt-' + (props.name || 'default')) === 'true') return;
   if(props.saveToLocalStorage === 'step') _CurrentStep.currentStep = parseInt(localStorage.getItem('vjt-' + (props.name || 'default')) || '0');
 
@@ -49,23 +63,27 @@ function startTour(){
     if(!_VTour.value){
       _VTour.value = createPopper(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, _Tooltip.value!, {
         position: _CurrentStep.getCurrentStep.placement || 'right',
-        margin: props.margin || 8,
+        margin: props.margin || (props.highlight ? 14 : 8),
       });
     }
     if(props.backdrop) document.querySelector('#vjt-backdrop')!.removeAttribute('data-hidden');
+    window.scrollTo({
+      top: _CurrentStep.getCurrentStep.target === 'body' ? 0 : (document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement).getBoundingClientRect().top - 100,
+      behavior: 'smooth',
+    });
     updatePosition();
     emit("onTourStart");
   }, props.startDelay);
 }
 
-function resetTour(){
+function resetTour(): void{
   _CurrentStep.currentStep = 0;
   _CurrentStep.lastStep = 0;
   localStorage.removeItem('vjt-' + (props.name || 'default'));
   startTour();
 }
 
-function nextStep(){
+function nextStep(): void{
   _CurrentStep.lastStep = _CurrentStep.currentStep;
   _CurrentStep.currentStep++;
   if(_CurrentStep.currentStep > props.steps.length -1){
@@ -75,7 +93,7 @@ function nextStep(){
   updatePosition();
 }
 
-function lastStep(){
+function lastStep(): void{
   _CurrentStep.currentStep = _CurrentStep.lastStep;
   _CurrentStep.lastStep--;
   if(_CurrentStep.lastStep === -1){
@@ -88,28 +106,40 @@ function lastStep(){
   updatePosition();
 }
 
-function endTour(){
+function endTour(): void{
   if(props.backdrop) document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
   _Tooltip.value!.setAttribute('data-hidden', '');
   if(props.saveToLocalStorage !== 'never') localStorage.setItem('vjt-' + (props.name || 'default'), 'true');
   emit("onTourEnd");
 }
 
-function goToStep(step: number){
+function goToStep(step: number): void{
   _CurrentStep.currentStep = step;
   _CurrentStep.lastStep = step - 1;
-  if(_CurrentStep.lastStep === -1){
-    _CurrentStep.lastStep = 0;
-  }
+  if(_CurrentStep.lastStep === -1) _CurrentStep.lastStep = 0;
   updatePosition();
 }
 
-function updatePosition(){
+async function updatePosition(): Promise<void>{
+  await new Promise<void>((resolve) => {
+    if(props.highlight) highlightElement();
+    _Tooltip.value!.setAttribute('data-hidden', '');
+    jump(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, {
+      duration: 500,
+      offset: -100,
+      callback: () => {resolve()},
+    });
+  });
   _Tooltip.value!.removeAttribute('data-hidden');
   _Tooltip.value!.setAttribute('data-arrow', _VTour.value!.update({
     reference: document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement,
   }) || 'right');
   if(props.saveToLocalStorage === 'step') localStorage.setItem('vjt-' + (props.name || 'default'), _CurrentStep.currentStep.toString());
+}
+
+function highlightElement(): void{
+  document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
+  (document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement).classList.add('vjt-highlight');
 }
 
 onMounted(() => {
@@ -119,19 +149,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <button @click="resetTour">asd</button>
   <div id="vjt-backdrop" data-hidden></div>
-  <div id="vjt-tooltip" role="tooltip" data-arrow="r" data-hidden >
-    <slot name="content" v-bind="{  }">
+  <div id="vjt-tooltip" role="tooltip" data-arrow="r" data-hidden>
+    <slot name="content" v-bind="{ _CurrentStep }">
       <div v-html="_CurrentStep.getCurrentStep?.content"></div>
     </slot>
-    <slot name="actions" v-bind="{  }">
+    <slot name="actions" v-bind="{ lastStep, nextStep, endTour, _CurrentStep, getNextLabel, props }">
       <div class="vjt-actions">
-        <button v-if="_CurrentStep.lastStep < _CurrentStep.currentStep" type="button" @click.prevent="lastStep()" v-text="'Back'"></button>
-        <button type="button" @click.prevent="endTour()" v-text="'Skip'"></button>
-        <button type="button" @click.prevent="nextStep()" v-text="'Next'"></button>
+        <button v-if="_CurrentStep.lastStep < _CurrentStep.currentStep" type="button" @click.prevent="lastStep()" v-text="props.buttonLabels?.back || 'Back'"></button>
+        <button v-if="!props.canSkip" type="button" @click.prevent="endTour()" v-text="props.buttonLabels?.skip || 'Skip'"></button>
+        <button type="button" @click.prevent="nextStep()" v-text="getNextLabel"></button>
       </div>
     </slot>
-    <div id="vjt-arrow"></div>
+    <div id="vjt-arrow" v-if="!props.hideArrow"></div>
   </div>
 </template>

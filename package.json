@@ -55,11 +55,13 @@
     "build::sass": "sass src/style/style.scss dist/style.css"
   },
   "dependencies": {
+    "jump.js": "^1.0.2",
     "nanopop": "^2.4.2",
     "vue": "^3.4.29"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
+    "@types/jump.js": "^1.0.6",
     "@types/node": "^20.14.5",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/tsconfig": "^0.5.1",
