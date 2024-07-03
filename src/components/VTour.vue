@@ -58,6 +58,7 @@ const getNextLabel: ComputedRef<String> = computed(() => {
 function startTour(): void{
   if(localStorage.getItem('vjt-' + (props.name || 'default')) === 'true') return;
   if(props.saveToLocalStorage === 'step') _CurrentStep.currentStep = parseInt(localStorage.getItem('vjt-' + (props.name || 'default')) || '0');
+  else _CurrentStep.currentStep = 0;
 
   setTimeout(() => {
     if(!_VTour.value){
