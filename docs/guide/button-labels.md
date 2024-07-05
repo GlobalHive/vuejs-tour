@@ -17,6 +17,32 @@ To customize the labels of the buttons, you can use the `buttonLabels` prop in t
 </template>
 ```
 
+<style>
+    .custom-block.example {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 1rem;
+        height: 16rem;
+        background-color: var(--vp-c-bg-alt);
+        text-align: center;
+    }
+</style>
+
+<script setup>
+import VTour from '../../src/components/VTour.vue';
+import "../../src/style/style.scss";
+
+const steps = [{ target: '[data-step="0"]', content: 'Customized button labels' }];
+</script>
+
+<VTour :steps="steps" autoStart saveToLocalStorage='never' noScroll :buttonLabels='{next: "➡", back: "⬅", done: "✓", skip: "↪"}' />
+
+<div class="custom-block example">
+    <p data-step="0">Target</p>
+</div>
+
 ## Customizing the action buttons
 You can also customize the action button labels by using the `actions` slot.
 

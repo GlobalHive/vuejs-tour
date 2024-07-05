@@ -10,6 +10,7 @@
 * **VTour:** Adding `onBeforeStep` event
 * **VTour:** Adding `onAfterStep` event
 * **VTour:** Adding `showProgress` prop
+* **VTour:** Adding `noScroll` prop ✔️
 * **Step:** Adding `arrow️` option
 * **Step:** Adding `backdrop` option
 * **Step:** Adding `highligt` option
@@ -19,6 +20,7 @@
 ### Documentation
 
 * **Documentation:** Adding referece pages 🚧
+* **Documentation:** Adding interactive examples ✔️
 
 ### Bug Fixes
 
