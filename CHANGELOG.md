@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/GlobalHive/vuejs-tour/compare/v2.0.0...v2.0.1) (2024-07-05)
+
+
+### Bug Fixes
+
+* **Package:** Fixed not using npm ([c9c046b](https://github.com/GlobalHive/vuejs-tour/commit/c9c046be28fad2e1f4ee85a50ee635cbed53c194))
+* **Workflow:** Fixed NPM release ([a053465](https://github.com/GlobalHive/vuejs-tour/commit/a0534653b46414198a23efe6271f7e012cfe2f86))
+
 ## [2.0.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.7.0...v2.0.0) (2024-07-05)
 
 
