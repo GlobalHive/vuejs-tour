@@ -90,5 +90,5 @@ That's it! You have successfully created a tour using the `vuejs-tour` package.
 
 ## What's next?
 - [Customization](./start-options)
-- [Reference](../reference/)
+- [Reference](../reference/coming-soon)
 

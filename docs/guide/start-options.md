@@ -1,7 +1,7 @@
 # Start Options
 To start a tour, you can use the `autoStart` prop or call the `startTour` method on the `VTour` component. Additionally, you can use the `startDelay` prop to delay the start of the tour.
 
-## Using `autoStart` prop
+## Using the `autoStart` prop
 ```vue
 <script setup lang='ts'>
     // ...
@@ -16,7 +16,7 @@ To start a tour, you can use the `autoStart` prop or call the `startTour` method
 When using the `autoStart` prop, the tour will start automatically when the component is mounted.
 
 
-## Using `startTour` method
+## Using the `startTour` method
 ```vue
 <script setup lang='ts'>
     // ...
@@ -40,8 +40,9 @@ Every time you use `startTour`, the tour begins from the start. It will do this 
 
 The `startDelay` prop allows you to delay the start of the tour. This can be useful when you want to give the user some time to get familiar with the page before starting the tour.
 
-```vue [startTour method]
+```vue
 <template>
+  <VTour :steps="steps" ref="vTour"/> // [!code --]
   <VTour :steps="steps" ref="vTour" startDelay='1000'/> // [!code ++]
   ...
 </template>

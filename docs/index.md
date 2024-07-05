@@ -11,7 +11,7 @@ hero:
       link: /guide/what-is-vuejs-tour
     - theme: alt
       text: Quickstart
-      link: /api-examples
+      link: /guide/getting-started
     - theme: alt
       text: Github
       link: https://github.com/GlobalHive/vuejs-tour

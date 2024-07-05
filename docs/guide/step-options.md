@@ -115,6 +115,6 @@ If not provided, the `placement` property will default to `right-middle`.
 </script>
 ```
 
-::: tip
+::: info
 `vuejs-tour` will automatically adjust the placement of the step if there is not enough space.
 :::

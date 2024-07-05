@@ -1,7 +1,7 @@
 # Highlight Target
 The `highlight` property is a boolean that represents whether the target should be highlighted or not.
 
-## Using `highlight` prop
+## Using the `highlight` prop
 To enable the highlight effect, you can use the `highlight` prop in the `VTour` component. 
 
 ```vue
@@ -11,11 +11,12 @@ To enable the highlight effect, you can use the `highlight` prop in the `VTour` 
 </script>
 
 <template>
+  <VTour :steps="steps" ref="vTour" startDelay='1000'/> // [!code --]
   <VTour :steps="steps" autoStart highlight/> // [!code ++]
   ...
 </template>
 ```
 
-::: tip
+::: info
 By default, highlighting is disabled.
 :::

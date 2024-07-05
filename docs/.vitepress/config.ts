@@ -7,10 +7,11 @@ export default defineConfig({
   themeConfig: {
     logo: 'https://vuejs.org/images/logo.png',
     nav: [
-      { text: 'Guide', link: '/' },
-      { text: 'Reference', link: '/' },
+      { text: 'Guide', link: '/guide/what-is-vuejs-tour' },
+      { text: 'Reference', link: '/reference/coming-soon' },
       { text: '1.2.3', items: [
         { text: 'Changelog', link: 'https://github.com/GlobalHive/vuejs-tour/blob/master/CHANGELOG.md' },
+        { text: 'Roadmap', link: '/guide/roadmap' },
         { text: 'Issues', link: 'https://github.com/GlobalHive/vuejs-tour/issues' }]
       }
     ],
@@ -32,17 +33,38 @@ export default defineConfig({
             { text: 'Start Options', link: '/guide/start-options' },
             { text: 'Highlight Target', link: '/guide/highlight-target' },
             { text: 'Using a Backdrop', link: '/guide/using-a-backdrop' },
-            { text: 'Saving Progress', link: '/guide/using-a-backdrop' },
-            { text: 'Step Options', link: '/guide/step-options' },
+            { text: 'Hiding the Arrow', link: '/guide/hiding-the-arrow' },
+            { text: 'Tour Margin', link: '/guide/tour-margin' },
+            { text: 'Saving Progress', link: '/guide/saving-progress' },
           ]
         },
         {
           text: 'Advanced',
           collapsed: false,
           items: [
+            { text: 'Skipping a Tour', link: '/guide/skipping-a-tour' },
+            { text: 'Button Labels', link: '/guide/button-labels' },
+            { text: 'Step Options', link: '/guide/step-options' },
             { text: 'Multiple Tours', link: '/guide/multiple-tours' },
           ]
+        },
+        {
+          text: "What's next?",
+          collapsed: false,
+          items: [
+            { text: 'Roadmap', link: '/guide/roadmap' },
+            { text: 'Changelog', link: 'https://github.com/GlobalHive/vuejs-tour/blob/master/CHANGELOG.md' },
+          ]
         }
+      ],
+      '/reference/': [
+        {
+          text: 'Reference',
+          collapsed: false,
+          items: [
+            { text: 'Coming Soon', link: '/reference/coming-soon' },
+          ]
+        },
       ],
     },
     socialLinks: [

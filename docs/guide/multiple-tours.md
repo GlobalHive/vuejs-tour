@@ -65,6 +65,9 @@ To switch between tours, you just switch the `tourSteps` and `tourName` values.
 </template>
 ```
 Now everytime you call the `switchTour` function, the tour will switch between `tour1` and `tour2`.
+::: tip
+There's no need to call `stopTour` before switching tours, the single `VTour` component will handle that for you.
+:::
 
 ## Multiple Components
 You can create multiple `VTour` components with different steps and options.
