@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1
+
+
 ## [1.7.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.6.1...v1.7.0) (2024-07-05)
 
 
