@@ -69,10 +69,6 @@ function startTour(): void{
       });
     }
     if(props.backdrop) document.querySelector('#vjt-backdrop')!.removeAttribute('data-hidden');
-    window.scrollTo({
-      top: _CurrentStep.getCurrentStep.target === 'body' ? 0 : (document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement).getBoundingClientRect().top - 100,
-      behavior: 'smooth',
-    });
     updatePosition();
     emit("onTourStart");
   }, props.startDelay);
