@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.6.1...v1.7.0) (2024-07-05)
+
+
+### Features
+
+* **Docs:** Adding docs using vitepress ([633b017](https://github.com/GlobalHive/vuejs-tour/commit/633b0173b2c0a8bb4a7f03f122c2b1f69f37ffad))
+* **Project:** Added Typescript ([2d80e28](https://github.com/GlobalHive/vuejs-tour/commit/2d80e28315bb708fb539dd13ca631b043de33427))
+
 ## [1.6.1](https://github.com/GlobalHive/vuejs-tour/compare/v1.6.0...v1.6.1) (2024-06-03)
 
 
