@@ -10,7 +10,7 @@ First of all, you need to create an array of steps. Each step should have a `tar
     import '@globalhive/vuejs-tour/dist/style.css';
     
     const steps = [{ // [!code ++:10]
-        target: '[data-step=0]',
+        target: '[data-step="0"]',
         content: 'Step 1',
     },{
         target: '.some-class',
