@@ -6,6 +6,7 @@
 [![open issues](https://img.shields.io/github/issues-raw/globalhive/vuejs-tour)](https://github.com/GlobalHive/vuejs-tour/issues)<br>
 [![version](https://img.shields.io/npm/v/@globalhive/vuejs-tour)](https://www.npmjs.com/package/@globalhive/vuejs-tour)
 [![downloads](https://img.shields.io/npm/dt/@globalhive/vuejs-tour)](https://www.npmjs.com/package/@globalhive/vuejs-tour)
+[![producthunt](https://img.shields.io/badge/view_on-ProductHunt-orange)](https://www.producthunt.com/posts/vuejs-tour)
 
 > VueJS Tour is a lightweight, simple and customizable tour plugin.
 > It provides a quick and easy way to guide your users through your application.
