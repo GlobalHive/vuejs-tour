@@ -116,8 +116,7 @@ function lastStep(): void{
 }
 
 function endTour(): void{
-  if(props.backdrop) document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
-  _Tooltip.value!.setAttribute('data-hidden', '');
+  stopTour();
   if(props.saveToLocalStorage !== 'never') localStorage.setItem('vjt-' + (props.name || 'default'), 'true');
   emit("onTourEnd");
 }
@@ -142,6 +141,7 @@ async function updatePosition(): Promise<void>{
   _Tooltip.value!.removeAttribute('data-hidden');
   _Tooltip.value!.setAttribute('data-arrow', _VTour.value!.update({
     reference: document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement,
+    position: _CurrentStep.getCurrentStep.placement || 'right',
   }) || 'right');
   if(props.saveToLocalStorage === 'step') localStorage.setItem('vjt-' + (props.name || 'default'), _CurrentStep.currentStep.toString());
 }
