@@ -20,6 +20,6 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: docs/.vuepress/dist/
+          folder: docs/.vitepress/dist/
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
