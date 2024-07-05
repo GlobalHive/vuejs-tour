@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/GlobalHive/vuejs-tour/compare/v2.0.1...v2.0.2) (2024-07-05)
+
+
+### Bug Fixes
+
+* **Step:** Fixed placement not working ([f16ec0f](https://github.com/GlobalHive/vuejs-tour/commit/f16ec0f2ad8276f05256c62379863e976ff43996))
+
 ## [2.0.1](https://github.com/GlobalHive/vuejs-tour/compare/v2.0.0...v2.0.1) (2024-07-05)
 
 
