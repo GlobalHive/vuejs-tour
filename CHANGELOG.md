@@ -20,14 +20,21 @@
 
 ### ⚠ BREAKING CHANGES
 
-* Push to 2.0.1
+* **VTour:** Removed the plugin approach, switched to component import
+* **Deps:** Switched from popperjs to nanopop
+
+### Features
+
+* **VTour:** Added margin prop
+* **VTour:** Added hideSkip prop
+* **VTour:** Added hideArrow prop
+* **VTour:** Added Typescript
+* **VTour:** Complete rewrite of the component
 
 ### Bug Fixes
 
-* Push to 2.0.1 ([93bef24](https://github.com/GlobalHive/vuejs-tour/commit/93bef24b8dfb19eeca78027d45b5a730d89e9178))
-
-## 2.0.1
-
+* **VTour:** Fixing the highlight using document space
+* **VTour:** Fixing wrong saveToLocalStorage checks
 
 ## [1.7.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.6.1...v1.7.0) (2024-07-05)
 
