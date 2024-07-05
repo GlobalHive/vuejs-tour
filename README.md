@@ -27,10 +27,16 @@
 
 ## Installation
 
-<ins><b>Looking for a nuxt version?</b></ins><br>
-[Nuxt version (Special thanks to BayBreezy)](https://github.com/BayBreezy/nuxt-tour)
+> [!TIP]
+> Looking for a nuxt version?
+> [Nuxt version (Special thanks to BayBreezy)](https://github.com/BayBreezy/nuxt-tour)
 
-This section will guide you through the process of installing VueJS Tour.
+> [!CAUTION]
+> As of version 2.0.1, VueJS Tour has been rewritten in TypeScript. The `VTour` component is now a named export and must be imported as such.
+> Please refer to the [Documentation](https://globalhive.github.io/vuejs-tour/) for more information on how to use VueJS Tour.
+
+<br><br><br><br>
+<ins>If you still want to use the old version, then this is the correct way to install it:</ins>
 
 * Step 1: Go to your project directory and install VueJS Tour using npm:
 
