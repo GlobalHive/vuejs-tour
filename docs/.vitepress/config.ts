@@ -4,6 +4,7 @@ export default defineConfig({
   title: "VueJS Tour",
   description: "Guide your users through your application quickly and easily.",
   lang: 'en-US',
+  base: '/vuejs-tour/',
   themeConfig: {
     logo: 'https://vuejs.org/images/logo.png',
     nav: [
