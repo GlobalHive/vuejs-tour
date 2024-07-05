@@ -19,7 +19,7 @@ export interface IVTourProps {
     skip: string;
   };
   saveToLocalStorage?: 'never' | 'step' | 'end';
-  canSkip?: boolean;
+  hideSkip?: boolean;
   hideArrow?: boolean;
 }
 export interface IVTourData {
@@ -47,6 +47,7 @@ defineExpose({
   nextStep,
   lastStep,
   endTour,
+  stopTour,
   goToStep,
   resetTour
 });
@@ -77,11 +78,18 @@ function startTour(): void{
   }, props.startDelay);
 }
 
-function resetTour(): void{
+function stopTour(): void{
+  if(props.backdrop) document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
+  if(props.highlight) document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
+  _Tooltip.value!.setAttribute('data-hidden', '');
+}
+
+function resetTour(restart: boolean): void{
+  stopTour();
   _CurrentStep.currentStep = 0;
   _CurrentStep.lastStep = 0;
   localStorage.removeItem('vjt-' + (props.name || 'default'));
-  startTour();
+  if(restart) startTour();
 }
 
 function nextStep(): void{
@@ -158,7 +166,7 @@ onMounted(() => {
     <slot name="actions" v-bind="{ lastStep, nextStep, endTour, _CurrentStep, getNextLabel, props }">
       <div class="vjt-actions">
         <button v-if="_CurrentStep.lastStep < _CurrentStep.currentStep" type="button" @click.prevent="lastStep()" v-text="props.buttonLabels?.back || 'Back'"></button>
-        <button v-if="!props.canSkip" type="button" @click.prevent="endTour()" v-text="props.buttonLabels?.skip || 'Skip'"></button>
+        <button v-if="!props.hideSkip" type="button" @click.prevent="endTour()" v-text="props.buttonLabels?.skip || 'Skip'"></button>
         <button type="button" @click.prevent="nextStep()" v-text="getNextLabel"></button>
       </div>
     </slot>
