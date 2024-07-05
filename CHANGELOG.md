@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.0.2...v2.1.0) (2024-07-05)
+
+
+### Features
+
+* **VTour:** Added noScroll prop ([7ad9141](https://github.com/GlobalHive/vuejs-tour/commit/7ad91418ea21041935b2a64e9ab43c0f836fd1cf))
+
+
+### Bug Fixes
+
+* **VTour:** Fixed tooltip not scrolling with target ([ffbe9d9](https://github.com/GlobalHive/vuejs-tour/commit/ffbe9d9ec451f5098b358bf5f09ea5f360cfd49e))
+* **VTour:** Fixed wrong scrolling call ([b644a86](https://github.com/GlobalHive/vuejs-tour/commit/b644a8674425b2d2c0048d419dddbb9cad4dcd97))
+
 ## [2.0.2](https://github.com/GlobalHive/vuejs-tour/compare/v2.0.1...v2.0.2) (2024-07-05)
 
 
