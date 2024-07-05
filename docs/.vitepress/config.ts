@@ -73,7 +73,7 @@ export default defineConfig({
     ],
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Made with ❤️ by Global Hive'
+      copyright: 'Made with ❤️ by <a href = "https://github.com/GlobalHive/vuejs-tour">Global Hive</a>'
     },
     editLink: {
       pattern: 'https://github.com/GlobalHive/vuejs-tour/tree/master/docs/:path',
