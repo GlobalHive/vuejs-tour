@@ -21,6 +21,7 @@ export interface IVTourProps {
   saveToLocalStorage?: 'never' | 'step' | 'end';
   hideSkip?: boolean;
   hideArrow?: boolean;
+  noScroll?: boolean;
 }
 export interface IVTourData {
   currentStep: number;
@@ -69,10 +70,6 @@ function startTour(): void{
       });
     }
     if(props.backdrop) document.querySelector('#vjt-backdrop')!.removeAttribute('data-hidden');
-    window.scrollTo({
-      top: _CurrentStep.getCurrentStep.target === 'body' ? 0 : (document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement).getBoundingClientRect().top - 100,
-      behavior: 'smooth',
-    });
     updatePosition();
     emit("onTourStart");
   }, props.startDelay);
@@ -132,11 +129,13 @@ async function updatePosition(): Promise<void>{
   await new Promise<void>((resolve) => {
     if(props.highlight) highlightElement();
     _Tooltip.value!.setAttribute('data-hidden', '');
-    jump(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, {
-      duration: 500,
-      offset: -100,
-      callback: () => {resolve()},
-    });
+    if(!props.noScroll){
+      jump(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, {
+        duration: 500,
+        offset: -100,
+        callback: () => {resolve()},
+      });
+    }else resolve();
   });
   _Tooltip.value!.removeAttribute('data-hidden');
   _Tooltip.value!.setAttribute('data-arrow', _VTour.value!.update({

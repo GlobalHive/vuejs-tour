@@ -19,6 +19,32 @@ To hide the Skip button, you can use the `hideSkip` prop in the `VTour` componen
 </template>
 ```
 
+<style>
+    .custom-block.example {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 1rem;
+        height: 16rem;
+        background-color: var(--vp-c-bg-alt);
+        text-align: center;
+    }
+</style>
+
+<script setup>
+import VTour from '../../src/components/VTour.vue';
+import "../../src/style/style.scss";
+
+const steps = [{ target: '[data-step="0"]', content: 'No skipping for you' }];
+</script>
+
+<VTour :steps="steps" autoStart hideSkip saveToLocalStorage='never' noScroll />
+
+<div class="custom-block example">
+    <p data-step="0">Target</p>
+</div>
+
 ## Customizing the action buttons
 You can also customize the action buttons by using the `actions` slot.
     

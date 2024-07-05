@@ -16,6 +16,30 @@ To enable the highlight effect, you can use the `highlight` prop in the `VTour` 
   ...
 </template>
 ```
+<style>
+    .custom-block.example {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 1rem;
+        height: 16rem;
+        background-color: var(--vp-c-bg-alt);
+        text-align: center;
+    }
+</style>
+<script setup>
+import VTour from '../../src/components/VTour.vue';
+import "../../src/style/style.scss";
+
+const steps = [{ target: '[data-step="0"]', content: 'Target highlighted' }];
+
+</script>
+<VTour :steps="steps" autoStart saveToLocalStorage='never' noScroll highlight/>
+
+<div class="custom-block example">
+    <p data-step="0">Target</p>
+</div>
 
 ::: info
 By default, highlighting is disabled.

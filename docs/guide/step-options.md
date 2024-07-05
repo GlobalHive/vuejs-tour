@@ -115,6 +115,35 @@ If not provided, the `placement` property will default to `right-middle`.
 </script>
 ```
 
+<style>
+    .custom-block.example {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 1rem;
+        height: 16rem;
+        background-color: var(--vp-c-bg-alt);
+        text-align: center;
+    }
+</style>
+
+<script setup>
+import VTour from '../../src/components/VTour.vue';
+import "../../src/style/style.scss";
+
+const steps = [{ target: '[data-step="0"]', content: 'Placement: top', placement: 'top' }
+,{ target: '[data-step="0"]', content: 'Placement: right (default)'}
+,{ target: '[data-step="0"]', content: 'Placement: bottom', placement: 'bottom' }
+,{ target: '[data-step="0"]', content: 'Placement: left', placement: 'left' }];
+</script>
+
+<VTour :steps="steps" autoStart saveToLocalStorage='never' noScroll />
+
+<div class="custom-block example">
+    <p data-step="0">Target</p>
+</div>
+
 ::: info
 `vuejs-tour` will automatically adjust the placement of the step if there is not enough space.
 :::
