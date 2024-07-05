@@ -32,12 +32,12 @@ After creating the steps, you need to pass them to the `VTour` component as a pr
         <a data-step="0" href="https://vitejs.dev" target="_blank"> // [!code ++]
             <img src="/vite.svg" class="logo" alt="Vite logo" />
         </a>
-        <a href="https://vuejs.org/" target="_blank"> // [!code ++]
+        <a href="https://vuejs.org/" target="_blank"> // [!code --]
         <a href="https://vuejs.org/" target="_blank" class="some-class"> // [!code ++]
             <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
         </a>
     </div>
-    <HelloWorld msg="Vite + Vue" /> / [!code --]
+    <HelloWorld msg="Vite + Vue" /> // [!code --]
     <HelloWorld id="some-id" msg="Vite + Vue" /> // [!code ++]
 </template>
 ```
