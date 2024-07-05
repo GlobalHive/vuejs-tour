@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/GlobalHive/vuejs-tour/compare/v1.7.0...v2.0.0) (2024-07-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* Push to 2.0.1
+
+### Bug Fixes
+
+* Push to 2.0.1 ([93bef24](https://github.com/GlobalHive/vuejs-tour/commit/93bef24b8dfb19eeca78027d45b5a730d89e9178))
+
 ## 2.0.1
 
 
