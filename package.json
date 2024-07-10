@@ -48,7 +48,7 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "build": "npm build-only && npm build::sass && npm pack",
+    "build": "npm run build-only && npm run build::sass && npm pack",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "build::types": "vue-tsc --emitDeclarationOnly",
