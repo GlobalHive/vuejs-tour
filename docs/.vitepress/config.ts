@@ -47,6 +47,13 @@ export default defineConfig({
             { text: 'Button Labels', link: '/guide/button-labels' },
             { text: 'Step Options', link: '/guide/step-options' },
             { text: 'Multiple Tours', link: '/guide/multiple-tours' },
+            {
+              text: 'Styling',
+                items: [
+                    { text: 'CSS Theme', link: '/guide/css-theme' },
+                    { text: 'Component Slots', link: '/guide/component-slots' },
+                ]
+            }
           ]
         },
         {

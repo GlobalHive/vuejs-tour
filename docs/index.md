@@ -31,7 +31,8 @@ features:
 
 <script setup>
 import VTour from '../src/components/VTour.vue';
-import "../src/style/style.scss";
+import "../src/style/_white.scss";
+
 
 const steps = [{
     target: '.image-src',
