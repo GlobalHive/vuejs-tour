@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/GlobalHive/vuejs-tour/compare/v2.1.0...v2.1.1) (2024-07-10)
+
+
+### Bug Fixes
+
+* **package:** Fixed wrong scripts ([4438349](https://github.com/GlobalHive/vuejs-tour/commit/4438349c749d283557e33bffa43f3cbca7423d03))
+
 ## [2.1.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.0.2...v2.1.0) (2024-07-05)
 
 
