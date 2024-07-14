@@ -1,5 +1,6 @@
 # Roadmap
 ✔️ = Done    
+❌ = Declined   
 🕔 = Postponed    
 🚧 = In Progress
 

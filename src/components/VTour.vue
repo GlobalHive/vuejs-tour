@@ -100,7 +100,6 @@ function nextStep(): void{
     return;
   }
   updatePosition();
-  emit("onTourStep");
 }
 
 function lastStep(): void{
@@ -114,7 +113,6 @@ function lastStep(): void{
     return;
   }
   updatePosition();
-  emit("onTourStep");
 }
 
 function endTour(): void{
@@ -148,6 +146,7 @@ async function updatePosition(): Promise<void>{
     position: _CurrentStep.getCurrentStep.placement || 'right',
   }) || 'right');
   if(props.saveToLocalStorage === 'step') localStorage.setItem('vjt-' + (props.name || 'default'), _CurrentStep.currentStep.toString());
+  emit("onTourStep");
 }
 
 function highlightElement(): void {
