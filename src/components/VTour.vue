@@ -41,7 +41,8 @@ const _CurrentStep: Reactive<IVTourData> = reactive({
 const props = defineProps<IVTourProps>();
 const emit = defineEmits<{
   onTourStart: [],
-  onTourEnd: []
+  onTourEnd: [],
+  onTourStep: []
 }>()
 defineExpose({
   startTour,
@@ -99,6 +100,7 @@ function nextStep(): void{
     return;
   }
   updatePosition();
+  emit("onTourStep");
 }
 
 function lastStep(): void{
@@ -112,6 +114,7 @@ function lastStep(): void{
     return;
   }
   updatePosition();
+  emit("onTourStep");
 }
 
 function endTour(): void{
