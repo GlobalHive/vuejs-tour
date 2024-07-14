@@ -1,5 +1,6 @@
 # Roadmap
 ✔️ = Done    
+❌ = Declined   
 🕔 = Postponed    
 🚧 = In Progress
 
@@ -7,8 +8,9 @@
 
 ### Features
 
-* **VTour:** Adding `onBeforeStep` event
-* **VTour:** Adding `onAfterStep` event
+* **VTour:** Adding `onTourStep` event ✔️
+* **VTour:** Adding `onBeforeStep` event ❌ (Changed to `onTourStep`)
+* **VTour:** Adding `onAfterStep` event ❌ (Changed to `onTourStep`)
 * **VTour:** Adding `showProgress` prop
 * **VTour:** Adding `noScroll` prop ✔️
 * **Step:** Adding `arrow️` option
