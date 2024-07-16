@@ -3,11 +3,11 @@
 [![license](https://img.shields.io/github/license/globalhive/vuejs-tour)](https://github.com/GlobalHive/vuejs-tour/blob/master/LICENSE)
 [![docs](https://img.shields.io/github/actions/workflow/status/globalhive/vuejs-tour/docs.yml?branch=master&label=docs)](https://github.com/GlobalHive/vuejs-tour/actions/workflows/docs.yml)
 [![build](https://img.shields.io/github/actions/workflow/status/globalhive/vuejs-tour/npm-publish.yml?branch=master)](https://www.npmjs.com/package/@globalhive/vuejs-tour)
-[![open issues](https://img.shields.io/github/issues-raw/globalhive/vuejs-tour)](https://github.com/GlobalHive/vuejs-tour/issues)<br>
+[![open issues](https://img.shields.io/github/issues-raw/globalhive/vuejs-tour)](https://github.com/GlobalHive/vuejs-tour/issues)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f320aadcc4514cc5aaedafd271be2fd7)](https://app.codacy.com/gh/GlobalHive/vuejs-tour/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)<br>
 [![version](https://img.shields.io/npm/v/@globalhive/vuejs-tour)](https://www.npmjs.com/package/@globalhive/vuejs-tour)
 [![downloads](https://img.shields.io/npm/dt/@globalhive/vuejs-tour)](https://www.npmjs.com/package/@globalhive/vuejs-tour)
 [![producthunt](https://img.shields.io/badge/view_on-ProductHunt-orange)](https://www.producthunt.com/products/vuejs-tour)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f320aadcc4514cc5aaedafd271be2fd7)](https://app.codacy.com/gh/GlobalHive/vuejs-tour/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 > VueJS Tour is a lightweight, simple and customizable tour plugin.
 > It provides a quick and easy way to guide your users through your application.
