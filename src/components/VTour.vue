@@ -130,7 +130,7 @@ function goToStep(step: number): void{
 
 async function updatePosition(): Promise<void>{
   await new Promise<void>((resolve) => {
-    if(props.highlight) highlightElement();
+    updateHighlight();
     _Tooltip.value!.setAttribute('data-hidden', '');
     if(!props.noScroll){
       jump(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, {
@@ -147,12 +147,6 @@ async function updatePosition(): Promise<void>{
   }) || 'right');
   if(props.saveToLocalStorage === 'step') localStorage.setItem('vjt-' + (props.name || 'default'), _CurrentStep.currentStep.toString());
   emit("onTourStep");
-}
-
-function highlightElement(): void {
-  document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
-  (document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement).classList.add('vjt-highlight');
-  getClipPath.value = getClipPathValues('.vjt-highlight');
 }
 
 onMounted(() => {

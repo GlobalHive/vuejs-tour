@@ -4,4 +4,5 @@ export interface ITourStep {
     target: string;
     content: string;
     placement?: NanoPopPosition;
+    highlight?: boolean;
 }
