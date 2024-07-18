@@ -133,7 +133,7 @@ async function updatePosition(): Promise<void>{
     updateHighlight();
     updateBackdrop();
     _Tooltip.value!.setAttribute('data-hidden', '');
-    if(!props.noScroll){
+    if(!props.noScroll && !_CurrentStep.getCurrentStep.noScroll){
       jump(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, {
         duration: 500,
         offset: -100,

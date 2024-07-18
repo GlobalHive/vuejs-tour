@@ -8,4 +8,5 @@ export interface ITourStep {
     onAfter?: () => Promise<void>;
     highlight?: boolean;
     backdrop?: boolean;
+    noScroll?: boolean;
 }
