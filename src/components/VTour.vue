@@ -67,7 +67,7 @@ function startTour(): void{
     if(!_VTour.value){
       _VTour.value = createPopper(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, _Tooltip.value!, {
         position: _CurrentStep.getCurrentStep.placement || 'right',
-        margin: props.margin || (props.highlight ? 14 : 8),
+        margin: props.margin || ((props.highlight || _CurrentStep.getCurrentStep.highlight ) ? 14 : 8),
       });
     }
     updatePosition();
@@ -76,8 +76,8 @@ function startTour(): void{
 }
 
 function stopTour(): void{
-  if(props.backdrop) document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
-  if(props.highlight) document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
+  if(props.backdrop || _CurrentStep.getLastStep.backdrop) document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
+  if(props.highlight || _CurrentStep.getLastStep.highlight) document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
   _Tooltip.value!.setAttribute('data-hidden', '');
 }
 
