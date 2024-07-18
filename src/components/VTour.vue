@@ -126,6 +126,7 @@ function goToStep(step: number): void{
 }
 
 async function updatePosition(): Promise<void>{
+  await _CurrentStep.getCurrentStep.onBefore?.();
   await new Promise<void>((resolve) => {
     updateHighlight();
     updateBackdrop();
