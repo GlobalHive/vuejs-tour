@@ -37,6 +37,7 @@ export default defineConfig({
             { text: 'Hiding the Arrow', link: '/guide/hiding-the-arrow' },
             { text: 'Tour Margin', link: '/guide/tour-margin' },
             { text: 'Saving Progress', link: '/guide/saving-progress' },
+            { text: 'Scroll to Element', link: '/guide/scroll-to-element' },
           ]
         },
         {
