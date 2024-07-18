@@ -70,7 +70,6 @@ function startTour(): void{
         margin: props.margin || (props.highlight ? 14 : 8),
       });
     }
-    if(props.backdrop) document.querySelector('#vjt-backdrop')!.removeAttribute('data-hidden');
     updatePosition();
     emit("onTourStart");
   }, props.startDelay);
@@ -129,6 +128,7 @@ function goToStep(step: number): void{
 async function updatePosition(): Promise<void>{
   await new Promise<void>((resolve) => {
     updateHighlight();
+    updateBackdrop();
     _Tooltip.value!.setAttribute('data-hidden', '');
     if(!props.noScroll){
       jump(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, {
@@ -151,6 +151,11 @@ function updateHighlight(): void{
   document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
   if(!props.highlight && !_CurrentStep.getCurrentStep.highlight) return;
   (document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement).classList.add('vjt-highlight');
+}
+
+function updateBackdrop(): void{
+  if(props.backdrop || _CurrentStep.getCurrentStep.backdrop) document.querySelector('#vjt-backdrop')!.removeAttribute('data-hidden');
+  else document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
 }
 
 onMounted(() => {
