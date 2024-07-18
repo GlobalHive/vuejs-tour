@@ -10,7 +10,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/what-is-vuejs-tour' },
       { text: 'Reference', link: '/reference/coming-soon' },
-      { text: '1.2.3', items: [
+      { text: '2.1.1', items: [
         { text: 'Changelog', link: 'https://github.com/GlobalHive/vuejs-tour/blob/master/CHANGELOG.md' },
         { text: 'Roadmap', link: '/guide/roadmap' },
         { text: 'Issues', link: 'https://github.com/GlobalHive/vuejs-tour/issues' }]
