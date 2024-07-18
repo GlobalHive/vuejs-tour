@@ -128,7 +128,7 @@ function goToStep(step: number): void{
 
 async function updatePosition(): Promise<void>{
   await new Promise<void>((resolve) => {
-    if(props.highlight) highlightElement();
+    updateHighlight();
     _Tooltip.value!.setAttribute('data-hidden', '');
     if(!props.noScroll){
       jump(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, {
@@ -147,8 +147,9 @@ async function updatePosition(): Promise<void>{
   emit("onTourStep");
 }
 
-function highlightElement(): void{
+function updateHighlight(): void{
   document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
+  if(!props.highlight && !_CurrentStep.getCurrentStep.highlight) return;
   (document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement).classList.add('vjt-highlight');
 }
 
