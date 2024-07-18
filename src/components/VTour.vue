@@ -145,6 +145,7 @@ async function updatePosition(): Promise<void>{
     position: _CurrentStep.getCurrentStep.placement || 'right',
   }) || 'right');
   if(props.saveToLocalStorage === 'step') localStorage.setItem('vjt-' + (props.name || 'default'), _CurrentStep.currentStep.toString());
+  await _CurrentStep.getCurrentStep.onAfter?.();
   emit("onTourStep");
 }
 
