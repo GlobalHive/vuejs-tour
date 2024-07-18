@@ -14,6 +14,7 @@
 * **VTour:** Adding `showProgress` prop
 * **VTour:** Adding `noScroll` prop ✔️
 * **Step:** Adding `arrow️` option
+* **Step:** Adding `noScroll` option ✔️
 * **Step:** Adding `backdrop` option ✔️
 * **Step:** Adding `highlight` option ✔️
 * **Step:** Adding `onBefore` event ✔️
