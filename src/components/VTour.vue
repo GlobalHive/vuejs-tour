@@ -57,6 +57,8 @@ const getNextLabel: ComputedRef<String> = computed(() => {
   return props.buttonLabels?.next || 'Next';
 });
 
+const getClipPath = ref(getClipPathValues('.vjt-highlight') ? getClipPathValues('.vjt-highlight') : '');
+
 function startTour(): void{
   if(localStorage.getItem('vjt-' + (props.name || 'default')) === 'true') return;
   if(props.saveToLocalStorage === 'step') _CurrentStep.currentStep = parseInt(localStorage.getItem('vjt-' + (props.name || 'default')) || '0');
@@ -145,19 +147,40 @@ async function updatePosition(): Promise<void>{
   if(props.saveToLocalStorage === 'step') localStorage.setItem('vjt-' + (props.name || 'default'), _CurrentStep.currentStep.toString());
 }
 
-function highlightElement(): void{
+function highlightElement(): void {
   document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
   (document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement).classList.add('vjt-highlight');
+  getClipPath.value = getClipPathValues('.vjt-highlight');
 }
 
 onMounted(() => {
   _Tooltip.value = document.querySelector('#vjt-tooltip') as HTMLElement;
   if(props.autoStart) startTour();
 });
+
+function getClipPathValues(targetSelector: string): string {
+  const targetElement = document.querySelector(targetSelector) as HTMLElement;
+  if(!targetElement) return '';
+
+  const rect = targetElement.getBoundingClientRect();
+  return `polygon(
+    0% 0%,
+    0% 100%,
+    ${rect.left}px 100%,
+    ${rect.left}px ${rect.top}px,
+    ${rect.right}px ${rect.top}px,
+    ${rect.right}px ${rect.bottom}px,
+    ${rect.left}px ${rect.bottom}px,
+    ${rect.left}px 100%,
+    100% 100%,
+    100% 0%
+  )`;
+}
+
 </script>
 
 <template>
-  <div id="vjt-backdrop" data-hidden></div>
+  <div id="vjt-backdrop" data-hidden :style="'clip-path: ' + getClipPath"></div>
   <div id="vjt-tooltip" role="tooltip" data-arrow="r" data-hidden>
     <slot name="content" v-bind="{ _CurrentStep }">
       <div v-html="_CurrentStep.getCurrentStep?.content"></div>
