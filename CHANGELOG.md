@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.1.1...v2.2.0) (2024-09-17)
+
+
+### Features
+
+* Added Clip-Path Highlight ([66a0bae](https://github.com/GlobalHive/vuejs-tour/commit/66a0bae3408926a8ccab514ce73c21f37ca4bce1))
+
 ## [2.1.1](https://github.com/GlobalHive/vuejs-tour/compare/v2.1.0...v2.1.1) (2024-07-10)
 
 
