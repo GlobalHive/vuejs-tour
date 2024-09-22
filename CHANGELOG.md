@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.3.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.2.0...v2.3.0) (2024-09-22)
+
+
+### Features
+
+* **Step:** Added backdrop option to step ([8b2824e](https://github.com/GlobalHive/vuejs-tour/commit/8b2824e8a05a7d113d2a46a2137960adf9e0b693))
+* **Step:** Added highlight option to steps ([95ea9f9](https://github.com/GlobalHive/vuejs-tour/commit/95ea9f938313b278f81fae773eb6624d208092fb))
+* **Step:** Added noScroll option to step ([6f60ba6](https://github.com/GlobalHive/vuejs-tour/commit/6f60ba601a28671ae98911a827cfa5eb5c552b5a))
+* **Step:** Added onAfter callback ([09f3fea](https://github.com/GlobalHive/vuejs-tour/commit/09f3fead9b28c9ff0bc6e592d80da96c7380bb35))
+* **Step:** Added onBefore callback to step ([15f0c7a](https://github.com/GlobalHive/vuejs-tour/commit/15f0c7a0b240d61c339cbd560b3e4f3cb004f79d))
+* **VTour:** Added OnTourStep emit ([ce0687c](https://github.com/GlobalHive/vuejs-tour/commit/ce0687cda7739ec7905597a54e9ddf6fc9d06c19))
+
+
+### Bug Fixes
+
+* **VTour:** Fixed stopping tour not removing backdrop & highlight ([408f5af](https://github.com/GlobalHive/vuejs-tour/commit/408f5af03f9b3c082d2c88e24a61b528460c7c3d))
+
 ## [2.2.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.1.1...v2.2.0) (2024-09-17)
 
 
