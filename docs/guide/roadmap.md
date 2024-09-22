@@ -10,7 +10,7 @@
 * **Step:** Adding `arrow️` option
 * **VTour:** Adding `showProgress` prop
 
-## 2.2.0 (2024-08-13) ✔️
+## 2.2.0 [2.3.0] (2024-08-13) [Delayed: 23.09.2024] ✔️
 
 ### Features
 
