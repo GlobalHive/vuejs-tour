@@ -10,7 +10,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/what-is-vuejs-tour' },
       { text: 'Reference', link: '/reference/coming-soon' },
-      { text: '1.2.3', items: [
+      { text: '2.1.1', items: [
         { text: 'Changelog', link: 'https://github.com/GlobalHive/vuejs-tour/blob/master/CHANGELOG.md' },
         { text: 'Roadmap', link: '/guide/roadmap' },
         { text: 'Issues', link: 'https://github.com/GlobalHive/vuejs-tour/issues' }]
@@ -31,12 +31,26 @@ export default defineConfig({
           text: 'Customization',
           collapsed: false,
           items: [
-            { text: 'Start Options', link: '/guide/start-options' },
-            { text: 'Highlight Target', link: '/guide/highlight-target' },
-            { text: 'Using a Backdrop', link: '/guide/using-a-backdrop' },
-            { text: 'Hiding the Arrow', link: '/guide/hiding-the-arrow' },
-            { text: 'Tour Margin', link: '/guide/tour-margin' },
-            { text: 'Saving Progress', link: '/guide/saving-progress' },
+            { text: 'VTour Component', items:[
+                { text: 'Start Options', link: '/guide/start-options' },
+                { text: 'Highlight Target', link: '/guide/highlight-target' },
+                { text: 'Using a Backdrop', link: '/guide/using-a-backdrop' },
+                { text: 'Hiding the Arrow', link: '/guide/hiding-the-arrow' },
+                { text: 'Tour Margin', link: '/guide/tour-margin' },
+                { text: 'Saving Progress', link: '/guide/saving-progress' },
+                { text: 'Scroll to Element', link: '/guide/scroll-to-element' },
+            ]},
+            { text: 'Step Options', items:[
+                { text: 'The Step Type', link: '/guide/the-step-type' },
+                { text: 'Setting a Target', link: '/guide/setting-a-target' },
+                { text: 'Define the Content', link: '/guide/define-the-content' },
+                { text: 'Using Placement', link: '/guide/using-placement' },
+                { text: 'The onBefore Event', link: '/guide/the-onbefore-event' },
+                { text: 'The onAfter Event', link: '/guide/the-onafter-event' },
+                { text: 'Highlight Target', link: '/guide/step-highlight-target' },
+                { text: 'Using a Backdrop', link: '/guide/step-using-a-backdrop' },
+                { text: 'Scroll to Element', link: '/guide/step-scroll-to-element' },
+            ]},
           ]
         },
         {
@@ -45,7 +59,6 @@ export default defineConfig({
           items: [
             { text: 'Skipping a Tour', link: '/guide/skipping-a-tour' },
             { text: 'Button Labels', link: '/guide/button-labels' },
-            { text: 'Step Options', link: '/guide/step-options' },
             { text: 'Multiple Tours', link: '/guide/multiple-tours' },
             {
               text: 'Styling',

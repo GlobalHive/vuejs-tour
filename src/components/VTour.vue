@@ -41,7 +41,8 @@ const _CurrentStep: Reactive<IVTourData> = reactive({
 const props = defineProps<IVTourProps>();
 const emit = defineEmits<{
   onTourStart: [],
-  onTourEnd: []
+  onTourEnd: [],
+  onTourStep: []
 }>()
 defineExpose({
   startTour,
@@ -68,18 +69,17 @@ function startTour(): void{
     if(!_VTour.value){
       _VTour.value = createPopper(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, _Tooltip.value!, {
         position: _CurrentStep.getCurrentStep.placement || 'right',
-        margin: props.margin || (props.highlight ? 14 : 8),
+        margin: props.margin || ((props.highlight || _CurrentStep.getCurrentStep.highlight ) ? 14 : 8),
       });
     }
-    if(props.backdrop) document.querySelector('#vjt-backdrop')!.removeAttribute('data-hidden');
     updatePosition();
     emit("onTourStart");
   }, props.startDelay);
 }
 
 function stopTour(): void{
-  if(props.backdrop) document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
-  if(props.highlight) document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
+  if(props.backdrop || _CurrentStep.getLastStep.backdrop) document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
+  if(props.highlight || _CurrentStep.getLastStep.highlight) document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
   _Tooltip.value!.setAttribute('data-hidden', '');
 }
 
@@ -128,10 +128,12 @@ function goToStep(step: number): void{
 }
 
 async function updatePosition(): Promise<void>{
+  await _CurrentStep.getCurrentStep.onBefore?.();
   await new Promise<void>((resolve) => {
-    if(props.highlight) highlightElement();
+    updateHighlight();
+    updateBackdrop();
     _Tooltip.value!.setAttribute('data-hidden', '');
-    if(!props.noScroll){
+    if(!props.noScroll && !_CurrentStep.getCurrentStep.noScroll){
       jump(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, {
         duration: 500,
         offset: -100,
@@ -145,12 +147,20 @@ async function updatePosition(): Promise<void>{
     position: _CurrentStep.getCurrentStep.placement || 'right',
   }) || 'right');
   if(props.saveToLocalStorage === 'step') localStorage.setItem('vjt-' + (props.name || 'default'), _CurrentStep.currentStep.toString());
+  await _CurrentStep.getCurrentStep.onAfter?.();
+  emit("onTourStep");
 }
 
-function highlightElement(): void {
+function updateHighlight(): void{
   document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
+  if(!props.highlight && !_CurrentStep.getCurrentStep.highlight) return;
   (document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement).classList.add('vjt-highlight');
   getClipPath.value = getClipPathValues('.vjt-highlight');
+}
+
+function updateBackdrop(): void{
+  if(props.backdrop || _CurrentStep.getCurrentStep.backdrop) document.querySelector('#vjt-backdrop')!.removeAttribute('data-hidden');
+  else document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
 }
 
 onMounted(() => {

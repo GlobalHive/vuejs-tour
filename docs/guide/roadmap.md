@@ -1,22 +1,30 @@
 # Roadmap
 ✔️ = Done    
+❌ = Declined   
 🕔 = Postponed    
 🚧 = In Progress
 
-## 2.2.0 (2024-08-13) 🚧
+
+## 2.4.0 (TBA) 🚧
+
+* **Step:** Adding `arrow️` option
+* **VTour:** Adding `showProgress` prop
+
+## 2.2.0 (2024-08-13) ✔️
 
 ### Features
 
 * **VTour:** Adding `onTourStep` event ✔️
-* **VTour:** Adding `onBeforeStep` event ❌ (Changed to `onTourStep`)
-* **VTour:** Adding `onAfterStep` event ❌ (Changed to `onTourStep`)
-* **VTour:** Adding `showProgress` prop
+* **VTour:** Adding `onBeforeStep` event ❌ (Changed to `onTourStep`) ✔️
+* **VTour:** Adding `onAfterStep` event ❌ (Changed to `onTourStep`) ✔️
+* **VTour:** Adding `showProgress` prop ❌
 * **VTour:** Adding `noScroll` prop ✔️
-* **Step:** Adding `arrow️` option
-* **Step:** Adding `backdrop` option
-* **Step:** Adding `highligt` option
-* **Step:** Adding `onBefore` event
-* **Step:** Adding `onAfter` event
+* **Step:** Adding `arrow️` option ❌
+* **Step:** Adding `noScroll` option ✔️
+* **Step:** Adding `backdrop` option ✔️
+* **Step:** Adding `highlight` option ✔️
+* **Step:** Adding `onBefore` event ✔️
+* **Step:** Adding `onAfter` event ✔️
 
 ### Documentation
 
