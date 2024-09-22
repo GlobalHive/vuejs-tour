@@ -3,7 +3,7 @@
 To disable scrolling <u>per step</u>, you can use the `noScroll` option in the `Step`.
 
 ::: info
-This feature will be available in version [`2.2.0`](./roadmap#_2-2-0-2024-08-13-🚧).
+This feature will be available in version [`2.4.0`](./roadmap#_(TBA)-🚧).
 :::
 
 ```vue

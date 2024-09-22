@@ -1,10 +1,6 @@
 # The onAfter Event
 
-The `onAfter` event is triggered after the step is shown. This event is useful when you want to do something after the step is shown. 
-
-::: info
-This feature will be available in version [`2.2.0`](./roadmap#_2-2-0-2024-08-13-🚧).
-:::
+The `onAfter` event is triggered after the step is shown. This event is useful when you want to do something after the step is shown.
 
 ```vue
 <script setup>

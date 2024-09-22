@@ -1,10 +1,6 @@
 # Highlight Target Option
 The `highlight` option is used to highlight the target element <u>per step</u>. This option is useful when you want to emphasize the target element.
 
-::: info
-This feature will be available in version [`2.2.0`](./roadmap#_2-2-0-2024-08-13-🚧).
-:::
-
 ## Using the `highlight` option
 To enable the highlight effect, you can set the `highlight` option in the `Step`.
 

@@ -1,9 +1,6 @@
 # Using a Backdrop
 The `backdrop` option is a boolean that represents whether the backdrop should be displayed or not <u>per step</u>. The backdrop is a semi-transparent overlay that covers the entire screen, except for the highlighted element.
 
-::: info
-This feature will be available in version [`2.2.0`](./roadmap#_2-2-0-2024-08-13-🚧).
-:::
 
 ## Using the `backdrop` option
 To enable the backdrop, you can use the `backdrop` option in the `Step`.
