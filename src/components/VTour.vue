@@ -26,8 +26,10 @@ export interface IVTourProps {
 export interface IVTourData {
   currentStep: number;
   lastStep: number;
+  nextStep: number;
   getCurrentStep: ComputedRef<ITourStep>;
   getLastStep: ComputedRef<ITourStep>;
+  getNextStep: ComputedRef<ITourStep>;
 }
 
 const _VTour: Ref<NanoPop | undefined> = ref(undefined);
@@ -35,8 +37,10 @@ const _Tooltip: Ref<HTMLElement | undefined> = ref(undefined);
 const _CurrentStep: Reactive<IVTourData> = reactive({
   currentStep: 0,
   lastStep: 0,
+  nextStep: 1,
   getCurrentStep: computed(() => props.steps[_CurrentStep.currentStep]),
   getLastStep: computed(() => props.steps[_CurrentStep.lastStep]),
+  getNextStep: computed(() => props.steps[_CurrentStep.nextStep]),
 });
 const props = defineProps<IVTourProps>();
 const emit = defineEmits<{
@@ -65,7 +69,8 @@ function startTour(): void{
   if(props.saveToLocalStorage === 'step') _CurrentStep.currentStep = parseInt(localStorage.getItem('vjt-' + (props.name || 'default')) || '0');
   else _CurrentStep.currentStep = 0;
 
-  setTimeout(() => {
+  setTimeout(async () => {
+    await beforeStep(_CurrentStep.currentStep);
     if(!_VTour.value){
       _VTour.value = createPopper(document.querySelector(`${_CurrentStep.getCurrentStep.target}`) as HTMLElement, _Tooltip.value!, {
         position: _CurrentStep.getCurrentStep.placement || 'right',
@@ -87,21 +92,25 @@ function resetTour(restart: boolean): void{
   stopTour();
   _CurrentStep.currentStep = 0;
   _CurrentStep.lastStep = 0;
+  _CurrentStep.nextStep = 1;
   localStorage.removeItem('vjt-' + (props.name || 'default'));
   if(restart) startTour();
 }
 
-function nextStep(): void{
+async function nextStep() {
+  await beforeStep(_CurrentStep.nextStep);
   _CurrentStep.lastStep = _CurrentStep.currentStep;
   _CurrentStep.currentStep++;
   if(_CurrentStep.currentStep > props.steps.length -1){
     endTour();
     return;
   }
+  _CurrentStep.nextStep = _CurrentStep.currentStep++;
   updatePosition();
 }
 
-function lastStep(): void{
+async function lastStep() {
+  await beforeStep(_CurrentStep.lastStep);
   _CurrentStep.currentStep = _CurrentStep.lastStep;
   _CurrentStep.lastStep--;
   if(_CurrentStep.lastStep === -1){
@@ -111,6 +120,7 @@ function lastStep(): void{
     endTour();
     return;
   }
+  _CurrentStep.nextStep = _CurrentStep.currentStep++;
   updatePosition();
 }
 
@@ -121,14 +131,19 @@ function endTour(): void{
 }
 
 function goToStep(step: number): void{
+  beforeStep(step);
   _CurrentStep.currentStep = step;
   _CurrentStep.lastStep = step - 1;
   if(_CurrentStep.lastStep === -1) _CurrentStep.lastStep = 0;
+  _CurrentStep.nextStep = step + 1;
   updatePosition();
 }
 
+async function beforeStep(step: number): Promise<void> {
+  await props.steps[step].onBefore?.();
+}
+
 async function updatePosition(): Promise<void>{
-  await _CurrentStep.getCurrentStep.onBefore?.();
   await new Promise<void>((resolve) => {
     updateHighlight();
     updateBackdrop();
