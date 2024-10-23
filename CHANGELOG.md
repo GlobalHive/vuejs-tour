@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.2](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.1...v2.3.2) (2024-10-23)
+
+
+### Miscellaneous Chores
+
+* release 2.3.2 ([600d874](https://github.com/GlobalHive/vuejs-tour/commit/600d8742152de2107f2cfdd6805f38933a772ddc))
+
 ## [2.3.1](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.0...v2.3.1) (2024-10-20)
 
 
