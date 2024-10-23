@@ -105,7 +105,7 @@ async function nextStep() {
     endTour();
     return;
   }
-  _CurrentStep.nextStep = _CurrentStep.currentStep++;
+  _CurrentStep.nextStep = _CurrentStep.currentStep + 1;
   updatePosition();
 }
 
@@ -120,7 +120,7 @@ async function lastStep() {
     endTour();
     return;
   }
-  _CurrentStep.nextStep = _CurrentStep.currentStep++;
+  _CurrentStep.nextStep = _CurrentStep.currentStep + 1;
   updatePosition();
 }
 
