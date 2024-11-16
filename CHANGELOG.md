@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.3](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.2...v2.3.3) (2024-11-16)
+
+
+### Bug Fixes
+
+* **VTour:** Fixed [#78](https://github.com/GlobalHive/vuejs-tour/issues/78) ([b1cdd63](https://github.com/GlobalHive/vuejs-tour/commit/b1cdd63440deebc0555c39079e02e8e02e34d5cf))
+
 ## [2.3.2](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.1...v2.3.2) (2024-10-23)
 
 
