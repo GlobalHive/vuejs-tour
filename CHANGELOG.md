@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.4](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.3...v2.3.4) (2024-12-11)
+
+
+### Bug Fixes
+
+* **VTour:** Fixed highlight target border remains on skip ([baba947](https://github.com/GlobalHive/vuejs-tour/commit/baba947f31ce7c0256c79f74a6afde49e07ca284))
+
 ## [2.3.3](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.2...v2.3.3) (2024-11-16)
 
 
