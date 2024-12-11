@@ -83,8 +83,8 @@ function startTour(): void{
 }
 
 function stopTour(): void{
-  if(props.backdrop || _CurrentStep.getLastStep.backdrop) document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
-  if(props.highlight || _CurrentStep.getLastStep.highlight) document.querySelectorAll('.vjt-highlight').forEach((element) => element.classList.remove('vjt-highlight'));
+  document.querySelector('#vjt-backdrop')!.setAttribute('data-hidden', '');
+  document.querySelectorAll('.vjt-highlight')!.forEach((element) => element.classList.remove('vjt-highlight'));
   _Tooltip.value!.setAttribute('data-hidden', '');
 }
 
