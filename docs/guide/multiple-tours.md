@@ -1,8 +1,5 @@
 # Multiple Tours
-There are two ways to create multiple tours on the same page. You can either create multiple `VTour` components or create a single `VTour` component with multiple steps.
-
-## Single Component
-To create multiple tours using a single `VTour` component, you can use the `steps` and `name` prop to switch between different tours.
+To create multiple tours, you can use the `steps` and `name` prop to switch between different tours.
 
 ### Defining the tours
 First you need to define the steps for each tour.

@@ -9,7 +9,6 @@ export default defineConfig({
     logo: 'https://vuejs.org/images/logo.png',
     nav: [
       { text: 'Guide', link: '/guide/what-is-vuejs-tour' },
-      { text: 'Reference', link: '/reference/coming-soon' },
       { text: '2.1.1', items: [
         { text: 'Changelog', link: 'https://github.com/GlobalHive/vuejs-tour/blob/master/CHANGELOG.md' },
         { text: 'Roadmap', link: '/guide/roadmap' },
