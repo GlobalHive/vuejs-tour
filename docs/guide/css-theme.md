@@ -1,5 +1,4 @@
 # CSS Theme
-
 To customize the look and feel of the tour, you can create your own styles and replace the default theme.
 
 ## Default Theme
@@ -285,8 +284,4 @@ $vjt__action_button_border: 1px solid rgb(15 23 42);
 </template>
 ```
 
-:::
-
-::: info
-You can find all the default SCSS variables in the [Reference](/reference/coming-soon) section. [COMING SOON]
 :::
