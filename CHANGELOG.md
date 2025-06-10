@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.5](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.4...v2.3.5) (2025-06-10)
+
+
+### Bug Fixes
+
+* [#86](https://github.com/GlobalHive/vuejs-tour/issues/86) lastStep is 0 after refresh ([8e504dc](https://github.com/GlobalHive/vuejs-tour/commit/8e504dc283b8bbd40edc02c2cffb5055eb1690b3))
+* Fixed tsconfig noEmit ([c06ec9f](https://github.com/GlobalHive/vuejs-tour/commit/c06ec9f28862cef7b806f2666378cf71741c7a74))
+
 ## [2.3.4](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.3...v2.3.4) (2024-12-11)
 
 
