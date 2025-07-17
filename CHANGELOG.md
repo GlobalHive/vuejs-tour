@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.6](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.5...v2.3.6) (2025-07-17)
+
+
+### Bug Fixes
+
+* [#89](https://github.com/GlobalHive/vuejs-tour/issues/89) updatePosition in window resize and resizeEnd ([2c5c366](https://github.com/GlobalHive/vuejs-tour/commit/2c5c366cbbab0836dd1e05d39d2c930f525f8616))
+
 ## [2.3.5](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.4...v2.3.5) (2025-06-10)
 
 
