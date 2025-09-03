@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.7](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.6...v2.3.7) (2025-09-03)
+
+
+### Bug Fixes
+
+* Refactor localStorage key usage in VTour component ([fd10c04](https://github.com/GlobalHive/vuejs-tour/commit/fd10c043d5344a06984b7bc6db5fd2324c2e2493))
+
 ## [2.3.6](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.5...v2.3.6) (2025-07-17)
 
 
