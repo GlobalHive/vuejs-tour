@@ -42,6 +42,8 @@ export interface IVTourData {
   getNextStep: ComputedRef<ITourStep>;
 }
 
+const __saveKey = computed(() => "vjt-" + (props.name || "default"));
+
 const _VTour: Ref<NanoPop | undefined> = ref(undefined);
 const _Tooltip: Ref<HTMLElement | undefined> = ref(undefined);
 const _CurrentStep: Reactive<IVTourData> = reactive({
@@ -86,7 +88,7 @@ function startTour(): void {
     return;
   if (props.saveToLocalStorage === "step") {
     _CurrentStep.currentStep = parseInt(
-      localStorage.getItem("vjt-" + (props.name || "default")) || "0"
+      localStorage.getItem(__saveKey.value) || "0"
     );
     if (_CurrentStep.currentStep > 0) {
       _CurrentStep.lastStep = Math.max(_CurrentStep.currentStep - 1, 0);
@@ -128,7 +130,7 @@ function resetTour(restart: boolean): void {
   _CurrentStep.currentStep = 0;
   _CurrentStep.lastStep = 0;
   _CurrentStep.nextStep = 1;
-  localStorage.removeItem("vjt-" + (props.name || "default"));
+  localStorage.removeItem(__saveKey.value);
   if (restart) startTour();
 }
 
@@ -162,7 +164,7 @@ async function lastStep() {
 function endTour(): void {
   stopTour();
   if (props.saveToLocalStorage !== "never")
-    localStorage.setItem("vjt-" + (props.name || "default"), "true");
+    localStorage.setItem(__saveKey.value, "true");
   emit("onTourEnd");
 }
 
@@ -209,10 +211,7 @@ async function updatePosition(): Promise<void> {
     }) || "right"
   );
   if (props.saveToLocalStorage === "step")
-    localStorage.setItem(
-      "vjt-" + (props.name || "default"),
-      _CurrentStep.currentStep.toString()
-    );
+    localStorage.setItem(__saveKey.value, _CurrentStep.currentStep.toString());
   await _CurrentStep.getCurrentStep.onAfter?.();
   emit("onTourStep");
 }
@@ -236,17 +235,22 @@ function updateBackdrop(): void {
   else document.querySelector("#vjt-backdrop")!.setAttribute("data-hidden", "");
 }
 
-let resizeTimer: NodeJS.Timeout;
+const redrawLayers = () => {
+  if(localStorage.getItem(__saveKey.value) === "true") return;
+  updatePosition();
+  updateHighlight();
+  updateBackdrop();
+};
+
+let resizeTimer: ReturnType<typeof setTimeout> | undefined = undefined;
 const debounceTime = computed(() => props.resizeTimeout || 250);
 
 const onResizeEnd = () => {
-  updatePosition();
-
   clearTimeout(resizeTimer);
 
-  resizeTimer = setTimeout(() => {
-      updatePosition();
-  }, debounceTime.value);
+  redrawLayers();
+
+  resizeTimer = setTimeout(() => { redrawLayers();}, debounceTime.value);
 }
 
 onMounted(() => {
