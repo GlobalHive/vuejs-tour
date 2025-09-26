@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.8](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.7...v2.3.8) (2025-09-26)
+
+
+### Miscellaneous Chores
+
+* release 2.3.8 ([88433f3](https://github.com/GlobalHive/vuejs-tour/commit/88433f31b1caad5427660a22aa8895a8145406a3))
+
 ## [2.3.7](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.6...v2.3.7) (2025-09-03)
 
 
