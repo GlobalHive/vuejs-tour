@@ -80,7 +80,7 @@ const getNextLabel: ComputedRef<String> = computed(() => {
   return props.buttonLabels?.next || "Next";
 });
 
-const getClipPath = ref("");
+const getClipPath = ref(getClipPathValues(".vjt-highlight"));
 
 function startTour(): void {
   if (localStorage.getItem(__saveKey.value) === "true")
