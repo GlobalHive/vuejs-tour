@@ -83,8 +83,7 @@ const getNextLabel: ComputedRef<String> = computed(() => {
 const getClipPath = ref(getClipPathValues(".vjt-highlight"));
 
 function startTour(): void {
-  if (localStorage.getItem(__saveKey.value) === "true")
-    return;
+  if (localStorage.getItem(__saveKey.value) === "true") return;
   if (props.saveToLocalStorage === "step") {
     _CurrentStep.currentStep = parseInt(
       localStorage.getItem(__saveKey.value) || "0"
@@ -97,30 +96,26 @@ function startTour(): void {
 
   setTimeout(async () => {
     await beforeStep(_CurrentStep.currentStep);
-    
+
     const targetElement = document.querySelector(
       `${_CurrentStep.getCurrentStep.target}`
     ) as HTMLElement;
-    
+
     if (!targetElement) {
       return;
     }
-    
+
     if (!_Tooltip.value) {
       return;
     }
-    
+
     if (!_VTour.value) {
-      _VTour.value = createPopper(
-        targetElement,
-        _Tooltip.value,
-        {
-          position: _CurrentStep.getCurrentStep.placement || "right",
-          margin:
-            props.margin ||
-            (props.highlight || _CurrentStep.getCurrentStep.highlight ? 14 : 8),
-        }
-      );
+      _VTour.value = createPopper(targetElement, _Tooltip.value, {
+        position: _CurrentStep.getCurrentStep.placement || "right",
+        margin:
+          props.margin ||
+          (props.highlight || _CurrentStep.getCurrentStep.highlight ? 14 : 8),
+      });
     }
     updatePosition();
     emit("onTourStart");
@@ -194,7 +189,7 @@ async function updatePosition(): Promise<void> {
   const targetElement = document.querySelector(
     `${_CurrentStep.getCurrentStep.target}`
   ) as HTMLElement;
-  
+
   if (!targetElement || !_Tooltip.value || !_VTour.value) {
     return;
   }
@@ -202,7 +197,7 @@ async function updatePosition(): Promise<void> {
   await new Promise<void>((resolve) => {
     updateHighlight();
     updateBackdrop();
-    _Tooltip.value!.setAttribute("data-hidden", "");
+    _Tooltip.value?.setAttribute("data-hidden", "");
     if (!props.noScroll && !_CurrentStep.getCurrentStep.noScroll) {
       jump(targetElement, {
         duration: 500,
@@ -213,7 +208,7 @@ async function updatePosition(): Promise<void> {
       });
     } else resolve();
   });
-  
+
   _Tooltip.value.removeAttribute("data-hidden");
   _Tooltip.value.setAttribute(
     "data-arrow",
@@ -233,15 +228,15 @@ function updateHighlight(): void {
     .querySelectorAll(".vjt-highlight")
     .forEach((element) => element.classList.remove("vjt-highlight"));
   if (!props.highlight && !_CurrentStep.getCurrentStep.highlight) return;
-  
+
   const targetElement = document.querySelector(
     `${_CurrentStep.getCurrentStep.target}`
   ) as HTMLElement;
-  
+
   if (!targetElement) {
     return;
   }
-  
+
   targetElement.classList.add("vjt-highlight");
   getClipPath.value = getClipPathValues(".vjt-highlight");
 }
@@ -253,7 +248,7 @@ function updateBackdrop(): void {
 }
 
 const redrawLayers = () => {
-  if(localStorage.getItem(__saveKey.value) === "true") return;
+  if (localStorage.getItem(__saveKey.value) === "true") return;
   // Only redraw if the tour is currently active (tooltip is visible)
   if (_Tooltip.value?.hasAttribute("data-hidden")) return;
   updatePosition();
@@ -264,8 +259,10 @@ const debounceTime = computed(() => props.resizeTimeout || 250);
 
 const onResizeEnd = () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => { redrawLayers();}, debounceTime.value);
-}
+  resizeTimer = setTimeout(() => {
+    redrawLayers();
+  }, debounceTime.value);
+};
 
 onMounted(() => {
   _Tooltip.value = document.querySelector("#vjt-tooltip") as HTMLElement;
@@ -305,11 +302,35 @@ function getClipPathValues(targetSelector: string): string {
     <slot name="content" v-bind="{ _CurrentStep }">
       <div v-html="_CurrentStep.getCurrentStep?.content"></div>
     </slot>
-    <slot name="actions" v-bind="{ lastStep, nextStep, endTour, _CurrentStep, getNextLabel, props }">
+    <slot
+      name="actions"
+      v-bind="{
+        lastStep,
+        nextStep,
+        endTour,
+        _CurrentStep,
+        getNextLabel,
+        props,
+      }"
+    >
       <div class="vjt-actions">
-        <button v-if="_CurrentStep.lastStep < _CurrentStep.currentStep" type="button" @click.prevent="lastStep()" v-text="props.buttonLabels?.back || 'Back'"></button>
-        <button v-if="!props.hideSkip" type="button" @click.prevent="endTour()" v-text="props.buttonLabels?.skip || 'Skip'"></button>
-        <button type="button" @click.prevent="nextStep()" v-text="getNextLabel"></button>
+        <button
+          v-if="_CurrentStep.lastStep < _CurrentStep.currentStep"
+          type="button"
+          @click.prevent="lastStep()"
+          v-text="props.buttonLabels?.back || 'Back'"
+        ></button>
+        <button
+          v-if="!props.hideSkip"
+          type="button"
+          @click.prevent="endTour()"
+          v-text="props.buttonLabels?.skip || 'Skip'"
+        ></button>
+        <button
+          type="button"
+          @click.prevent="nextStep()"
+          v-text="getNextLabel"
+        ></button>
       </div>
     </slot>
     <div id="vjt-arrow" v-if="!props.hideArrow"></div>
