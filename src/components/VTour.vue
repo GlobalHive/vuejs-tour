@@ -319,20 +319,20 @@ function getClipPathValues(targetSelector: string): string {
           type="button"
           @click.prevent="lastStep()"
           v-text="props.buttonLabels?.back || 'Back'"
-        ></button>
+        />
         <button
           v-if="!props.hideSkip"
           type="button"
           @click.prevent="endTour()"
           v-text="props.buttonLabels?.skip || 'Skip'"
-        ></button>
+        />
         <button
           type="button"
           @click.prevent="nextStep()"
           v-text="getNextLabel"
-        ></button>
+        />
       </div>
     </slot>
-    <div id="vjt-arrow" v-if="!props.hideArrow"></div>
+    <div id="vjt-arrow" v-if="!props.hideArrow" />
   </div>
 </template>
