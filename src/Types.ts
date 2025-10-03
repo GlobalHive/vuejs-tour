@@ -124,9 +124,19 @@ export interface VTourData {
   getNextStep: ITourStep;
 }
 
-export type VTourGoToStep = (stepIndex: number) => Promise<void>;
+/**
+ * Programmatic step navigation signature.
+ *
+ * @param arg0 Step index to navigate to.
+ */
+export type VTourGoToStep = (arg0: number) => Promise<void>;
 
-export type VTourResetTour = (shouldRestart?: boolean) => void;
+/**
+ * Reset behaviour signature.
+ *
+ * @param arg0 When true, restarts immediately after reset.
+ */
+export type VTourResetTour = (arg0?: boolean) => void;
 
 /**
  * Public API methods exposed by the VTour component
