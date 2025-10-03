@@ -105,11 +105,11 @@ export interface VTourEvents {
 /**
  * Tour events for defineEmits (Vue emit constraint format)
  */
-export type VTourEmits = {
+export interface VTourEmits {
   onTourStart: [];
   onTourEnd: [];
   onTourStep: [step: number];
-};
+}
 
 /**
  * Internal tour state data structure
@@ -143,10 +143,10 @@ export interface VTourExposedMethods {
   stopTour: () => void;
 
   /** Navigate to a specific step by index */
-  goToStep: (step: number) => Promise<void>;
+  goToStep: (stepIndex: number) => Promise<void>;
 
   /** Reset tour state and optionally restart */
-  resetTour: (restart?: boolean) => void;
+  resetTour: (shouldRestart?: boolean) => void;
 
   /** Update tooltip position */
   updatePosition: () => Promise<void>;
