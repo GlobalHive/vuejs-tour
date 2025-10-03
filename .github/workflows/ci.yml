@@ -84,7 +84,7 @@ jobs:
     - name: Check code formatting
       run: |
         npm run format
-        git diff --exit-code || (echo "Code is not formatted. Run 'npm run format' to fix." && exit 1)
+        git diff --exit-code -- ':!*.tsbuildinfo' || (echo "Code is not formatted. Run 'npm run format' to fix." && exit 1)
 
   security:
     name: Security Audit
