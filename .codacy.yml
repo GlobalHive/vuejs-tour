@@ -1,0 +1,15 @@
+---
+engines:
+  eslint:
+    enabled: true
+  duplication:
+    enabled: true
+    
+exclude_patterns:
+  - 'test/**'
+  - 'node_modules/**'
+  - 'dist/**'
+  - 'coverage/**'
+  - '*.d.ts'
+  - 'vite.config.js'
+  - 'vitest.config.ts'
