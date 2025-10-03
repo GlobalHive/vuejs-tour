@@ -1,14 +1,8 @@
 <script setup lang="ts">
-import { createPopper, type NanoPop } from "nanopop";
-import {
-  computed,
-  onMounted,
-  onUnmounted,
-  reactive,
-  ref
-} from "vue";
-import jump from "jump.js";
-import type { VTourProps, VTourEmits, VTourData } from "../Types.ts";
+import { createPopper, type NanoPop } from 'nanopop';
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
+import jump from 'jump.js';
+import type { VTourProps, VTourEmits, VTourData } from '../Types.ts';
 
 // Props with defaults
 const props = withDefaults(defineProps<VTourProps>(), {
@@ -22,7 +16,7 @@ const props = withDefaults(defineProps<VTourProps>(), {
   hideSkip: false,
   hideArrow: false,
   noScroll: false,
-  resizeTimeout: 250
+  resizeTimeout: 250,
 });
 
 // Emit definitions using standardized VTourEmits type
@@ -49,25 +43,25 @@ const _CurrentStep: VTourData = reactive({
   nextStep: nextStepIndex,
   getCurrentStep,
   getLastStep,
-  getNextStep
+  getNextStep,
 });
 
 const getNextLabel = computed(() => {
   const isLastStep = currentStepIndex.value === props.steps.length - 1;
   return isLastStep
-    ? props.buttonLabels?.done ?? "Done"
-    : props.buttonLabels?.next ?? "Next";
+    ? (props.buttonLabels?.done ?? 'Done')
+    : (props.buttonLabels?.next ?? 'Next');
 });
 
-const getClipPath = ref("");
+const getClipPath = ref('');
 
 const startTour = async (): Promise<void> => {
-  if (localStorage.getItem(saveKey.value) === "true") return;
-  
-  if (props.saveToLocalStorage === "step") {
+  if (localStorage.getItem(saveKey.value) === 'true') return;
+
+  if (props.saveToLocalStorage === 'step') {
     const savedStep = localStorage.getItem(saveKey.value);
-    currentStepIndex.value = parseInt(savedStep || "0", 10);
-    
+    currentStepIndex.value = parseInt(savedStep || '0', 10);
+
     if (currentStepIndex.value > 0) {
       lastStepIndex.value = Math.max(currentStepIndex.value - 1, 0);
       nextStepIndex.value = currentStepIndex.value + 1;
@@ -85,7 +79,9 @@ const startTour = async (): Promise<void> => {
       return;
     }
 
-    const targetElement = document.querySelector(currentStepData.target) as HTMLElement;
+    const targetElement = document.querySelector(
+      currentStepData.target
+    ) as HTMLElement;
 
     if (!targetElement || !tooltip.value) {
       console.warn(`Tour target element not found: ${currentStepData.target}`);
@@ -94,22 +90,24 @@ const startTour = async (): Promise<void> => {
 
     if (!vTour.value) {
       vTour.value = createPopper(targetElement, tooltip.value, {
-        position: currentStepData.placement || "right",
-        margin: props.margin || (props.highlight || currentStepData.highlight ? 14 : 8),
+        position: currentStepData.placement || 'right',
+        margin:
+          props.margin ||
+          (props.highlight || currentStepData.highlight ? 14 : 8),
       });
     }
-    
+
     await updatePosition();
-    emit("onTourStart");
+    emit('onTourStart');
   }, props.startDelay);
 };
 
 const stopTour = (): void => {
-  backdrop.value?.setAttribute("data-hidden", "");
+  backdrop.value?.setAttribute('data-hidden', '');
   document
-    .querySelectorAll(".vjt-highlight")
-    .forEach((element) => element.classList.remove("vjt-highlight"));
-  tooltip.value?.setAttribute("data-hidden", "");
+    .querySelectorAll('.vjt-highlight')
+    .forEach((element) => element.classList.remove('vjt-highlight'));
+  tooltip.value?.setAttribute('data-hidden', '');
 };
 
 const resetTour = (restart = false): void => {
@@ -125,12 +123,12 @@ const nextStep = async (): Promise<void> => {
   await beforeStep(nextStepIndex.value);
   lastStepIndex.value = currentStepIndex.value;
   currentStepIndex.value++;
-  
+
   if (currentStepIndex.value > props.steps.length - 1) {
     endTour();
     return;
   }
-  
+
   nextStepIndex.value = currentStepIndex.value + 1;
   await updatePosition();
 };
@@ -139,22 +137,22 @@ const lastStep = async (): Promise<void> => {
   await beforeStep(lastStepIndex.value);
   currentStepIndex.value = lastStepIndex.value;
   lastStepIndex.value = Math.max(lastStepIndex.value - 1, 0);
-  
+
   if (currentStepIndex.value < 0) {
     endTour();
     return;
   }
-  
+
   nextStepIndex.value = currentStepIndex.value + 1;
   await updatePosition();
 };
 
 const endTour = (): void => {
   stopTour();
-  if (props.saveToLocalStorage !== "never") {
-    localStorage.setItem(saveKey.value, "true");
+  if (props.saveToLocalStorage !== 'never') {
+    localStorage.setItem(saveKey.value, 'true');
   }
-  emit("onTourEnd");
+  emit('onTourEnd');
 };
 
 const goToStep = async (step: number): Promise<void> => {
@@ -162,7 +160,7 @@ const goToStep = async (step: number): Promise<void> => {
     console.warn(`Invalid step index: ${step}`);
     return;
   }
-  
+
   await beforeStep(step);
   currentStepIndex.value = step;
   lastStepIndex.value = Math.max(step - 1, 0);
@@ -180,56 +178,59 @@ const beforeStep = async (step: number): Promise<void> => {
 const updatePosition = async (): Promise<void> => {
   const currentStepData = getCurrentStep.value;
   if (!currentStepData) {
-    console.warn("No current step data available");
+    console.warn('No current step data available');
     return;
   }
 
-  const targetElement = document.querySelector(currentStepData.target) as HTMLElement;
+  const targetElement = document.querySelector(
+    currentStepData.target
+  ) as HTMLElement;
 
   if (!targetElement || !tooltip.value || !vTour.value) {
-    console.warn("Cannot update position: missing required elements");
+    console.warn('Cannot update position: missing required elements');
     return;
   }
 
   updateHighlight();
   updateBackdrop();
-  tooltip.value.setAttribute("data-hidden", "");
-  
+  tooltip.value.setAttribute('data-hidden', '');
+
   if (!props.noScroll && !currentStepData.noScroll) {
     await new Promise<void>((resolve) => {
       jump(targetElement, {
         duration: 500,
         offset: -100,
-        callback: resolve
+        callback: resolve,
       });
     });
   }
 
-  tooltip.value.removeAttribute("data-hidden");
-  const arrowPosition = vTour.value.update({
-    reference: targetElement,
-    position: currentStepData.placement || "right",
-  }) || "right";
-  
-  tooltip.value.setAttribute("data-arrow", arrowPosition);
-  
-  if (props.saveToLocalStorage === "step") {
+  tooltip.value.removeAttribute('data-hidden');
+  const arrowPosition =
+    vTour.value.update({
+      reference: targetElement,
+      position: currentStepData.placement || 'right',
+    }) || 'right';
+
+  tooltip.value.setAttribute('data-arrow', arrowPosition);
+
+  if (props.saveToLocalStorage === 'step') {
     localStorage.setItem(saveKey.value, currentStepIndex.value.toString());
   }
-  
+
   if (currentStepData.onAfter) {
     await currentStepData.onAfter();
   }
-  
-  emit("onTourStep", currentStepIndex.value);
+
+  emit('onTourStep', currentStepIndex.value);
 };
 
 const updateHighlight = (): void => {
   // Remove existing highlights
   document
-    .querySelectorAll(".vjt-highlight")
-    .forEach((element) => element.classList.remove("vjt-highlight"));
-  
+    .querySelectorAll('.vjt-highlight')
+    .forEach((element) => element.classList.remove('vjt-highlight'));
+
   const currentStepData = getCurrentStep.value;
   if (!props.highlight && !currentStepData?.highlight) return;
 
@@ -238,31 +239,33 @@ const updateHighlight = (): void => {
     return;
   }
 
-  const targetElement = document.querySelector(currentStepData.target) as HTMLElement;
+  const targetElement = document.querySelector(
+    currentStepData.target
+  ) as HTMLElement;
 
   if (!targetElement) {
     console.warn(`Highlight target not found: ${currentStepData.target}`);
     return;
   }
 
-  targetElement.classList.add("vjt-highlight");
-  getClipPath.value = getClipPathValues(".vjt-highlight");
+  targetElement.classList.add('vjt-highlight');
+  getClipPath.value = getClipPathValues('.vjt-highlight');
 };
 
 const updateBackdrop = (): void => {
   const currentStepData = getCurrentStep.value;
   const shouldShowBackdrop = props.backdrop || currentStepData?.backdrop;
-  
+
   if (shouldShowBackdrop) {
-    backdrop.value?.removeAttribute("data-hidden");
+    backdrop.value?.removeAttribute('data-hidden');
   } else {
-    backdrop.value?.setAttribute("data-hidden", "");
+    backdrop.value?.setAttribute('data-hidden', '');
   }
 };
 
 // Add missing redrawLayers function from old version
 const redrawLayers = (): void => {
-  if (localStorage.getItem(saveKey.value) === "true") return;
+  if (localStorage.getItem(saveKey.value) === 'true') return;
   updatePosition();
 };
 
@@ -270,11 +273,11 @@ const redrawLayers = (): void => {
 let resizeTimer: ReturnType<typeof setTimeout> | undefined;
 
 const onResizeEnd = (): void => {
-  if (localStorage.getItem(saveKey.value) === "true") return;
-  
+  if (localStorage.getItem(saveKey.value) === 'true') return;
+
   clearTimeout(resizeTimer);
   redrawLayers();
-  
+
   resizeTimer = setTimeout(() => {
     redrawLayers();
   }, props.resizeTimeout);
@@ -283,7 +286,7 @@ const onResizeEnd = (): void => {
 // Utility functions
 function getClipPathValues(targetSelector: string): string {
   const targetElement = document.querySelector(targetSelector) as HTMLElement;
-  if (!targetElement) return "";
+  if (!targetElement) return '';
 
   const rect = targetElement.getBoundingClientRect();
   return `polygon(
@@ -301,22 +304,22 @@ function getClipPathValues(targetSelector: string): string {
 }
 
 // Initialize clip path
-getClipPath.value = getClipPathValues(".vjt-highlight");
+getClipPath.value = getClipPathValues('.vjt-highlight');
 
 // Lifecycle hooks
 onMounted(() => {
-  tooltip.value = document.querySelector("#vjt-tooltip") as HTMLElement;
-  backdrop.value = document.querySelector("#vjt-backdrop") as HTMLElement;
-  
+  tooltip.value = document.querySelector('#vjt-tooltip') as HTMLElement;
+  backdrop.value = document.querySelector('#vjt-backdrop') as HTMLElement;
+
   if (props.autoStart) {
     startTour();
   }
 
-  window.addEventListener("resize", onResizeEnd);
+  window.addEventListener('resize', onResizeEnd);
 });
 
 onUnmounted(() => {
-  window.removeEventListener("resize", onResizeEnd);
+  window.removeEventListener('resize', onResizeEnd);
   clearTimeout(resizeTimer);
 });
 
@@ -336,27 +339,27 @@ defineExpose({
 </script>
 
 <template>
-  <div 
-    id="vjt-backdrop" 
+  <div
+    id="vjt-backdrop"
     ref="backdrop"
-    data-hidden 
+    data-hidden
     :style="{ 'clip-path': getClipPath }"
   />
-  <div 
-    id="vjt-tooltip" 
+  <div
+    id="vjt-tooltip"
     ref="tooltip"
-    role="tooltip" 
-    data-arrow="right" 
+    role="tooltip"
+    data-arrow="right"
     data-hidden
   >
-    <slot 
-      name="content" 
+    <slot
+      name="content"
       :current-step-index="currentStepIndex"
       :current-step-data="getCurrentStep"
     >
       <div v-html="_CurrentStep.getCurrentStep?.content" />
     </slot>
-    
+
     <slot
       name="actions"
       :lastStep="lastStep"
@@ -375,7 +378,7 @@ defineExpose({
         >
           {{ props.buttonLabels?.back || 'Back' }}
         </button>
-        
+
         <button
           v-if="!props.hideSkip"
           type="button"
@@ -384,7 +387,7 @@ defineExpose({
         >
           {{ props.buttonLabels?.skip || 'Skip' }}
         </button>
-        
+
         <button
           type="button"
           class="vjt-btn vjt-btn-next"
@@ -394,12 +397,8 @@ defineExpose({
         </button>
       </div>
     </slot>
-    
-    <div 
-      v-if="!props.hideArrow" 
-      id="vjt-arrow" 
-      class="vjt-arrow"
-    />
+
+    <div v-if="!props.hideArrow" id="vjt-arrow" class="vjt-arrow" />
   </div>
 </template>
 

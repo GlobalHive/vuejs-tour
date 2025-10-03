@@ -1,4 +1,4 @@
-import VTour from "./components/VTour.vue";
+import VTour from './components/VTour.vue';
 
 export { VTour };
 export type {
@@ -9,5 +9,5 @@ export type {
   VTourData,
   VTourExposedMethods,
   ButtonLabels,
-  SaveToLocalStorage
-} from "./Types.js";
+  SaveToLocalStorage,
+} from './Types.js';

@@ -1,37 +1,37 @@
-import '@testing-library/jest-dom'
-import { beforeEach, vi } from 'vitest'
+import '@testing-library/jest-dom';
+import { beforeEach, vi } from 'vitest';
 
 // Mock nanopop to avoid real DOM positioning
 vi.mock('nanopop', () => ({
   createPopper: vi.fn(() => ({
     update: vi.fn(() => 'right'),
-    destroy: vi.fn()
-  }))
-}))
+    destroy: vi.fn(),
+  })),
+}));
 
 // Mock jump.js if still used
 vi.mock('jump.js', () => ({
-  default: vi.fn(() => Promise.resolve())
-}))
+  default: vi.fn(() => Promise.resolve()),
+}));
 
 // Global test setup
 beforeEach(() => {
   // Clear localStorage before each test
-  localStorage.clear()
-  
+  localStorage.clear();
+
   // Reset all mocks
-  vi.clearAllMocks()
-  
+  vi.clearAllMocks();
+
   // Clean up DOM
-  document.body.innerHTML = ''
-  document.head.innerHTML = ''
-})
+  document.body.innerHTML = '';
+  document.head.innerHTML = '';
+});
 
 // Mock scrollTo for smooth scrolling tests
 Object.defineProperty(window, 'scrollTo', {
   value: vi.fn(),
-  writable: true
-})
+  writable: true,
+});
 
 // Mock getBoundingClientRect
 Element.prototype.getBoundingClientRect = vi.fn(() => ({
@@ -43,23 +43,23 @@ Element.prototype.getBoundingClientRect = vi.fn(() => ({
   right: 100,
   x: 0,
   y: 0,
-  toJSON: vi.fn()
-}))
+  toJSON: vi.fn(),
+}));
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class {
-  observe = vi.fn()
-  unobserve = vi.fn()
-  disconnect = vi.fn()
-  root = null
-  rootMargin = '0px'
-  thresholds = [0]
-  takeRecords = vi.fn(() => [])
-}
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+  root = null;
+  rootMargin = '0px';
+  thresholds = [0];
+  takeRecords = vi.fn(() => []);
+};
 
-// Mock ResizeObserver  
+// Mock ResizeObserver
 global.ResizeObserver = class {
-  observe = vi.fn()
-  unobserve = vi.fn()
-  disconnect = vi.fn()
-}
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+};
