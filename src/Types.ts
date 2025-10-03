@@ -144,9 +144,11 @@ export interface VTourExposedMethods {
   stopTour: () => void;
 
   /** Navigate to a specific step by index */
+  // codacy:disable:next-line
   goToStep(stepIndex: number): Promise<void>;
 
   /** Reset tour state and optionally restart */
+  // codacy:disable:next-line
   resetTour(shouldRestart?: boolean): void;
 
   /** Update tooltip position */

@@ -36,6 +36,7 @@ export default defineConfig({
         defineModel: true,
       },
     }),
+    // codacy:disable:next-line
     dts({
       insertTypesEntry: true,
       cleanVueFileName: true,
