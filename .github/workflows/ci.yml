@@ -128,11 +128,17 @@ jobs:
     - name: Generate coverage report
       run: npm run test:coverage
       
-    - name: Generate coverage badge
-      uses: jaywcjlove/coverage-badges-cli@main
+    - name: Generate coverage badge  
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       with:
-        source: coverage/coverage-summary.json
-        output: coverage/badges.svg
+        script: |
+          const fs = require('fs');
+          const path = 'coverage/coverage-summary.json';
+          if (fs.existsSync(path)) {
+            const coverage = JSON.parse(fs.readFileSync(path, 'utf8'));
+            const pct = coverage.total.lines.pct;
+            console.log(`Coverage: ${pct}%`);
+          }
         
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4
