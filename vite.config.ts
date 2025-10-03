@@ -1,13 +1,13 @@
-import { resolve } from 'path'
-import { defineConfig } from 'vite'
-import dts from 'vite-plugin-dts'
-import vue from '@vitejs/plugin-vue'
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src')
-    }
+      '@': resolve(__dirname, 'src'),
+    },
   },
   build: {
     lib: {
@@ -20,32 +20,32 @@ export default defineConfig({
       external: ['vue', 'nanopop', 'jump.js'],
       output: {
         globals: {
-          'vue': 'Vue',
-          'nanopop': 'nanopop',
-          'jump.js': 'jump'
+          vue: 'Vue',
+          nanopop: 'nanopop',
+          'jump.js': 'jump',
         },
       },
     },
     minify: 'esbuild',
     sourcemap: true,
-    target: 'es2020'
+    target: 'es2020',
   },
   plugins: [
     vue({
       script: {
-        defineModel: true
-      }
+        defineModel: true,
+      },
     }),
     dts({
       insertTypesEntry: true,
-      cleanVueFileName: true
-    })
+      cleanVueFileName: true,
+    }),
   ],
   server: {
     open: true,
-    port: 3000
+    port: 3000,
   },
   preview: {
-    port: 4173
-  }
-})
+    port: 4173,
+  },
+});
