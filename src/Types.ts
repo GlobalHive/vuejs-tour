@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { NanoPopPosition } from 'nanopop';
 
 /**
@@ -143,12 +144,10 @@ export interface VTourExposedMethods {
   stopTour: () => void;
 
   /** Navigate to a specific step by index */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  goToStep: (stepIndex: number) => Promise<void>;
+  goToStep: (index: number) => Promise<void>;
 
   /** Reset tour state and optionally restart */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  resetTour: (shouldRestart?: boolean) => void;
+  resetTour: (restart?: boolean) => void;
 
   /** Update tooltip position */
   updatePosition: () => Promise<void>;
