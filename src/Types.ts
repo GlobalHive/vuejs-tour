@@ -124,6 +124,10 @@ export interface VTourData {
   getNextStep: ITourStep;
 }
 
+export type VTourGoToStep = (stepIndex: number) => Promise<void>;
+
+export type VTourResetTour = (shouldRestart?: boolean) => void;
+
 /**
  * Public API methods exposed by the VTour component
  */
@@ -144,12 +148,10 @@ export interface VTourExposedMethods {
   stopTour: () => void;
 
   /** Navigate to a specific step by index */
-  // codacy:disable:next-line
-  goToStep(stepIndex: number): Promise<void>;
+  goToStep: VTourGoToStep;
 
   /** Reset tour state and optionally restart */
-  // codacy:disable:next-line
-  resetTour(shouldRestart?: boolean): void;
+  resetTour: VTourResetTour;
 
   /** Update tooltip position */
   updatePosition: () => Promise<void>;

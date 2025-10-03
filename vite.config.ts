@@ -1,7 +1,14 @@
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
+import dtsPlugin, {
+  type PluginOptions as DtsPluginOptions,
+} from 'vite-plugin-dts';
 import vue from '@vitejs/plugin-vue';
+
+const dtsOptions: DtsPluginOptions = {
+  insertTypesEntry: true,
+  cleanVueFileName: true,
+};
 
 export default defineConfig({
   resolve: {
@@ -36,11 +43,7 @@ export default defineConfig({
         defineModel: true,
       },
     }),
-    // codacy:disable:next-line
-    dts({
-      insertTypesEntry: true,
-      cleanVueFileName: true,
-    }),
+    dtsPlugin(dtsOptions),
   ],
   server: {
     open: true,
