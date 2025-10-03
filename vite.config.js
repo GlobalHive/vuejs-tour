@@ -38,7 +38,6 @@ export default defineConfig({
     dts({
       insertTypesEntry: true,
       cleanVueFileName: true,
-      rollupTypes: true,
     }),
   ],
   server: {

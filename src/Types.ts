@@ -143,10 +143,12 @@ export interface VTourExposedMethods {
   stopTour: () => void;
 
   /** Navigate to a specific step by index */
-  goToStep: (_stepIndex: number) => Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  goToStep: (stepIndex: number) => Promise<void>;
 
   /** Reset tour state and optionally restart */
-  resetTour: (_shouldRestart?: boolean) => void;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  resetTour: (shouldRestart?: boolean) => void;
 
   /** Update tooltip position */
   updatePosition: () => Promise<void>;
