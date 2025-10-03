@@ -36,7 +36,6 @@ export default defineConfig({
         defineModel: true,
       },
     }),
-    // @ts-ignore: dts plugin configuration
     dts({
       insertTypesEntry: true,
       cleanVueFileName: true,

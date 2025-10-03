@@ -144,10 +144,10 @@ export interface VTourExposedMethods {
   stopTour: () => void;
 
   /** Navigate to a specific step by index */
-  goToStep: (index: number) => Promise<void>;
+  goToStep(stepIndex: number): Promise<void>;
 
   /** Reset tour state and optionally restart */
-  resetTour: (restart?: boolean) => void;
+  resetTour(shouldRestart?: boolean): void;
 
   /** Update tooltip position */
   updatePosition: () => Promise<void>;

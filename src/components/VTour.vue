@@ -110,13 +110,13 @@ const stopTour = (): void => {
   tooltip.value?.setAttribute('data-hidden', '');
 };
 
-const resetTour = (restart = false): void => {
+const resetTour = (shouldRestart = false): void => {
   stopTour();
   currentStepIndex.value = 0;
   lastStepIndex.value = 0;
   nextStepIndex.value = 1;
   localStorage.removeItem(saveKey.value);
-  if (restart) startTour();
+  if (shouldRestart) startTour();
 };
 
 const nextStep = async (): Promise<void> => {
@@ -155,16 +155,16 @@ const endTour = (): void => {
   emit('onTourEnd');
 };
 
-const goToStep = async (index: number): Promise<void> => {
-  if (index < 0 || index >= props.steps.length) {
-    console.warn(`Invalid step index: ${index}`);
+const goToStep = async (stepIndex: number): Promise<void> => {
+  if (stepIndex < 0 || stepIndex >= props.steps.length) {
+    console.warn(`Invalid step index: ${stepIndex}`);
     return;
   }
 
-  await beforeStep(index);
-  currentStepIndex.value = index;
-  lastStepIndex.value = Math.max(index - 1, 0);
-  nextStepIndex.value = index + 1;
+  await beforeStep(stepIndex);
+  currentStepIndex.value = stepIndex;
+  lastStepIndex.value = Math.max(stepIndex - 1, 0);
+  nextStepIndex.value = stepIndex + 1;
   await updatePosition();
 };
 
