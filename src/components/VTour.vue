@@ -2,7 +2,12 @@
 import { createPopper, type NanoPop } from 'nanopop';
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
 import jump from 'jump.js';
-import type { VTourProps, VTourEmits, VTourData } from '../Types.ts';
+import type {
+  VTourProps,
+  VTourEmits,
+  VTourData,
+  VTourExposedMethods,
+} from '../Types.ts';
 
 // Props with defaults
 const props = withDefaults(defineProps<VTourProps>(), {
@@ -324,7 +329,7 @@ onUnmounted(() => {
 });
 
 // Expose public API
-defineExpose({
+defineExpose<VTourExposedMethods>({
   startTour,
   nextStep,
   lastStep,
