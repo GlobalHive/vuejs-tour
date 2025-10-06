@@ -2,6 +2,9 @@
 engines:
   eslint:
     enabled: true
+    exclude_paths:
+      - 'src/Types.ts'
+      - 'vite.config.ts'
   duplication:
     enabled: true
     
