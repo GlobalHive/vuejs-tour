@@ -125,20 +125,6 @@ export interface VTourData {
 }
 
 /**
- * Programmatic step navigation signature.
- *
- * @param stepIndex Step index to navigate to.
- */
-export type VTourGoToStep = (stepIndex: number) => Promise<void>;
-
-/**
- * Reset behaviour signature.
- *
- * @param shouldRestart When true, restarts immediately after reset.
- */
-export type VTourResetTour = (shouldRestart?: boolean) => void;
-
-/**
  * Public API methods exposed by the VTour component
  */
 export interface VTourExposedMethods {
@@ -158,10 +144,10 @@ export interface VTourExposedMethods {
   stopTour: () => void;
 
   /** Navigate to a specific step by index */
-  goToStep: VTourGoToStep;
+  goToStep: (stepIndex: number) => Promise<void>;
 
   /** Reset tour state and optionally restart */
-  resetTour: VTourResetTour;
+  resetTour: (shouldRestart?: boolean) => void;
 
   /** Update tooltip position */
   updatePosition: () => Promise<void>;
