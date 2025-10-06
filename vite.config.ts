@@ -10,7 +10,7 @@ const dtsOptions: DtsPluginOptions = {
   cleanVueFileName: true,
 };
 
-const dts: Plugin = dtsPlugin(dtsOptions);
+const dts = dtsPlugin(dtsOptions) as Plugin;
 
 export default defineConfig({
   resolve: {
