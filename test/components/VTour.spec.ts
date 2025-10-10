@@ -195,6 +195,35 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       expect(wrapper.vm.lastStepIndex).toBe(initialStep);
     });
 
+    it('should navigate backwards using lastStep', async () => {
+      // Navigate to step 2
+      await wrapper.vm.goToStep(2);
+      await waitForAsync();
+      expect(wrapper.vm.currentStepIndex).toBe(2);
+
+      // Go back one step
+      await wrapper.vm.lastStep();
+      await waitForAsync();
+
+      expect(wrapper.vm.currentStepIndex).toBe(1);
+      expect(wrapper.vm.lastStepIndex).toBe(0);
+      expect(wrapper.vm.nextStepIndex).toBe(2);
+    });
+
+    it('should not allow lastStep to go below 0', async () => {
+      // Start at step 0
+      wrapper.vm.currentStepIndex = 0;
+      wrapper.vm.lastStepIndex = 0;
+      wrapper.vm.nextStepIndex = 1;
+
+      // Try to go back from step 0
+      await wrapper.vm.lastStep();
+      await waitForAsync();
+
+      // lastStepIndex should not go below 0
+      expect(wrapper.vm.lastStepIndex).toBe(0);
+    });
+
     it('should navigate to specific step', async () => {
       // Navigate to specific step
       await wrapper.vm.goToStep(2);
@@ -398,19 +427,81 @@ describe('VTour Component - Comprehensive Test Suite', () => {
   });
 
   describe('Backdrop Functionality', () => {
-    it('should show/hide backdrop correctly', () => {
+    it('should show backdrop when global backdrop prop is true', async () => {
       wrapper = mount(VTour, {
         props: {
           steps: mockSteps,
           backdrop: true,
         },
+        attachTo: document.getElementById('app')!,
       });
 
       const backdrop = wrapper.find('#vjt-backdrop');
       expect(backdrop.exists()).toBe(true);
 
-      // Backdrop should be shown by default when tour starts (not have data-hidden attribute)
-      expect(backdrop.attributes('data-hidden')).toBeFalsy();
+      // Trigger backdrop update
+      wrapper.vm.currentStepIndex = 0;
+      await nextTick();
+      
+      wrapper.vm.updateBackdrop();
+      await nextTick();
+
+      // Backdrop should be visible (not have data-hidden attribute)
+      expect(backdrop.attributes('data-hidden')).toBeUndefined();
+    });
+
+    it('should show backdrop for individual step when step.backdrop is true', async () => {
+      const stepsWithBackdrop = [
+        {
+          target: '#step1',
+          content: 'Step with backdrop',
+          backdrop: true,
+        },
+      ];
+
+      wrapper = mount(VTour, {
+        props: {
+          steps: stepsWithBackdrop,
+          backdrop: false, // Global backdrop off
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      wrapper.vm.currentStepIndex = 0;
+      await nextTick();
+      
+      wrapper.vm.updateBackdrop();
+      await nextTick();
+
+      const backdrop = wrapper.find('#vjt-backdrop');
+      expect(backdrop.attributes('data-hidden')).toBeUndefined();
+    });
+
+    it('should hide backdrop when both global and step backdrop are false', async () => {
+      const stepsWithoutBackdrop = [
+        {
+          target: '#step1',
+          content: 'Step without backdrop',
+          backdrop: false,
+        },
+      ];
+
+      wrapper = mount(VTour, {
+        props: {
+          steps: stepsWithoutBackdrop,
+          backdrop: false,
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      wrapper.vm.currentStepIndex = 0;
+      await nextTick();
+      
+      wrapper.vm.updateBackdrop();
+      await nextTick();
+
+      const backdrop = wrapper.find('#vjt-backdrop');
+      expect(backdrop.attributes('data-hidden')).toBeDefined();
     });
   });
 
@@ -553,22 +644,6 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Tour should be started
       expect(wrapper.vm.currentStepIndex).toBe(0);
-    });
-
-    it('should handle highlight functionality with props.highlight', async () => {
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-          highlight: true,
-        },
-        attachTo: document.getElementById('app')!,
-      });
-
-      wrapper.vm.updateHighlight();
-      await waitForAsync();
-
-      // Highlight should be managed
-      expect(wrapper.exists()).toBe(true);
     });
 
     it('should handle resetTour with restart parameter', async () => {

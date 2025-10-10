@@ -1,14 +1,12 @@
 import { resolve } from 'path';
 import { defineConfig, type Plugin } from 'vite';
-import dts, { type PluginOptions as DtsPluginOptions } from 'vite-plugin-dts';
+import dtsPlugin, { type PluginOptions as DtsPluginOptions } from 'vite-plugin-dts';
 import vue from '@vitejs/plugin-vue';
 
 const dtsOptions: DtsPluginOptions = {
   insertTypesEntry: true,
   cleanVueFileName: true,
 };
-
-const typedDts: (opts?: DtsPluginOptions) => Plugin = dts;
 
 export default defineConfig({
   resolve: {
@@ -39,8 +37,7 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    typedDts(dtsOptions),
+    (dtsPlugin(dtsOptions) as Plugin),
   ],
   server: {
     open: true,
