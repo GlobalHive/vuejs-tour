@@ -9,6 +9,13 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+      },
+    },
+  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/vuejs-tour.ts'),
@@ -33,8 +40,9 @@ export default defineConfig({
   plugins: [
     vue(),
     dtsPlugin({
-      insertTypesEntry: true,
-      cleanVueFileName: true,
+      include: ['src/**/*.ts', 'src/**/*.vue'],
+      exclude: ['src/**/*.spec.ts', 'test/**', 'node_modules/**'],
+      entryRoot: 'src',
     }) as Plugin,
   ],
   server: {

@@ -1,5 +1,5 @@
 @use "sass:math";
-@import "variables";
+@use "variables" as *;
 
 [data-hidden] {
   display: none;
