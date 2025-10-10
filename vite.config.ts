@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import dts, {
   type PluginOptions as DtsPluginOptions,
 } from 'vite-plugin-dts';
@@ -9,6 +9,8 @@ const dtsOptions: DtsPluginOptions = {
   insertTypesEntry: true,
   cleanVueFileName: true,
 };
+
+const typedDts: (opts?: DtsPluginOptions) => Plugin = dts;
 
 export default defineConfig({
   resolve: {
@@ -39,7 +41,7 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    dts(dtsOptions),
+    typedDts(dtsOptions),
   ],
   server: {
     open: true,
