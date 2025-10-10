@@ -7,6 +7,7 @@
   "type": "module",
   "main": "dist/vuejs-tour.umd.cjs",
   "module": "dist/vuejs-tour.js",
+  "types": "dist/vuejs-tour.d.ts",
   "keywords": [
     "vue",
     "vuejs",

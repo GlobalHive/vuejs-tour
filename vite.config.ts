@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import dtsPlugin from 'vite-plugin-dts';
 import vue from '@vitejs/plugin-vue';
 
@@ -35,7 +35,7 @@ export default defineConfig({
     dtsPlugin({
       insertTypesEntry: true,
       cleanVueFileName: true,
-    }),
+    }) as Plugin,
   ],
   server: {
     open: true,
