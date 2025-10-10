@@ -1,6 +1,6 @@
 {
   "name": "@globalhive/vuejs-tour",
-  "version": "2.3.8",
+  "version": "2.4.0",
   "description": "VueJS Tour is a lightweight, simple and customizable tour plugin. It provides a quick and easy way to guide your users through your application.",
   "author": "Global Hive <support@globalhive.de>",
   "license": "MIT",

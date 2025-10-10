@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.4.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.8...v2.4.0) (2025-10-10)
+
+
+### Bug Fixes
+
+* Codacy (Hopefully) ([0f9ad16](https://github.com/GlobalHive/vuejs-tour/commit/0f9ad16a536c42f51143febe490b5a1e01615b28))
+
+
+### Miscellaneous Chores
+
+* release 2.4.0 ([8ef6523](https://github.com/GlobalHive/vuejs-tour/commit/8ef6523d9155d07911eceb4391d614c2d49051ec))
+
 ## [2.3.8](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.7...v2.3.8) (2025-09-26)
 
 
