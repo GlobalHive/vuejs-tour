@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
-import dtsPlugin, {
+import dts, {
   type PluginOptions as DtsPluginOptions,
 } from 'vite-plugin-dts';
 import vue from '@vitejs/plugin-vue';
@@ -39,7 +39,7 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    dtsPlugin(dtsOptions),
+    dts(dtsOptions),
   ],
   server: {
     open: true,

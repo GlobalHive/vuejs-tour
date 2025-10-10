@@ -10,4 +10,4 @@ export type {
   VTourExposedMethods,
   ButtonLabels,
   SaveToLocalStorage,
-} from './Types.js';
+} from './Types';

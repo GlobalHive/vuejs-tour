@@ -7,7 +7,7 @@ import type {
   VTourEmits,
   VTourData,
   VTourExposedMethods,
-} from '../Types.ts';
+} from '../Types';
 
 // Props with defaults
 const props = withDefaults(defineProps<VTourProps>(), {

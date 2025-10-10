@@ -38,6 +38,7 @@ module.exports = {
         // Allow any type assertions in config files
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
+        '@typescript-eslint/no-unsafe-call': 'off',
       },
     },
   ],
