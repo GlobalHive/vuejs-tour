@@ -1,8 +1,6 @@
 import { resolve } from 'path';
 import { defineConfig, type Plugin } from 'vite';
-import dts, {
-  type PluginOptions as DtsPluginOptions,
-} from 'vite-plugin-dts';
+import dts, { type PluginOptions as DtsPluginOptions } from 'vite-plugin-dts';
 import vue from '@vitejs/plugin-vue';
 
 const dtsOptions: DtsPluginOptions = {
@@ -39,10 +37,7 @@ export default defineConfig({
     sourcemap: true,
     target: 'es2020',
   },
-  plugins: [
-    vue(),
-    typedDts(dtsOptions),
-  ],
+  plugins: [vue(), typedDts(dtsOptions)],
   server: {
     open: true,
     port: 3000,
