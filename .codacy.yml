@@ -20,8 +20,11 @@ engines:
     exclude_paths:
       - '*.d.ts'
       - 'env.d.ts'
-      - 'vite.config.*'
-      - 'vitest.config.*'
+      - 'vite.config.ts'
+      - 'vite.config.js'
+      - 'vite.config.d.ts'
+      - 'vitest.config.ts'
+      - 'vitest.config.js'
       - 'src/Types.ts'  # Public API interface definitions
       
   # Duplication detection

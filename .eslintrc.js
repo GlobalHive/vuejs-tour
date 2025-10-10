@@ -11,6 +11,7 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 2020,
+    project: ['./tsconfig.json', './tsconfig.node.json'],
   },
   rules: {
     // Allow unused parameters in TypeScript interfaces and type definitions
@@ -39,6 +40,8 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
       },
     },
   ],

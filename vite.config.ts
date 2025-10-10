@@ -37,7 +37,11 @@ export default defineConfig({
     sourcemap: true,
     target: 'es2020',
   },
-  plugins: [vue(), typedDts(dtsOptions)],
+  plugins: [
+    vue(),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    typedDts(dtsOptions),
+  ],
   server: {
     open: true,
     port: 3000,
