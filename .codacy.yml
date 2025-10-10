@@ -1,5 +1,14 @@
 ---
 # Codacy configuration for VueJS Tour project
+
+# CRITICAL: Exclude config files FIRST to prevent any engine from analyzing them
+exclude_paths:
+  - 'vite.config.ts'
+  - 'vite.config.js'
+  - 'vitest.config.ts'
+  - '*.config.ts'
+  - '*.config.js'
+
 engines:
   # ESLint for JavaScript/TypeScript/Vue linting
   eslint:
@@ -52,15 +61,8 @@ engines:
       - 'coverage/**'
       - 'docs/**'
 
-# Global exclude patterns
+# Additional global exclude patterns (config files already excluded at top)
 exclude_patterns:
-  # Configuration files - MUST be excluded first
-  - 'vite.config.ts'
-  - 'vite.config.js'
-  - 'vitest.config.ts'
-  - '*.config.ts'
-  - '*.config.js'
-  
   # Dependencies and build artifacts
   - 'node_modules/**'
   - 'dist/**'
