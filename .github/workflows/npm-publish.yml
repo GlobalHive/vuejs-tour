@@ -20,7 +20,7 @@ jobs:
           npm run build-only
 
       - name: Build Sass
-        uses: gha-utilities/sass-build@v0.5.1
+        uses: gha-utilities/sass-build@c15aba209f1cfe51f43e319f2724558112cd9336
         with:
           source: src/style/style.scss
           destination: dist/style.css

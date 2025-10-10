@@ -18,7 +18,7 @@ jobs:
           npm run docs:build
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@78c8a980f86518397ead10e1832f1fe7808573f9
         with:
           folder: docs/.vitepress/dist/
         env:
