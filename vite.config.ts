@@ -1,14 +1,7 @@
 import { resolve } from 'path';
-import { defineConfig, type Plugin } from 'vite';
-import dtsPlugin, {
-  type PluginOptions as DtsPluginOptions,
-} from 'vite-plugin-dts';
+import { defineConfig } from 'vite';
+import dtsPlugin from 'vite-plugin-dts';
 import vue from '@vitejs/plugin-vue';
-
-const dtsOptions: DtsPluginOptions = {
-  insertTypesEntry: true,
-  cleanVueFileName: true,
-};
 
 export default defineConfig({
   resolve: {
@@ -37,7 +30,13 @@ export default defineConfig({
     sourcemap: true,
     target: 'es2020',
   },
-  plugins: [vue(), dtsPlugin(dtsOptions) as Plugin],
+  plugins: [
+    vue(),
+    dtsPlugin({
+      insertTypesEntry: true,
+      cleanVueFileName: true,
+    }),
+  ],
   server: {
     open: true,
     port: 3000,
