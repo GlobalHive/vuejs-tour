@@ -38,11 +38,7 @@ export default defineConfig({
     target: 'es2020',
   },
   plugins: [
-    vue({
-      script: {
-        defineModel: true,
-      },
-    }),
+    vue(),
     dtsPlugin(dtsOptions),
   ],
   server: {

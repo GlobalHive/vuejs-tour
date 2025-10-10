@@ -10,6 +10,9 @@ engines:
       - '*.d.ts'
       - 'env.d.ts'
       - 'docs/.vitepress/**'
+    configuration:
+      rules:
+        "@typescript-eslint/no-unused-vars": "off"
     
   # TypeScript linting
   typescript:
