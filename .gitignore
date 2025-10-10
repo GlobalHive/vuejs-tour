@@ -29,3 +29,10 @@ dist-ssr
 docs/.vitepress/dist
 docs/.vitepress/cache
 *.tgz
+.vitepress/cache/*
+coverage/*
+
+# TypeScript build info and generated config files
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts

@@ -1,0 +1,16 @@
+# Build outputs
+dist/
+coverage/
+node_modules/
+
+# Configuration files
+*.config.ts
+*.config.js
+*.d.ts
+*.tsbuildinfo
+
+# Specific files to exclude from linting
+vite.config.ts
+vite.config.js
+vitest.config.ts
+env.d.ts

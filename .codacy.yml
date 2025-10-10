@@ -1,0 +1,115 @@
+---
+# Codacy configuration for VueJS Tour project
+
+# CRITICAL: Exclude config files FIRST to prevent any engine from analyzing them
+exclude_paths:
+  - 'vite.config.ts'
+  - 'vite.config.js'
+  - 'vitest.config.ts'
+  - '*.config.ts'
+  - '*.config.js'
+
+engines:
+  # ESLint for JavaScript/TypeScript/Vue linting
+  eslint:
+    enabled: true
+    exclude_paths:
+      - 'vite.config.*'
+      - 'vitest.config.*'
+      - '*.d.ts'
+      - 'env.d.ts'
+      - 'docs/.vitepress/**'
+    configuration:
+      rules:
+        "@typescript-eslint/no-unused-vars": "off"
+    
+  # TypeScript linting
+  typescript:
+    enabled: true
+    exclude_paths:
+      - '*.d.ts'
+      - 'env.d.ts'
+      - 'vite.config.ts'
+      - 'vite.config.js'
+      - 'vite.config.d.ts'
+      - 'vitest.config.ts'
+      - 'vitest.config.js'
+      - 'src/Types.ts'  # Public API interface definitions
+      
+  # Duplication detection
+  duplication:
+    enabled: true
+    exclude_paths:
+      - 'test/**'
+      - 'docs/**'
+      - 'coverage/**'
+      
+  # Code complexity analysis
+  metrics:
+    enabled: true
+    exclude_paths:
+      - 'test/**'
+      - 'docs/**'
+      - 'coverage/**'
+      - 'vite.config.*'
+      - 'vitest.config.*'
+      
+  # CSS/SCSS linting
+  csslint:
+    enabled: true
+    exclude_paths:
+      - 'coverage/**'
+      - 'docs/**'
+
+# Additional global exclude patterns (config files already excluded at top)
+exclude_patterns:
+  # Dependencies and build artifacts
+  - 'node_modules/**'
+  - 'dist/**'
+  - 'coverage/**'
+  - '.vitepress/cache/**'
+  
+  # Test files (if you want to exclude from analysis)
+  - 'test/**'
+  
+  # Configuration files that don't need deep analysis
+  - '*.config.*'
+  - '*.d.ts'
+  - 'env.d.ts'
+  - 'tsconfig*.json'
+  
+  # Documentation build artifacts
+  - 'docs/.vitepress/dist/**'
+  
+  # Generated files
+  - '*.tsbuildinfo'
+  - '*.gif'
+  - '*.png'
+  - '*.jpg'
+  - '*.jpeg'
+  - '*.svg'
+  - '*.ico'
+  
+  # Package files
+  - '*.tgz'
+  - '*.tar.gz'
+  - 'package-lock.json'
+  - 'yarn.lock'
+  - 'pnpm-lock.yaml'
+  
+  # IDE and editor files
+  - '.vscode/**'
+  - '.idea/**'
+  - '*.swp'
+  - '*.swo'
+  - '*~'
+  
+  # OS generated files
+  - '.DS_Store'
+  - 'Thumbs.db'
+
+# File size limits (optional)
+file_size_limit: 5000  # Lines
+
+# Complexity thresholds (optional)
+complexity_threshold: 15
