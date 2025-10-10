@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.1](https://github.com/GlobalHive/vuejs-tour/compare/v2.4.0...v2.4.1) (2025-10-10)
+
+
+### Bug Fixes
+
+* Pinning actions to a full length commit SHA ([49f12a0](https://github.com/GlobalHive/vuejs-tour/commit/49f12a04126f12175a9aee51d494f4aff345a4d9))
+
 ## [2.4.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.3.8...v2.4.0) (2025-10-10)
 
 
