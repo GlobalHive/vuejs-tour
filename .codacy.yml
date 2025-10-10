@@ -10,14 +10,6 @@ engines:
       - '*.d.ts'
       - 'env.d.ts'
       - 'docs/.vitepress/**'
-    configuration:
-      rules:
-        # Allow unused parameters in interface method signatures (public API definitions)
-        "@typescript-eslint/no-unused-vars":
-          - "error"
-          - "argsIgnorePattern": "^(stepIndex|shouldRestart)$"
-            "varsIgnorePattern": "^_"
-            "args": "after-used"
     
   # TypeScript linting
   typescript:
@@ -27,6 +19,7 @@ engines:
       - 'env.d.ts'
       - 'vite.config.*'
       - 'vitest.config.*'
+      - 'src/Types.ts'  # Public API interface definitions
       
   # Duplication detection
   duplication:
