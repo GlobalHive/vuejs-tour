@@ -442,7 +442,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       // Trigger backdrop update
       wrapper.vm.currentStepIndex = 0;
       await nextTick();
-      
+
       wrapper.vm.updateBackdrop();
       await nextTick();
 
@@ -469,7 +469,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       wrapper.vm.currentStepIndex = 0;
       await nextTick();
-      
+
       wrapper.vm.updateBackdrop();
       await nextTick();
 
@@ -496,7 +496,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       wrapper.vm.currentStepIndex = 0;
       await nextTick();
-      
+
       wrapper.vm.updateBackdrop();
       await nextTick();
 

@@ -54,6 +54,13 @@ engines:
 
 # Global exclude patterns
 exclude_patterns:
+  # Configuration files - MUST be excluded first
+  - 'vite.config.ts'
+  - 'vite.config.js'
+  - 'vitest.config.ts'
+  - '*.config.ts'
+  - '*.config.js'
+  
   # Dependencies and build artifacts
   - 'node_modules/**'
   - 'dist/**'
