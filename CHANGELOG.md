@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.4.2](https://github.com/GlobalHive/vuejs-tour/compare/v2.4.1...v2.4.2) (2025-10-12)
+
+
+### Bug Fixes
+
+* add scss build to ci (temp) ([aeffefe](https://github.com/GlobalHive/vuejs-tour/commit/aeffefe7922d83ddfa9fcb150c8b7b83c358fcc7))
+* Default scss preprocessor is not modern-compiler ([7964ca2](https://github.com/GlobalHive/vuejs-tour/commit/7964ca224081aca7902ac3f0fc0c16f28c1f9f16))
+* happy-dom RCE ([8db8f68](https://github.com/GlobalHive/vuejs-tour/commit/8db8f6817bef244e61d5fa973a850a9864cf67be))
+* removed unsupported node version 18 ([3be0f49](https://github.com/GlobalHive/vuejs-tour/commit/3be0f49a6ff32425f92e66665f7c08947869563d))
+
 ## [2.4.1](https://github.com/GlobalHive/vuejs-tour/compare/v2.4.0...v2.4.1) (2025-10-10)
 
 
