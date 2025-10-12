@@ -426,6 +426,7 @@ defineExpose<VTourExposedMethods>({
   background: white;
   cursor: pointer;
   transition: all 0.2s ease;
+  color: #000;
 }
 
 .vjt-btn:hover {
