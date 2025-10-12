@@ -48,6 +48,9 @@ jobs:
         
     - name: Build library
       run: npm run build-only
+
+    - name: Build styles
+      run: npm run build::sass
       
     - name: Build documentation
       run: npm run docs:build

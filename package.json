@@ -50,7 +50,7 @@
     "dev": "vite",
     "preview": "vite preview",
     "build": "npm run build-only && npm run build::sass && npm pack",
-    "build-only": "vite build",
+    "build-only": "vite build && mv dist/vuejs-tour.css dist/style.css",
     "type-check": "vue-tsc --build --force",
     "build::sass": "sass src/style/style.scss dist/style.css",
     "docs:dev": "vitepress dev docs",
