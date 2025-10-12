@@ -33,8 +33,9 @@ export default defineConfig({
   plugins: [
     vue(),
     dtsPlugin({
-      insertTypesEntry: true,
-      cleanVueFileName: true,
+      include: ['src/**/*.ts', 'src/**/*.vue'],
+      exclude: ['src/**/*.spec.ts', 'test/**', 'node_modules/**'],
+      entryRoot: 'src',
     }) as Plugin,
   ],
   server: {

@@ -5,12 +5,21 @@ export default defineConfig({
   description: 'Guide your users through your application quickly and easily.',
   lang: 'en-US',
   base: '/vuejs-tour/',
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        },
+      },
+    },
+  },
   themeConfig: {
     logo: 'https://vuejs.org/images/logo.png',
     nav: [
       { text: 'Guide', link: '/guide/what-is-vuejs-tour' },
       {
-        text: '2.1.1',
+        text: '2.4.2',
         items: [
           {
             text: 'Changelog',

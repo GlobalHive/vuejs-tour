@@ -290,6 +290,9 @@ const onResizeEnd = (): void => {
 
 // Utility functions
 function getClipPathValues(targetSelector: string): string {
+  // Guard against SSR environment where document is not available
+  if (typeof document === 'undefined') return '';
+
   const targetElement = document.querySelector(targetSelector) as HTMLElement;
   if (!targetElement) return '';
 
@@ -308,8 +311,10 @@ function getClipPathValues(targetSelector: string): string {
   )`;
 }
 
-// Initialize clip path
-getClipPath.value = getClipPathValues('.vjt-highlight');
+// Initialize clip path (only in browser environment)
+if (typeof document !== 'undefined') {
+  getClipPath.value = getClipPathValues('.vjt-highlight');
+}
 
 // Lifecycle hooks
 onMounted(() => {
