@@ -7,7 +7,7 @@ You can try VueJS Tour directly in your browser on [StackBlitz](https://stackbli
 ## Installation
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) version 18.3 or higher.
+- [Node.js](https://nodejs.org/) version 20 or higher.
 - [Vue 3.x](https://vuejs.org/) or higher.
 - Terminal for installing VueJS Tour.
 
@@ -50,20 +50,5 @@ We are also importing the default styles of VueJS Tour.
     <HelloWorld msg="Vite + Vue" />
 </template>
 ```
-::: danger Breaking Changes
-Since version 2.0.1, VueJS Tour has been rewritten in TypeScript. The `VTour` component is now a named export and must be imported as such.
-::: details Version 1.x.x
-Import the plugin in your application entry point (`main.js`) file.
-```js{3,4,7}
-import { createApp } from "vue";
-import App from "./App.vue";
-import VueJsTour from '@globalhive/vuejs-tour';
-import '@globalhive/vuejs-tour/dist/style.css';
-
-const app = createApp(App)
-  .use(VueJsTour)
-  .mount("#app");
-```
-:::
 
 Everything is now set up, and you can start [creating your first tour](./create-a-tour).

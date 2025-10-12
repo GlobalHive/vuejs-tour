@@ -19,7 +19,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/what-is-vuejs-tour' },
       {
-        text: '2.4.1',
+        text: '2.4.2',
         items: [
           {
             text: 'Changelog',
