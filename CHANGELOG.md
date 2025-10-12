@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.3](https://github.com/GlobalHive/vuejs-tour/compare/v2.4.2...v2.4.3) (2025-10-12)
+
+
+### Bug Fixes
+
+* Fixed wrong button text color ([4693eac](https://github.com/GlobalHive/vuejs-tour/commit/4693eacea8b8b60a2a20ae8fa87be771a930ee08))
+
 ## [2.4.2](https://github.com/GlobalHive/vuejs-tour/compare/v2.4.1...v2.4.2) (2025-10-12)
 
 
