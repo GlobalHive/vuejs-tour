@@ -493,6 +493,41 @@ describe('VTour Component - Accessibility', () => {
       wrapper.unmount();
     });
 
+    it('should not trigger next step when Enter is pressed on a button', async () => {
+      const wrapper = mountVTour({
+        steps,
+        autoStart: true,
+        keyboardNav: true,
+      });
+
+      await startAndWaitReady(wrapper);
+
+      const initialStep = wrapper.vm.currentStepIndex;
+
+      // Create a button and simulate Enter key on it
+      const button = document.createElement('button');
+      document.body.appendChild(button);
+      
+      const enterEventOnButton = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+      });
+      
+      Object.defineProperty(enterEventOnButton, 'target', {
+        value: button,
+        enumerable: true,
+      });
+      
+      window.dispatchEvent(enterEventOnButton);
+      await flushVue();
+
+      // Should still be on the same step
+      expect(wrapper.vm.currentStepIndex).toBe(initialStep);
+
+      document.body.removeChild(button);
+      wrapper.unmount();
+    });
+
     it('should remove keyboard listener on unmount', async () => {
       const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
 

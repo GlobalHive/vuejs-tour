@@ -529,6 +529,33 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       // onBefore should be called when step starts
       expect(onBeforeSpy).toHaveBeenCalled();
     });
+
+    it('should execute async onBefore callback', async () => {
+      let callbackExecuted = false;
+      const asyncOnBefore = vi.fn(async () => {
+        await flushVue();
+        callbackExecuted = true;
+      });
+
+      const stepsWithAsyncCallback = [
+        {
+          target: '#step1',
+          content: 'Step with async callback',
+          onBefore: asyncOnBefore,
+        },
+      ];
+
+      wrapper = mountVTour({
+        steps: stepsWithAsyncCallback,
+        autoStart: false,
+      });
+
+      await startAndWaitReady(wrapper);
+
+      // Async onBefore should be called and awaited
+      expect(asyncOnBefore).toHaveBeenCalled();
+      expect(callbackExecuted).toBe(true);
+    });
   });
 
   describe('Error Handling', () => {
