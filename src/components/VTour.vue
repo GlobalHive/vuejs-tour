@@ -8,6 +8,7 @@ import type {
   VTourData,
   VTourExposedMethods,
 } from '../Types';
+import { easeInOutQuad, easingFunctions } from '../easing';
 
 // Props with defaults
 const props = withDefaults(defineProps<VTourProps>(), {
@@ -94,8 +95,6 @@ let previousFocus: HTMLElement | null = null;
 const DEFAULT_JUMP_OPTIONS = {
   duration: 500,
   offset: -100,
-  easing: 'easeInOutQuad' as const,
-  a11y: false, // Note: This is overridden by props.enableA11y in the merge at line 369
 };
 
 // Helper to check if tour was completed and saved to localStorage
@@ -105,6 +104,11 @@ const isTourCompleted = (): boolean => {
 
 const startTour = async (): Promise<void> => {
   if (isTourCompleted()) return;
+
+  // If tour is already active, do nothing (prevents restart)
+  if (tourVisible.value) {
+    return;
+  }
 
   if (props.saveToLocalStorage === 'step') {
     const savedStep = localStorage.getItem(saveKey.value);
@@ -360,17 +364,26 @@ const updatePosition = async (): Promise<void> => {
   // Scroll to target first if needed
   if (!props.noScroll && !currentStepData.noScroll) {
     await new Promise<void>((resolve) => {
-      // Merge default options with global and step-specific options
-      // Priority: step options > global options > enableA11y prop > defaults
-      const scrollOptions = {
-        ...DEFAULT_JUMP_OPTIONS,
-        a11y: props.enableA11y, // Use enableA11y prop as default
+      // Merge jump options: step > global > defaults
+      const merged = {
+        duration: DEFAULT_JUMP_OPTIONS.duration,
+        offset: DEFAULT_JUMP_OPTIONS.offset,
+        easing: 'easeInOutQuad',
+        a11y: props.enableA11y,
         ...props.jumpOptions,
         ...currentStepData.jumpOptions,
-        callback: () => resolve(),
-      } as any; // jump.js has incomplete type definitions
+      };
 
-      jump(targetElement, scrollOptions);
+      // Map string easing name to function (jump.js requirement)
+      const easingFn = easingFunctions[merged.easing] || easeInOutQuad;
+
+      jump(targetElement, {
+        duration: merged.duration,
+        offset: merged.offset,
+        easing: easingFn,
+        a11y: merged.a11y,
+        callback: () => resolve(),
+      });
     });
   }
 

@@ -180,6 +180,29 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       expect(wrapper.vm.lastStepIndex).toBe(0);
     });
 
+    it('should not restart tour if already active', async () => {
+      // Start the tour properly with all async operations
+      await startAndWaitReady(wrapper);
+
+      expect(wrapper.vm.tourVisible).toBe(true);
+      expect(wrapper.vm.currentStepIndex).toBe(0);
+
+      // Navigate to step 2
+      await wrapper.vm.goToStep(2);
+      await flushVue();
+
+      expect(wrapper.vm.currentStepIndex).toBe(2);
+      expect(wrapper.vm.tourVisible).toBe(true);
+
+      // Try to start tour again while it's active
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Tour should remain at step 2, not restart at step 0
+      expect(wrapper.vm.currentStepIndex).toBe(2);
+      expect(wrapper.vm.tourVisible).toBe(true);
+    });
+
     it('should navigate through steps', async () => {
       // Start from known state
       wrapper.vm.currentStepIndex = 0;

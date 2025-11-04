@@ -47,7 +47,7 @@ describe('VTour Component - Jump Options', () => {
     // Should use default values (a11y follows enableA11y prop which defaults to true via mountVTour)
     expect(callArgs.duration).toBe(500);
     expect(callArgs.offset).toBe(-100);
-    expect(callArgs.easing).toBe('easeInOutQuad');
+    expect(typeof callArgs.easing).toBe('function'); // Should be easeInOutQuad function
     expect(callArgs.a11y).toBe(true); // mountVTour defaults enableA11y to true
 
     wrapper.unmount();
@@ -73,7 +73,7 @@ describe('VTour Component - Jump Options', () => {
     expect(callArgs.duration).toBe(1000);
     expect(callArgs.offset).toBe(-200);
     expect(callArgs.a11y).toBe(true);
-    expect(callArgs.easing).toBe('easeInOutQuad'); // Default still applies
+    expect(typeof callArgs.easing).toBe('function'); // Default easeInOutQuad
 
     wrapper.unmount();
   });
@@ -109,7 +109,7 @@ describe('VTour Component - Jump Options', () => {
     expect(callArgs.duration).toBe(300);
     expect(callArgs.offset).toBe(-50);
     expect(callArgs.a11y).toBe(true); // From global
-    expect(callArgs.easing).toBe('easeInOutQuad'); // From default
+    expect(typeof callArgs.easing).toBe('function'); // Default easeInOutQuad
 
     wrapper.unmount();
   });
@@ -131,16 +131,12 @@ describe('VTour Component - Jump Options', () => {
     wrapper.unmount();
   });
 
-  it('should support custom easing function', async () => {
-    const customEasing = (t: number, b: number, c: number, d: number) => {
-      return (c * t) / d + b;
-    };
-
+  it('should support different easing names', async () => {
     const wrapper = mountVTour({
       steps,
       noScroll: false,
       jumpOptions: {
-        easing: customEasing,
+        easing: 'easeInCubic',
       },
     });
 
@@ -149,8 +145,8 @@ describe('VTour Component - Jump Options', () => {
     expect(jump).toHaveBeenCalled();
     const callArgs = (jump as any).mock.calls[0][1];
 
-    // Should use custom easing function
-    expect(callArgs.easing).toBe(customEasing);
+    // Should map string to easing function
+    expect(typeof callArgs.easing).toBe('function');
 
     wrapper.unmount();
   });
@@ -178,5 +174,27 @@ describe('VTour Component - Jump Options', () => {
     expect(callArgs2.a11y).toBe(true);
 
     wrapper2.unmount();
+  });
+
+  it('should not override default easing with undefined values', async () => {
+    const wrapper = mountVTour({
+      steps,
+      noScroll: false,
+      jumpOptions: {
+        duration: 1000,
+        // easing is undefined, should use default 'easeInOutQuad'
+      } as any,
+    });
+
+    await startAndWaitReady(wrapper);
+
+    expect(jump).toHaveBeenCalled();
+    const callArgs = (jump as any).mock.calls[0][1];
+
+    // Should still have the default easing function, not undefined
+    expect(typeof callArgs.easing).toBe('function');
+    expect(callArgs.duration).toBe(1000); // Custom duration should be applied
+
+    wrapper.unmount();
   });
 });

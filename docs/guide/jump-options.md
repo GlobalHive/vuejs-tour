@@ -15,8 +15,13 @@ interface JumpOptions {
   /** Callback function to execute after scroll completes */
   callback?: () => void;
 
-  /** Easing function name or custom function (default: 'easeInOutQuad') */
-  easing?: (t: number, b: number, c: number, d: number) => number | string;
+  /**
+   * Easing function name (default: 'easeInOutQuad')
+   * Valid values: 'easeInQuad', 'easeOutQuad', 'easeInOutQuad', 'easeInCubic',
+   * 'easeOutCubic', 'easeInOutCubic', 'easeInQuart', 'easeOutQuart', 'easeInOutQuart',
+   * 'easeInQuint', 'easeOutQuint', 'easeInOutQuint'
+   */
+  easing?: string;
 
   /** Whether to focus the element for accessibility (default: false) */
   a11y?: boolean;
@@ -53,37 +58,14 @@ const steps = [
   },
   {
     target: '#step2',
-    content: 'This step uses custom scroll duration',
+    content: 'This step uses custom scroll options',
     jumpOptions: {
       duration: 300, // Faster scroll
       offset: -200, // More space at top
+      easing: 'easeInCubic', // Different easing
     },
   },
 ];
-```
-
-## Custom Easing
-
-Provide a custom easing function:
-
-```vue
-<script setup lang="ts">
-import { VTour } from '@globalhive/vuejs-tour';
-
-const customEasing = (t: number, b: number, c: number, d: number) => {
-  // Linear easing
-  return (c * t) / d + b;
-};
-
-const jumpOptions = {
-  duration: 800,
-  easing: customEasing,
-};
-</script>
-
-<template>
-  <VTour :steps="steps" :jump-options="jumpOptions" />
-</template>
 ```
 
 ## Disabling Scroll
@@ -140,30 +122,38 @@ const steps = [
 
 ## Available Easing Functions
 
-jump.js supports the following built-in easing function names:
+VueJS Tour supports the following built-in easing function names:
 
-- `'easeInQuad'`
-- `'easeOutQuad'`
-- `'easeInOutQuad'` (default)
-- `'easeInCubic'`
-- `'easeOutCubic'`
-- `'easeInOutCubic'`
-- `'easeInQuart'`
-- `'easeOutQuart'`
-- `'easeInOutQuart'`
-- `'easeInQuint'`
-- `'easeOutQuint'`
-- `'easeInOutQuint'`
+- `'easeInQuad'` - Quadratic acceleration
+- `'easeOutQuad'` - Quadratic deceleration
+- `'easeInOutQuad'` - Quadratic acceleration and deceleration (default)
+- `'easeInCubic'` - Cubic acceleration
+- `'easeOutCubic'` - Cubic deceleration
+- `'easeInOutCubic'` - Cubic acceleration and deceleration
+- `'easeInQuart'` - Quartic acceleration
+- `'easeOutQuart'` - Quartic deceleration
+- `'easeInOutQuart'` - Quartic acceleration and deceleration
+- `'easeInQuint'` - Quintic acceleration
+- `'easeOutQuint'` - Quintic deceleration
+- `'easeInOutQuint'` - Quintic acceleration and deceleration
 
-Or provide your own custom easing function following the signature:
+Example usage:
 
-```typescript
-(t: number, b: number, c: number, d: number) => number;
+```vue
+<template>
+  <VTour
+    :steps="steps"
+    :jump-options="{
+      duration: 800,
+      easing: 'easeInOutCubic', // Smoother animation
+    }"
+  />
+</template>
 ```
 
-Where:
+### Understanding Easing Types
 
-- `t` = current time
-- `b` = beginning value
-- `c` = change in value
-- `d` = duration
+- **In** (e.g., `easeInQuad`) - Starts slow, ends fast (acceleration)
+- **Out** (e.g., `easeOutQuad`) - Starts fast, ends slow (deceleration)
+- **InOut** (e.g., `easeInOutQuad`) - Starts slow, speeds up, then slows down (smooth)
+- **Quad/Cubic/Quart/Quint** - The strength of the curve (higher = more dramatic)

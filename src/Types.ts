@@ -14,13 +14,13 @@ export interface JumpOptions {
   /** Callback function to execute after scroll completes */
   readonly callback?: () => void;
 
-  /** Easing function name (default: 'easeInOutQuad') */
-  readonly easing?: (
-    t: number,
-    b: number,
-    c: number,
-    d: number
-  ) => number | string;
+  /**
+   * Easing function name (default: 'easeInOutQuad')
+   * Valid values: 'easeInQuad', 'easeOutQuad', 'easeInOutQuad', 'easeInCubic',
+   * 'easeOutCubic', 'easeInOutCubic', 'easeInQuart', 'easeOutQuart', 'easeInOutQuart',
+   * 'easeInQuint', 'easeOutQuint', 'easeInOutQuint'
+   */
+  readonly easing?: string;
 
   /** Whether to focus the element for accessibility (default: false) */
   readonly a11y?: boolean;
