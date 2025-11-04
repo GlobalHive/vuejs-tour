@@ -507,17 +507,17 @@ describe('VTour Component - Accessibility', () => {
       // Create a button and simulate Enter key on it
       const button = document.createElement('button');
       document.body.appendChild(button);
-      
+
       const enterEventOnButton = new KeyboardEvent('keydown', {
         key: 'Enter',
         bubbles: true,
       });
-      
+
       Object.defineProperty(enterEventOnButton, 'target', {
         value: button,
         enumerable: true,
       });
-      
+
       window.dispatchEvent(enterEventOnButton);
       await flushVue();
 
