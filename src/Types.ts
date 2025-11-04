@@ -56,6 +56,9 @@ export interface ITourStep {
 
   /** Custom scroll animation options for this step (overrides global jumpOptions) */
   readonly jumpOptions?: Partial<JumpOptions>;
+
+  /** Descriptive label for screen readers (e.g., "User Profile Settings") */
+  readonly ariaLabel?: string;
 }
 
 /**
@@ -121,6 +124,18 @@ export interface VTourProps {
 
   /** Default scroll animation options (can be overridden per step) */
   readonly jumpOptions?: Partial<JumpOptions>;
+
+  /** Enable accessibility features including keyboard navigation and ARIA attributes (default: true) */
+  readonly enableA11y?: boolean;
+
+  /** Enable keyboard navigation with Arrow keys, Enter, and Escape (default: true) */
+  readonly keyboardNav?: boolean;
+
+  /** Custom ARIA label for the tour dialog (default: "Guided tour") */
+  readonly ariaLabel?: string;
+
+  /** Delay in milliseconds to wait for Vue Teleport to render DOM elements (default: 100) */
+  readonly teleportDelay?: number;
 }
 
 /**

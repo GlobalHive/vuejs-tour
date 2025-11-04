@@ -23,6 +23,10 @@ const props = withDefaults(defineProps<VTourProps>(), {
   hideArrow: false,
   noScroll: false,
   resizeTimeout: 250,
+  enableA11y: false, // Conservative default - can be enabled when accessibility is fully vetted
+  keyboardNav: true,
+  ariaLabel: 'Guided tour',
+  teleportDelay: 100,
 });
 
 // Emit definitions using standardized VTourEmits type
@@ -50,9 +54,12 @@ const _CurrentStep: VTourData = reactive({
   getNextStep,
 });
 
+const isLastStep = computed(
+  () => currentStepIndex.value === props.steps.length - 1
+);
+
 const getNextLabel = computed(() => {
-  const isLastStep = currentStepIndex.value === props.steps.length - 1;
-  return isLastStep
+  return isLastStep.value
     ? (props.buttonLabels?.done ?? 'Done')
     : (props.buttonLabels?.next ?? 'Next');
 });
@@ -80,15 +87,15 @@ const highlightClass = computed(() =>
 const _Tooltip = ref<HTMLElement>();
 const _Backdrop = ref<HTMLElement>();
 
-// Constants for timing and positioning
-const TELEPORT_RENDER_DELAY = 100; // ms to wait for Vue Teleport to render DOM elements
+// Accessibility: Store previous focus to restore on close
+let previousFocus: HTMLElement | null = null;
 
 // Default jump.js scroll options (can be overridden via props)
 const DEFAULT_JUMP_OPTIONS = {
   duration: 500,
   offset: -100,
   easing: 'easeInOutQuad' as const,
-  a11y: false,
+  a11y: false, // Note: This is overridden by props.enableA11y in the merge at line 369
 };
 
 // Helper to check if tour was completed and saved to localStorage
@@ -132,7 +139,7 @@ const startTour = async (): Promise<void> => {
 
     // Wait for Teleport to render DOM elements, then cache references
     await new Promise((resolve) => {
-      teleportDelayTimer = setTimeout(resolve, TELEPORT_RENDER_DELAY);
+      teleportDelayTimer = setTimeout(resolve, props.teleportDelay);
     });
 
     if (!_Tooltip.value) {
@@ -150,6 +157,11 @@ const startTour = async (): Promise<void> => {
     if (!_Tooltip.value) {
       console.warn('Tooltip element not found in DOM');
       return;
+    }
+
+    // Store current focus for accessibility restoration
+    if (props.enableA11y && typeof document !== 'undefined') {
+      previousFocus = document.activeElement as HTMLElement;
     }
 
     // Show tour content (but keep hidden via isTransitioning) so nanopop can calculate dimensions
@@ -175,6 +187,12 @@ const startTour = async (): Promise<void> => {
     // Show tooltip after positioning is complete
     isTransitioning.value = false;
 
+    // Focus the tooltip for accessibility
+    if (props.enableA11y) {
+      await nextTick();
+      _Tooltip.value?.focus();
+    }
+
     emit('onTourStart');
   }, props.startDelay);
 };
@@ -198,6 +216,12 @@ const stopTour = (): void => {
   // Destroy nanopop instance so it can be recreated on next tour start
   if (vTour.value) {
     vTour.value = undefined;
+  }
+
+  // Restore previous focus for accessibility
+  if (props.enableA11y && previousFocus) {
+    previousFocus.focus();
+    previousFocus = null;
   }
 };
 const resetTour = (shouldRestart = false): void => {
@@ -337,9 +361,10 @@ const updatePosition = async (): Promise<void> => {
   if (!props.noScroll && !currentStepData.noScroll) {
     await new Promise<void>((resolve) => {
       // Merge default options with global and step-specific options
-      // Priority: step options > global options > defaults
+      // Priority: step options > global options > enableA11y prop > defaults
       const scrollOptions = {
         ...DEFAULT_JUMP_OPTIONS,
+        a11y: props.enableA11y, // Use enableA11y prop as default
         ...props.jumpOptions,
         ...currentStepData.jumpOptions,
         callback: () => resolve(),
@@ -454,10 +479,45 @@ const onScroll = (): void => {
   redrawLayers();
 };
 
+// Keyboard navigation handler
+const onKeydown = (event: KeyboardEvent): void => {
+  if (!tourVisible.value || !props.enableA11y || !props.keyboardNav) return;
+
+  switch (event.key) {
+    case 'Escape':
+      endTour();
+      event.preventDefault();
+      break;
+    case 'ArrowRight':
+    case 'Enter':
+      // Only handle Enter if it's not from a button click
+      if (
+        event.key === 'Enter' &&
+        (event.target as HTMLElement)?.tagName === 'BUTTON'
+      ) {
+        return;
+      }
+      nextStep();
+      event.preventDefault();
+      break;
+    case 'ArrowLeft':
+      if (currentStepIndex.value > 0) {
+        lastStep();
+        event.preventDefault();
+      }
+      break;
+  }
+};
+
 // Lifecycle hooks
 onMounted(() => {
   // Vue refs will be set automatically for Teleported elements
   // No need to manually query DOM for refs
+
+  // Set up keyboard navigation if enabled
+  if (props.keyboardNav) {
+    window.addEventListener('keydown', onKeydown);
+  }
 
   if (props.autoStart) {
     startTour();
@@ -469,6 +529,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   // Clean up event listeners
+  if (props.keyboardNav) {
+    window.removeEventListener('keydown', onKeydown);
+  }
   window.removeEventListener('resize', onResizeEnd);
   window.removeEventListener('scroll', onScroll, true);
 
@@ -512,17 +575,36 @@ defineExpose<VTourExposedMethods>({
       />
       <div
         :id="tooltipId"
-        role="tooltip"
+        ref="_Tooltip"
+        role="dialog"
+        :aria-modal="enableA11y ? 'true' : undefined"
+        :aria-label="getCurrentStep?.ariaLabel || ariaLabel"
+        :aria-describedby="`${tooltipId}-content`"
+        :tabindex="enableA11y ? '0' : undefined"
         :data-hidden="!tourVisible || isTransitioning"
       >
         <div v-if="tourVisible" :key="`step-${currentStepIndex}`">
+          <!-- Screen reader announcement for step changes -->
+          <div
+            v-if="enableA11y"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            class="vjt-sr-only"
+          >
+            Step {{ currentStepIndex + 1 }} of {{ props.steps.length }}
+          </div>
+
           <div :id="arrowId" v-if="!hideArrow"></div>
           <slot
             name="content"
             :current-step-index="currentStepIndex"
             :current-step-data="getCurrentStep"
           >
-            <div v-html="_CurrentStep.getCurrentStep?.content" />
+            <div
+              :id="`${tooltipId}-content`"
+              v-html="_CurrentStep.getCurrentStep?.content"
+            />
           </slot>
 
           <slot
@@ -539,6 +621,11 @@ defineExpose<VTourExposedMethods>({
                 v-if="lastStepIndex < currentStepIndex"
                 type="button"
                 @click.prevent="lastStep"
+                :aria-label="
+                  enableA11y
+                    ? `Go to previous step, step ${currentStepIndex} of ${props.steps.length}`
+                    : undefined
+                "
               >
                 {{ props.buttonLabels?.back || 'Back' }}
               </button>
@@ -547,11 +634,22 @@ defineExpose<VTourExposedMethods>({
                 v-if="!props.hideSkip"
                 type="button"
                 @click.prevent="endTour"
+                :aria-label="enableA11y ? 'Skip tour and close' : undefined"
               >
                 {{ props.buttonLabels?.skip || 'Skip' }}
               </button>
 
-              <button type="button" @click.prevent="nextStep">
+              <button
+                type="button"
+                @click.prevent="nextStep"
+                :aria-label="
+                  enableA11y
+                    ? isLastStep
+                      ? 'Finish tour'
+                      : `Go to next step, step ${nextStepIndex + 1} of ${props.steps.length}`
+                    : undefined
+                "
+              >
                 {{ getNextLabel }}
               </button>
             </div>

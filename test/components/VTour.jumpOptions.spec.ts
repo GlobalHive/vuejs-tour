@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
-import VTour from '../../src/components/VTour.vue';
 import type { ITourStep } from '../../src/Types';
 import jump from 'jump.js';
+import { useFakeTimersPerTest, startAndWaitReady } from '../helpers/timers';
+import { mountVTour } from '../helpers/mountVTour';
 
 // Mock jump.js
 vi.mock('jump.js', () => ({
@@ -15,6 +15,8 @@ vi.mock('jump.js', () => ({
 }));
 
 describe('VTour Component - Jump Options', () => {
+  useFakeTimersPerTest();
+
   const steps: ITourStep[] = [
     {
       target: '#step1',
@@ -35,43 +37,34 @@ describe('VTour Component - Jump Options', () => {
   });
 
   it('should use default jump options when none provided', async () => {
-    const wrapper = mount(VTour, {
-      props: { steps },
-      attachTo: document.body,
-    });
+    const wrapper = mountVTour({ steps, noScroll: false });
 
-    const component = wrapper.vm as any;
-    await component.startTour();
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await startAndWaitReady(wrapper);
 
     expect(jump).toHaveBeenCalled();
     const callArgs = (jump as any).mock.calls[0][1];
 
-    // Should use default values
+    // Should use default values (a11y follows enableA11y prop which defaults to true via mountVTour)
     expect(callArgs.duration).toBe(500);
     expect(callArgs.offset).toBe(-100);
     expect(callArgs.easing).toBe('easeInOutQuad');
-    expect(callArgs.a11y).toBe(false);
+    expect(callArgs.a11y).toBe(true); // mountVTour defaults enableA11y to true
 
     wrapper.unmount();
   });
 
   it('should use global jump options from props', async () => {
-    const wrapper = mount(VTour, {
-      props: {
-        steps,
-        jumpOptions: {
-          duration: 1000,
-          offset: -200,
-          a11y: true,
-        },
+    const wrapper = mountVTour({
+      steps,
+      noScroll: false,
+      jumpOptions: {
+        duration: 1000,
+        offset: -200,
+        a11y: true,
       },
-      attachTo: document.body,
     });
 
-    const component = wrapper.vm as any;
-    await component.startTour();
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await startAndWaitReady(wrapper);
 
     expect(jump).toHaveBeenCalled();
     const callArgs = (jump as any).mock.calls[0][1];
@@ -97,21 +90,17 @@ describe('VTour Component - Jump Options', () => {
       },
     ];
 
-    const wrapper = mount(VTour, {
-      props: {
-        steps: stepsWithOptions,
-        jumpOptions: {
-          duration: 1000,
-          offset: -200,
-          a11y: true,
-        },
+    const wrapper = mountVTour({
+      steps: stepsWithOptions,
+      noScroll: false,
+      jumpOptions: {
+        duration: 1000,
+        offset: -200,
+        a11y: true,
       },
-      attachTo: document.body,
     });
 
-    const component = wrapper.vm as any;
-    await component.startTour();
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await startAndWaitReady(wrapper);
 
     expect(jump).toHaveBeenCalled();
     const callArgs = (jump as any).mock.calls[0][1];
@@ -126,20 +115,15 @@ describe('VTour Component - Jump Options', () => {
   });
 
   it('should not scroll when noScroll is enabled', async () => {
-    const wrapper = mount(VTour, {
-      props: {
-        steps,
-        noScroll: true,
-        jumpOptions: {
-          duration: 1000,
-        },
+    const wrapper = mountVTour({
+      steps,
+      noScroll: true,
+      jumpOptions: {
+        duration: 1000,
       },
-      attachTo: document.body,
     });
 
-    const component = wrapper.vm as any;
-    await component.startTour();
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await startAndWaitReady(wrapper);
 
     // jump.js should not be called when noScroll is true
     expect(jump).not.toHaveBeenCalled();
@@ -152,19 +136,15 @@ describe('VTour Component - Jump Options', () => {
       return (c * t) / d + b;
     };
 
-    const wrapper = mount(VTour, {
-      props: {
-        steps,
-        jumpOptions: {
-          easing: customEasing,
-        },
+    const wrapper = mountVTour({
+      steps,
+      noScroll: false,
+      jumpOptions: {
+        easing: customEasing,
       },
-      attachTo: document.body,
     });
 
-    const component = wrapper.vm as any;
-    await component.startTour();
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await startAndWaitReady(wrapper);
 
     expect(jump).toHaveBeenCalled();
     const callArgs = (jump as any).mock.calls[0][1];
@@ -173,5 +153,30 @@ describe('VTour Component - Jump Options', () => {
     expect(callArgs.easing).toBe(customEasing);
 
     wrapper.unmount();
+  });
+
+  it('should respect enableA11y prop for jump.js a11y option', async () => {
+    // Test with enableA11y: false
+    const wrapper1 = mountVTour({ steps, enableA11y: false, noScroll: false });
+
+    await startAndWaitReady(wrapper1);
+
+    expect(jump).toHaveBeenCalled();
+    const callArgs1 = (jump as any).mock.calls[0][1];
+    expect(callArgs1.a11y).toBe(false);
+
+    wrapper1.unmount();
+    vi.clearAllMocks();
+
+    // Test with enableA11y: true (explicit)
+    const wrapper2 = mountVTour({ steps, enableA11y: true, noScroll: false });
+
+    await startAndWaitReady(wrapper2);
+
+    expect(jump).toHaveBeenCalled();
+    const callArgs2 = (jump as any).mock.calls[0][1];
+    expect(callArgs2.a11y).toBe(true);
+
+    wrapper2.unmount();
   });
 });

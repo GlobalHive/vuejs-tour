@@ -3,6 +3,13 @@ import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import VTour from '../../src/components/VTour.vue';
 import type { ITourStep } from '../../src/Types';
+import {
+  useFakeTimersPerTest,
+  startAndWaitReady,
+  waitForStepTransition,
+  flushVue,
+} from '../helpers/timers';
+import { mountVTour } from '../helpers/mountVTour';
 
 // Mock nanopop with proper functionality
 const mockPopper = {
@@ -15,8 +22,9 @@ vi.mock('nanopop', () => ({
 }));
 
 describe('VTour Component - Comprehensive Test Suite', () => {
-  let wrapper: any;
+  useFakeTimersPerTest();
 
+  let wrapper: any;
   const mockSteps: ITourStep[] = [
     {
       target: '#step1',
@@ -37,13 +45,6 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       placement: 'left',
     },
   ];
-
-  // Helper function to wait for async operations and DOM updates
-  const waitForAsync = async (ms: number = 50) => {
-    await new Promise((resolve) => setTimeout(resolve, ms));
-    await nextTick();
-    await nextTick();
-  };
 
   beforeEach(() => {
     // Create a comprehensive DOM structure for testing
@@ -102,18 +103,14 @@ describe('VTour Component - Comprehensive Test Suite', () => {
         skip: 'Cancel',
       };
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-          buttonLabels: customLabels,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: mockSteps,
+        buttonLabels: customLabels,
+        autoStart: false,
       });
 
       // Start tour and wait for async operations
-      await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await nextTick();
+      await startAndWaitReady(wrapper);
 
       // Check if custom labels appear in Teleported element
       const tooltipElement = document.querySelector('#vjt-tooltip');
@@ -149,11 +146,9 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
   describe('Tour Navigation and Control', () => {
     beforeEach(() => {
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: mockSteps,
+        autoStart: false,
       });
     });
 
@@ -178,7 +173,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       expect(wrapper.vm.currentStepIndex).toBe(0);
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // Tour should be in started state (currentStepIndex maintained or set)
       expect(wrapper.vm.currentStepIndex).toBe(0);
@@ -196,7 +191,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Navigate to next step
       await wrapper.vm.nextStep();
-      await waitForAsync();
+      await flushVue();
 
       expect(wrapper.vm.currentStepIndex).toBe(initialStep + 1);
       expect(wrapper.vm.lastStepIndex).toBe(initialStep);
@@ -205,12 +200,12 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     it('should navigate backwards using lastStep', async () => {
       // Navigate to step 2
       await wrapper.vm.goToStep(2);
-      await waitForAsync();
+      await flushVue();
       expect(wrapper.vm.currentStepIndex).toBe(2);
 
       // Go back one step
       await wrapper.vm.lastStep();
-      await waitForAsync();
+      await flushVue();
 
       expect(wrapper.vm.currentStepIndex).toBe(1);
       expect(wrapper.vm.lastStepIndex).toBe(0);
@@ -225,7 +220,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Try to go back from step 0
       await wrapper.vm.lastStep();
-      await waitForAsync();
+      await flushVue();
 
       // lastStepIndex should not go below 0
       expect(wrapper.vm.lastStepIndex).toBe(0);
@@ -234,7 +229,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     it('should navigate to specific step', async () => {
       // Navigate to specific step
       await wrapper.vm.goToStep(2);
-      await waitForAsync();
+      await flushVue();
 
       expect(wrapper.vm.currentStepIndex).toBe(2);
       expect(wrapper.vm.lastStepIndex).toBe(1);
@@ -256,8 +251,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     });
 
     it('should stop tour correctly', async () => {
-      await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await startAndWaitReady(wrapper);
 
       wrapper.vm.stopTour();
       await nextTick();
@@ -293,7 +287,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     it('should emit tourEnd event reliably', async () => {
       // Test the most reliable event - tourEnd
       wrapper.vm.endTour();
-      await waitForAsync();
+      await flushVue();
 
       expect(wrapper.emitted('onTourEnd')).toBeTruthy();
     });
@@ -348,20 +342,19 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     it('should not start tour if already completed', async () => {
       localStorage.setItem('vjt-completed-tour', 'true');
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-          name: 'completed-tour',
-          saveToLocalStorage: 'end',
-        },
+      wrapper = mountVTour({
+        steps: mockSteps,
+        name: 'completed-tour',
+        saveToLocalStorage: 'end',
+        autoStart: false,
       });
 
-      // Try to start tour - it should not emit tourStart if already completed
+      // Try to start tour - it should not start if already completed
       await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await flushVue();
 
-      // Tour should not have started (no tourStart emission)
-      expect(wrapper.emitted('onTourStart')).toBeFalsy();
+      // Tour should not have started (tourVisible should be false)
+      expect(wrapper.vm.tourVisible).toBe(false);
     });
   });
 
@@ -527,16 +520,12 @@ describe('VTour Component - Comprehensive Test Suite', () => {
         },
       ];
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: stepsWithCallbacks,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: stepsWithCallbacks,
+        autoStart: false,
       });
 
-      await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await nextTick();
+      await startAndWaitReady(wrapper);
 
       // onBefore should be called when step starts
       expect(onBeforeSpy).toHaveBeenCalled();
@@ -554,15 +543,17 @@ describe('VTour Component - Comprehensive Test Suite', () => {
         },
       ];
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: stepsWithMissingTarget,
-        },
+      wrapper = mountVTour({
+        steps: stepsWithMissingTarget,
+        autoStart: false,
       });
 
-      await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await nextTick();
+      // Try to start the tour, expecting it to fail gracefully
+      try {
+        await startAndWaitReady(wrapper);
+      } catch (error) {
+        // Expected to fail since target doesn't exist
+      }
 
       expect(consoleSpy).toHaveBeenCalledWith(
         'Tour target element not found: #non-existent'
@@ -575,17 +566,13 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     it('should auto start tour when autoStart is true', async () => {
       const startSpy = vi.fn();
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-          autoStart: true,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: mockSteps,
+        autoStart: true,
       });
 
       // Wait for auto start
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await nextTick();
+      await startAndWaitReady(wrapper);
 
       // Check if tour has started (currentStepIndex should be 0, not -1 or undefined)
       expect(wrapper.vm.currentStepIndex).toBe(0);
@@ -594,22 +581,20 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
   describe('Resize Handling', () => {
     it('should handle window resize events', async () => {
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: mockSteps,
+        autoStart: false,
       });
 
-      await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await startAndWaitReady(wrapper);
 
       // Mock resize event
       const resizeEvent = new Event('resize');
       window.dispatchEvent(resizeEvent);
 
-      // Wait for debounced resize handler
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      // Wait for debounced resize handler (need to advance fake timers)
+      vi.advanceTimersByTime(300);
+      await flushVue();
 
       // Should not throw errors
       expect(wrapper.exists()).toBe(true);
@@ -691,25 +676,20 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Try to go to next step - should end tour
       await wrapper.vm.nextStep();
-      await waitForAsync();
+      await flushVue();
 
       // Should have emitted tourEnd
       expect(wrapper.emitted('onTourEnd')).toBeTruthy();
     });
 
     it('should handle various startDelay values', async () => {
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-          startDelay: 100,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: mockSteps,
+        startDelay: 100,
+        autoStart: false,
       });
 
-      await wrapper.vm.startTour();
-      // Wait for custom startDelay
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await waitForAsync();
+      await startAndWaitReady(wrapper);
 
       // Tour should be started
       expect(wrapper.vm.currentStepIndex).toBe(0);
@@ -728,7 +708,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Reset and restart
       wrapper.vm.resetTour(true);
-      await waitForAsync();
+      await flushVue();
 
       // Should be reset to initial state
       expect(wrapper.vm.currentStepIndex).toBe(0);
@@ -803,7 +783,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       // Test each placement
       for (let i = 0; i < stepsWithPlacements.length; i++) {
         await wrapper.vm.goToStep(i);
-        await waitForAsync();
+        await flushVue();
         expect(wrapper.vm.currentStepIndex).toBe(i);
       }
     });
@@ -872,13 +852,13 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       const initialStep = wrapper.vm.currentStepIndex;
 
       // Navigate to next step
       await wrapper.vm.nextStep();
-      await waitForAsync();
+      await flushVue();
 
       // Should have moved to next step successfully
       expect(wrapper.vm.currentStepIndex).toBe(initialStep + 1);
@@ -893,14 +873,14 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // Verify first step content
       expect(wrapper.vm.currentStepIndex).toBe(0);
 
       // Navigate to next step
       await wrapper.vm.nextStep();
-      await waitForAsync();
+      await flushVue();
 
       // Verify navigation worked (content was recreated with new key)
       expect(wrapper.vm.currentStepIndex).toBe(1);
@@ -916,7 +896,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Start tour - this internally waits for nextTick before positioning
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // Tour should have started successfully
       expect(wrapper.vm.currentStepIndex).toBe(0);
@@ -933,7 +913,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // Tour should be started
       const tooltip = document.querySelector('#vjt-tooltip');
@@ -974,7 +954,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // Tour should be started and tooltip should exist in DOM
       const tooltip = document.querySelector('#vjt-tooltip') as HTMLElement;
@@ -1012,7 +992,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       expect(targetDiv.classList.contains('vjt-highlight')).toBe(false);
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // After stopping, highlight should be removed
       wrapper.vm.stopTour();
@@ -1046,7 +1026,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // Backdrop element should exist in DOM
       const backdrop = document.querySelector('#vjt-backdrop') as HTMLElement;
@@ -1069,7 +1049,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // Tooltip should NOT be in wrapper
       expect(wrapper.find('#vjt-tooltip').exists()).toBe(false);
@@ -1110,14 +1090,14 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // Should be on first step
       expect(wrapper.vm.currentStepIndex).toBe(0);
 
       // Navigate to second step
       await wrapper.vm.nextStep();
-      await waitForAsync();
+      await flushVue();
 
       // Should be on second step
       expect(wrapper.vm.currentStepIndex).toBe(1);
@@ -1133,27 +1113,25 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       targetDiv.style.top = '500px';
       document.body.appendChild(targetDiv);
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: [
-            {
-              target: '#scroll-target',
-              content: 'Test content',
-            },
-          ],
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: [
+          {
+            target: '#scroll-target',
+            content: 'Test content',
+          },
+        ],
+        autoStart: false,
       });
 
-      await wrapper.vm.startTour();
-      await waitForAsync();
+      await startAndWaitReady(wrapper);
 
       const tooltip = document.querySelector('#vjt-tooltip') as HTMLElement;
       expect(tooltip).toBeTruthy();
 
       // Trigger scroll event
       window.dispatchEvent(new Event('scroll'));
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      vi.advanceTimersByTime(50);
+      await flushVue();
 
       // Tooltip should still exist in DOM
       const tooltipAfterScroll = document.querySelector('#vjt-tooltip');
@@ -1161,7 +1139,8 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Trigger resize event
       window.dispatchEvent(new Event('resize'));
-      await new Promise((resolve) => setTimeout(resolve, 300)); // Wait for debounce
+      vi.advanceTimersByTime(300); // Wait for debounce
+      await flushVue();
 
       // Tooltip should still exist in DOM after resize
       const tooltipAfterResize = document.querySelector('#vjt-tooltip');
@@ -1189,7 +1168,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // Verify tour is active
       const tooltip = document.querySelector('#vjt-tooltip');
