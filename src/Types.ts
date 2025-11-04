@@ -1,6 +1,32 @@
 import type { NanoPopPosition } from 'nanopop';
 
 /**
+ * Scroll animation options for jump.js
+ * @see https://github.com/callmecavs/jump.js
+ */
+export interface JumpOptions {
+  /** Duration of scroll animation in milliseconds (default: 500) */
+  readonly duration?: number;
+
+  /** Vertical offset in pixels from target element (default: -100) */
+  readonly offset?: number;
+
+  /** Callback function to execute after scroll completes */
+  readonly callback?: () => void;
+
+  /** Easing function name (default: 'easeInOutQuad') */
+  readonly easing?: (
+    t: number,
+    b: number,
+    c: number,
+    d: number
+  ) => number | string;
+
+  /** Whether to focus the element for accessibility (default: false) */
+  readonly a11y?: boolean;
+}
+
+/**
  * Configuration for a single step in a tour
  */
 export interface ITourStep {
@@ -27,6 +53,9 @@ export interface ITourStep {
 
   /** Whether to disable auto-scrolling for this step */
   readonly noScroll?: boolean;
+
+  /** Custom scroll animation options for this step (overrides global jumpOptions) */
+  readonly jumpOptions?: Partial<JumpOptions>;
 }
 
 /**
@@ -89,6 +118,9 @@ export interface VTourProps {
 
   /** Default tooltip placement when step doesn't specify one */
   readonly defaultPlacement?: NanoPopPosition;
+
+  /** Default scroll animation options (can be overridden per step) */
+  readonly jumpOptions?: Partial<JumpOptions>;
 }
 
 /**

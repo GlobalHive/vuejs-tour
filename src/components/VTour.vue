@@ -82,8 +82,14 @@ const _Backdrop = ref<HTMLElement>();
 
 // Constants for timing and positioning
 const TELEPORT_RENDER_DELAY = 100; // ms to wait for Vue Teleport to render DOM elements
-const SCROLL_DURATION = 500; // ms for smooth scroll animation
-const SCROLL_OFFSET = -100; // px offset from top when scrolling to element
+
+// Default jump.js scroll options (can be overridden via props)
+const DEFAULT_JUMP_OPTIONS = {
+  duration: 500,
+  offset: -100,
+  easing: 'easeInOutQuad' as const,
+  a11y: false,
+};
 
 // Helper to check if tour was completed and saved to localStorage
 const isTourCompleted = (): boolean => {
@@ -330,11 +336,16 @@ const updatePosition = async (): Promise<void> => {
   // Scroll to target first if needed
   if (!props.noScroll && !currentStepData.noScroll) {
     await new Promise<void>((resolve) => {
-      jump(targetElement, {
-        duration: SCROLL_DURATION,
-        offset: SCROLL_OFFSET,
+      // Merge default options with global and step-specific options
+      // Priority: step options > global options > defaults
+      const scrollOptions = {
+        ...DEFAULT_JUMP_OPTIONS,
+        ...props.jumpOptions,
+        ...currentStepData.jumpOptions,
         callback: () => resolve(),
-      });
+      } as any; // jump.js has incomplete type definitions
+
+      jump(targetElement, scrollOptions);
     });
   }
 
