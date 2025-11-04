@@ -395,6 +395,9 @@ const onResizeEnd = (): void => {
 
 // Utility functions
 function getClipPathValues(targetSelector: string): string {
+  // Guard against SSR environment where document is not available
+  if (typeof document === 'undefined') return '';
+
   const targetElement = document.querySelector(targetSelector) as HTMLElement;
   if (!targetElement) return '';
 

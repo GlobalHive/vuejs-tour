@@ -23,7 +23,7 @@ First of all, you need to create an array of steps. Each step should have a `tar
 ```
 
 After creating the steps, you need to pass them to the `VTour` component as a prop.
-```vue{2}
+```vue
 <template>
     <VTour/> // [!code --]
     <VTour :steps="steps"/> // [!code ++]
