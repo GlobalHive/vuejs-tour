@@ -80,8 +80,18 @@ const highlightClass = computed(() =>
 const _Tooltip = ref<HTMLElement>();
 const _Backdrop = ref<HTMLElement>();
 
+// Constants for timing and positioning
+const TELEPORT_RENDER_DELAY = 100; // ms to wait for Vue Teleport to render DOM elements
+const SCROLL_DURATION = 500; // ms for smooth scroll animation
+const SCROLL_OFFSET = -100; // px offset from top when scrolling to element
+
+// Helper to check if tour was completed and saved to localStorage
+const isTourCompleted = (): boolean => {
+  return localStorage.getItem(saveKey.value) === 'true';
+};
+
 const startTour = async (): Promise<void> => {
-  if (localStorage.getItem(saveKey.value) === 'true') return;
+  if (isTourCompleted()) return;
 
   if (props.saveToLocalStorage === 'step') {
     const savedStep = localStorage.getItem(saveKey.value);
@@ -116,7 +126,7 @@ const startTour = async (): Promise<void> => {
 
     // Wait for Teleport to render DOM elements, then cache references
     await new Promise((resolve) => {
-      teleportDelayTimer = setTimeout(resolve, 100);
+      teleportDelayTimer = setTimeout(resolve, TELEPORT_RENDER_DELAY);
     });
 
     if (!_Tooltip.value) {
@@ -144,11 +154,13 @@ const startTour = async (): Promise<void> => {
     await nextTick();
 
     if (!vTour.value) {
+      // Calculate margin: use prop margin, or increase to 14px if highlighting is enabled
+      const shouldHighlight = props.highlight || currentStepData.highlight;
+      const calculatedMargin = props.margin || (shouldHighlight ? 14 : 8);
+
       vTour.value = createPopper(targetElement, _Tooltip.value, {
         position: currentStepData.placement || props.defaultPlacement,
-        margin:
-          props.margin ||
-          (props.highlight || currentStepData.highlight ? 14 : 8),
+        margin: calculatedMargin,
       });
     }
 
@@ -319,8 +331,8 @@ const updatePosition = async (): Promise<void> => {
   if (!props.noScroll && !currentStepData.noScroll) {
     await new Promise<void>((resolve) => {
       jump(targetElement, {
-        duration: 500,
-        offset: -100,
+        duration: SCROLL_DURATION,
+        offset: SCROLL_OFFSET,
         callback: () => resolve(),
       });
     });
@@ -347,9 +359,9 @@ const updateHighlight = (): void => {
     .forEach((element) => element.classList.remove(highlightClass.value));
 
   const currentStepData = getCurrentStep.value;
-  if (!props.highlight && !currentStepData?.highlight) return;
 
-  if (!currentStepData) {
+  // Check if highlighting is disabled or no step data
+  if (!currentStepData || (!props.highlight && !currentStepData.highlight)) {
     return;
   }
 
@@ -375,7 +387,7 @@ const updateBackdrop = (): void => {
 
 // Redraw layers for resize/scroll events - updates position without scrolling or events
 const redrawLayers = (): void => {
-  if (localStorage.getItem(saveKey.value) === 'true') return;
+  if (isTourCompleted()) return;
   if (!tourVisible.value) return; // Only redraw if tour is active
 
   updateTooltipPosition();
@@ -387,7 +399,7 @@ let startDelayTimer: ReturnType<typeof setTimeout> | undefined;
 let teleportDelayTimer: ReturnType<typeof setTimeout> | undefined;
 
 const onResizeEnd = (): void => {
-  if (localStorage.getItem(saveKey.value) === 'true') return;
+  if (isTourCompleted()) return;
 
   clearTimeout(resizeTimer);
   redrawLayers();
@@ -425,7 +437,7 @@ getClipPath.value = '';
 
 // Scroll handling to update position during scroll
 const onScroll = (): void => {
-  if (localStorage.getItem(saveKey.value) === 'true') return;
+  if (isTourCompleted()) return;
   if (!tourVisible.value) return; // Only update if tour is active
 
   redrawLayers();
