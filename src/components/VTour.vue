@@ -95,7 +95,7 @@ const startTour = async (): Promise<void> => {
     currentStepIndex.value = 0;
   }
 
-  setTimeout(async () => {
+  startDelayTimer = setTimeout(async () => {
     await beforeStep(currentStepIndex.value);
 
     const currentStepData = getCurrentStep.value;
@@ -115,7 +115,9 @@ const startTour = async (): Promise<void> => {
     }
 
     // Wait for Teleport to render DOM elements, then cache references
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => {
+      teleportDelayTimer = setTimeout(resolve, 100);
+    });
 
     if (!_Tooltip.value) {
       _Tooltip.value = document.querySelector(
@@ -160,6 +162,10 @@ const startTour = async (): Promise<void> => {
 };
 
 const stopTour = (): void => {
+  // Clear any pending timeouts
+  clearTimeout(startDelayTimer);
+  clearTimeout(teleportDelayTimer);
+
   // Hide tour and backdrop immediately
   // Both must be set to prevent CSS visibility conflicts with fixed-position elements
   tourVisible.value = false;
@@ -381,6 +387,8 @@ const redrawLayers = (): void => {
 
 // Resize handling with debounce
 let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+let startDelayTimer: ReturnType<typeof setTimeout> | undefined;
+let teleportDelayTimer: ReturnType<typeof setTimeout> | undefined;
 
 const onResizeEnd = (): void => {
   if (localStorage.getItem(saveKey.value) === 'true') return;
@@ -444,7 +452,11 @@ onUnmounted(() => {
   // Clean up event listeners
   window.removeEventListener('resize', onResizeEnd);
   window.removeEventListener('scroll', onScroll, true);
+
+  // Clear all timers
   clearTimeout(resizeTimer);
+  clearTimeout(startDelayTimer);
+  clearTimeout(teleportDelayTimer);
 
   // Ensure tour is stopped and cleaned up when component unmounts
   if (tourVisible.value) {
