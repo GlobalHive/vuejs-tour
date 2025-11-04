@@ -6,7 +6,6 @@ import type { ITourStep } from '../../src/Types';
 import {
   useFakeTimersPerTest,
   startAndWaitReady,
-  waitForStepTransition,
   flushVue,
 } from '../helpers/timers';
 import { mountVTour } from '../helpers/mountVTour';
