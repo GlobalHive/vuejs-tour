@@ -321,11 +321,7 @@ const updatePosition = async (): Promise<void> => {
       jump(targetElement, {
         duration: 500,
         offset: -100,
-        callback: () => {
-          setTimeout(() => {
-            resolve();
-          }, 50);
-        },
+        callback: () => resolve(),
       });
     });
   }
