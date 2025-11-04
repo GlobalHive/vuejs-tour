@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { createPopper, type NanoPop } from 'nanopop';
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref } from 'vue';
 import jump from 'jump.js';
 import type {
   VTourProps,
@@ -11,12 +11,13 @@ import type {
 
 // Props with defaults
 const props = withDefaults(defineProps<VTourProps>(), {
-  name: 'default',
+  name: '',
   backdrop: false,
   autoStart: false,
   startDelay: 0,
   highlight: false,
   margin: 8,
+  defaultPlacement: 'right',
   saveToLocalStorage: 'never',
   hideSkip: false,
   hideArrow: false,
@@ -28,10 +29,8 @@ const props = withDefaults(defineProps<VTourProps>(), {
 const emit = defineEmits<VTourEmits>();
 
 // Reactive state with cleaner naming
-const saveKey = computed(() => `vjt-${props.name}`);
+const saveKey = computed(() => (props.name ? `vjt-${props.name}` : 'vjt-tour'));
 const vTour = ref<NanoPop>();
-const tooltip = ref<HTMLElement>();
-const backdrop = ref<HTMLElement>();
 
 const currentStepIndex = ref(0);
 const lastStepIndex = ref(0);
@@ -60,6 +59,27 @@ const getNextLabel = computed(() => {
 
 const getClipPath = ref('');
 
+// Reactive visibility controls for modal behavior
+const tourVisible = ref(false);
+const backdropVisible = ref(false);
+const currentPlacement = ref('right');
+const isTransitioning = ref(false); // Hide tooltip during step transitions
+
+// Unique IDs and classes for this tour instance (based on name prop)
+// Empty name = backward compatible IDs (vjt-tooltip, vjt-backdrop)
+// Non-empty name = scoped IDs (vjt-myname-tooltip, vjt-myname-backdrop)
+const tourId = computed(() => (props.name ? `vjt-${props.name}` : 'vjt'));
+const tooltipId = computed(() => `${tourId.value}-tooltip`);
+const backdropId = computed(() => `${tourId.value}-backdrop`);
+const arrowId = computed(() => `${tourId.value}-arrow`);
+const highlightClass = computed(() =>
+  props.name ? `vjt-highlight-${props.name}` : 'vjt-highlight'
+);
+
+// Cache DOM element references (populated after Teleport renders)
+const _Tooltip = ref<HTMLElement>();
+const _Backdrop = ref<HTMLElement>();
+
 const startTour = async (): Promise<void> => {
   if (localStorage.getItem(saveKey.value) === 'true') return;
 
@@ -79,6 +99,7 @@ const startTour = async (): Promise<void> => {
     await beforeStep(currentStepIndex.value);
 
     const currentStepData = getCurrentStep.value;
+
     if (!currentStepData) {
       console.warn('No step data available');
       return;
@@ -88,14 +109,41 @@ const startTour = async (): Promise<void> => {
       currentStepData.target
     ) as HTMLElement;
 
-    if (!targetElement || !tooltip.value) {
+    if (!targetElement) {
       console.warn(`Tour target element not found: ${currentStepData.target}`);
       return;
     }
 
+    // Wait for Teleport to render DOM elements, then cache references
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    if (!_Tooltip.value) {
+      _Tooltip.value = document.querySelector(
+        `#${tooltipId.value}`
+      ) as HTMLElement;
+    }
+
+    if (!_Backdrop.value) {
+      _Backdrop.value = document.querySelector(
+        `#${backdropId.value}`
+      ) as HTMLElement;
+    }
+
+    if (!_Tooltip.value) {
+      console.warn('Tooltip element not found in DOM');
+      return;
+    }
+
+    // Show tour content (but keep hidden via isTransitioning) so nanopop can calculate dimensions
+    tourVisible.value = true;
+    isTransitioning.value = true;
+
+    // Wait for Vue to render the content in the DOM with proper dimensions
+    await nextTick();
+
     if (!vTour.value) {
-      vTour.value = createPopper(targetElement, tooltip.value, {
-        position: currentStepData.placement || 'right',
+      vTour.value = createPopper(targetElement, _Tooltip.value, {
+        position: currentStepData.placement || props.defaultPlacement,
         margin:
           props.margin ||
           (props.highlight || currentStepData.highlight ? 14 : 8),
@@ -103,18 +151,31 @@ const startTour = async (): Promise<void> => {
     }
 
     await updatePosition();
+
+    // Show tooltip after positioning is complete
+    isTransitioning.value = false;
+
     emit('onTourStart');
   }, props.startDelay);
 };
 
 const stopTour = (): void => {
-  backdrop.value?.setAttribute('data-hidden', '');
-  document
-    .querySelectorAll('.vjt-highlight')
-    .forEach((element) => element.classList.remove('vjt-highlight'));
-  tooltip.value?.setAttribute('data-hidden', '');
-};
+  // Hide tour and backdrop immediately
+  // Both must be set to prevent CSS visibility conflicts with fixed-position elements
+  tourVisible.value = false;
+  backdropVisible.value = false;
+  isTransitioning.value = false;
 
+  // Remove highlights for this tour instance only
+  document
+    .querySelectorAll(`.${highlightClass.value}`)
+    .forEach((element) => element.classList.remove(highlightClass.value));
+
+  // Destroy nanopop instance so it can be recreated on next tour start
+  if (vTour.value) {
+    vTour.value = undefined;
+  }
+};
 const resetTour = (shouldRestart = false): void => {
   stopTour();
   currentStepIndex.value = 0;
@@ -126,6 +187,10 @@ const resetTour = (shouldRestart = false): void => {
 
 const nextStep = async (): Promise<void> => {
   await beforeStep(nextStepIndex.value);
+
+  // Hide tooltip during transition to prevent content flash
+  isTransitioning.value = true;
+
   lastStepIndex.value = currentStepIndex.value;
   currentStepIndex.value++;
 
@@ -136,10 +201,17 @@ const nextStep = async (): Promise<void> => {
 
   nextStepIndex.value = currentStepIndex.value + 1;
   await updatePosition();
+
+  // Show tooltip after positioning is complete
+  isTransitioning.value = false;
 };
 
 const lastStep = async (): Promise<void> => {
   await beforeStep(lastStepIndex.value);
+
+  // Hide tooltip during transition to prevent content flash
+  isTransitioning.value = true;
+
   currentStepIndex.value = lastStepIndex.value;
   lastStepIndex.value = Math.max(lastStepIndex.value - 1, 0);
 
@@ -150,6 +222,9 @@ const lastStep = async (): Promise<void> => {
 
   nextStepIndex.value = currentStepIndex.value + 1;
   await updatePosition();
+
+  // Show tooltip after positioning is complete
+  isTransitioning.value = false;
 };
 
 const endTour = (): void => {
@@ -167,12 +242,18 @@ const goToStep = async (stepIndex: number): Promise<void> => {
   }
 
   await beforeStep(stepIndex);
+
+  // Hide tooltip during transition to prevent content flash
+  isTransitioning.value = true;
+
   currentStepIndex.value = stepIndex;
   lastStepIndex.value = Math.max(stepIndex - 1, 0);
   nextStepIndex.value = stepIndex + 1;
   await updatePosition();
-};
 
+  // Show tooltip after positioning is complete
+  isTransitioning.value = false;
+};
 const beforeStep = async (step: number): Promise<void> => {
   const stepData = props.steps[step];
   if (stepData?.onBefore) {
@@ -180,44 +261,71 @@ const beforeStep = async (step: number): Promise<void> => {
   }
 };
 
-const updatePosition = async (): Promise<void> => {
+// Helper function to set the placement attribute for CSS styling
+// Sets data-arrow attribute based on tooltip placement so CSS can style the arrow accordingly
+const setPlacementAttribute = (placement: string | null | undefined): void => {
+  if (!placement || !_Tooltip.value) return;
+
+  _Tooltip.value.setAttribute('data-arrow', placement);
+  currentPlacement.value = placement;
+};
+
+// Core positioning logic - updates tooltip, highlight, and backdrop without scrolling or events
+const updateTooltipPosition = (): void => {
   const currentStepData = getCurrentStep.value;
-  if (!currentStepData) {
-    console.warn('No current step data available');
-    return;
-  }
+  if (!currentStepData || !vTour.value) return;
 
   const targetElement = document.querySelector(
     currentStepData.target
   ) as HTMLElement;
 
-  if (!targetElement || !tooltip.value || !vTour.value) {
-    console.warn('Cannot update position: missing required elements');
+  if (!targetElement) return;
+
+  // Update highlight and backdrop for current position
+  updateHighlight();
+  updateBackdrop();
+
+  // Update popper position and set placement attribute
+  // Nanopop automatically handles viewport edge detection and will flip placement if needed
+  // Nanopop v2.x returns the actual placement but doesn't automatically set the data-arrow attribute
+  const actualPlacement = vTour.value.update({
+    reference: targetElement,
+    position: currentStepData.placement || props.defaultPlacement,
+  });
+
+  setPlacementAttribute(actualPlacement || props.defaultPlacement);
+};
+
+// Full position update with optional scrolling, callbacks, and events
+const updatePosition = async (): Promise<void> => {
+  const currentStepData = getCurrentStep.value;
+  if (!currentStepData) return;
+
+  const targetElement = document.querySelector(
+    currentStepData.target
+  ) as HTMLElement;
+
+  if (!targetElement || !_Tooltip.value || !vTour.value) {
     return;
   }
 
-  updateHighlight();
-  updateBackdrop();
-  tooltip.value.setAttribute('data-hidden', '');
-
+  // Scroll to target first if needed
   if (!props.noScroll && !currentStepData.noScroll) {
     await new Promise<void>((resolve) => {
       jump(targetElement, {
         duration: 500,
         offset: -100,
-        callback: resolve,
+        callback: () => {
+          setTimeout(() => {
+            resolve();
+          }, 50);
+        },
       });
     });
   }
 
-  tooltip.value.removeAttribute('data-hidden');
-  const arrowPosition =
-    vTour.value.update({
-      reference: targetElement,
-      position: currentStepData.placement || 'right',
-    }) || 'right';
-
-  tooltip.value.setAttribute('data-arrow', arrowPosition);
+  // Update tooltip position (includes highlight, backdrop, and nanopop positioning)
+  updateTooltipPosition();
 
   if (props.saveToLocalStorage === 'step') {
     localStorage.setItem(saveKey.value, currentStepIndex.value.toString());
@@ -231,16 +339,15 @@ const updatePosition = async (): Promise<void> => {
 };
 
 const updateHighlight = (): void => {
-  // Remove existing highlights
+  // Remove existing highlights for this tour instance only
   document
-    .querySelectorAll('.vjt-highlight')
-    .forEach((element) => element.classList.remove('vjt-highlight'));
+    .querySelectorAll(`.${highlightClass.value}`)
+    .forEach((element) => element.classList.remove(highlightClass.value));
 
   const currentStepData = getCurrentStep.value;
   if (!props.highlight && !currentStepData?.highlight) return;
 
   if (!currentStepData) {
-    console.warn('No current step data for highlight');
     return;
   }
 
@@ -249,29 +356,27 @@ const updateHighlight = (): void => {
   ) as HTMLElement;
 
   if (!targetElement) {
-    console.warn(`Highlight target not found: ${currentStepData.target}`);
     return;
   }
 
-  targetElement.classList.add('vjt-highlight');
-  getClipPath.value = getClipPathValues('.vjt-highlight');
+  targetElement.classList.add(highlightClass.value);
+  getClipPath.value = getClipPathValues(`.${highlightClass.value}`);
 };
 
 const updateBackdrop = (): void => {
   const currentStepData = getCurrentStep.value;
-  const shouldShowBackdrop = props.backdrop || currentStepData?.backdrop;
+  // Show backdrop if global backdrop is enabled OR step has backdrop
+  const shouldShowBackdrop = props.backdrop || !!currentStepData?.backdrop;
 
-  if (shouldShowBackdrop) {
-    backdrop.value?.removeAttribute('data-hidden');
-  } else {
-    backdrop.value?.setAttribute('data-hidden', '');
-  }
+  backdropVisible.value = shouldShowBackdrop;
 };
 
-// Add missing redrawLayers function from old version
+// Redraw layers for resize/scroll events - updates position without scrolling or events
 const redrawLayers = (): void => {
   if (localStorage.getItem(saveKey.value) === 'true') return;
-  updatePosition();
+  if (!tourVisible.value) return; // Only redraw if tour is active
+
+  updateTooltipPosition();
 };
 
 // Resize handling with debounce
@@ -308,24 +413,40 @@ function getClipPathValues(targetSelector: string): string {
   )`;
 }
 
-// Initialize clip path
-getClipPath.value = getClipPathValues('.vjt-highlight');
+// Initialize clip path (will be updated when highlight is applied)
+getClipPath.value = '';
+
+// Scroll handling to update position during scroll
+const onScroll = (): void => {
+  if (localStorage.getItem(saveKey.value) === 'true') return;
+  if (!tourVisible.value) return; // Only update if tour is active
+
+  redrawLayers();
+};
 
 // Lifecycle hooks
 onMounted(() => {
-  tooltip.value = document.querySelector('#vjt-tooltip') as HTMLElement;
-  backdrop.value = document.querySelector('#vjt-backdrop') as HTMLElement;
+  // Vue refs will be set automatically for Teleported elements
+  // No need to manually query DOM for refs
 
   if (props.autoStart) {
     startTour();
   }
 
   window.addEventListener('resize', onResizeEnd);
+  window.addEventListener('scroll', onScroll, true); // Use capture phase to catch all scrolls
 });
 
 onUnmounted(() => {
+  // Clean up event listeners
   window.removeEventListener('resize', onResizeEnd);
+  window.removeEventListener('scroll', onScroll, true);
   clearTimeout(resizeTimer);
+
+  // Ensure tour is stopped and cleaned up when component unmounts
+  if (tourVisible.value) {
+    stopTour();
+  }
 });
 
 // Expose public API
@@ -344,102 +465,65 @@ defineExpose<VTourExposedMethods>({
 </script>
 
 <template>
-  <div
-    id="vjt-backdrop"
-    ref="backdrop"
-    data-hidden
-    :style="{ 'clip-path': getClipPath }"
-  />
-  <div
-    id="vjt-tooltip"
-    ref="tooltip"
-    role="tooltip"
-    data-arrow="right"
-    data-hidden
-  >
-    <slot
-      name="content"
-      :current-step-index="currentStepIndex"
-      :current-step-data="getCurrentStep"
+  <Teleport to="body">
+    <div
+      class="vjt-modal-overlay"
+      :class="{ 'vjt-tour-active': tourVisible }"
+      :data-hidden="!tourVisible"
     >
-      <div v-html="_CurrentStep.getCurrentStep?.content" />
-    </slot>
+      <div
+        :id="backdropId"
+        :data-hidden="!backdropVisible"
+        :style="{ 'clip-path': getClipPath }"
+      />
+      <div
+        :id="tooltipId"
+        role="tooltip"
+        :data-hidden="!tourVisible || isTransitioning"
+      >
+        <div v-if="tourVisible" :key="`step-${currentStepIndex}`">
+          <div :id="arrowId" v-if="!hideArrow"></div>
+          <slot
+            name="content"
+            :current-step-index="currentStepIndex"
+            :current-step-data="getCurrentStep"
+          >
+            <div v-html="_CurrentStep.getCurrentStep?.content" />
+          </slot>
 
-    <slot
-      name="actions"
-      :lastStep="lastStep"
-      :nextStep="nextStep"
-      :endTour="endTour"
-      :getNextLabel="getNextLabel"
-      :props="props"
-      :_CurrentStep="_CurrentStep"
-    >
-      <div class="vjt-actions">
-        <button
-          v-if="lastStepIndex < currentStepIndex"
-          type="button"
-          class="vjt-btn vjt-btn-back"
-          @click.prevent="lastStep"
-        >
-          {{ props.buttonLabels?.back || 'Back' }}
-        </button>
+          <slot
+            name="actions"
+            :lastStep="lastStep"
+            :nextStep="nextStep"
+            :endTour="endTour"
+            :getNextLabel="getNextLabel"
+            :props="props"
+            :_CurrentStep="_CurrentStep"
+          >
+            <div class="vjt-actions">
+              <button
+                v-if="lastStepIndex < currentStepIndex"
+                type="button"
+                @click.prevent="lastStep"
+              >
+                {{ props.buttonLabels?.back || 'Back' }}
+              </button>
 
-        <button
-          v-if="!props.hideSkip"
-          type="button"
-          class="vjt-btn vjt-btn-skip"
-          @click.prevent="endTour"
-        >
-          {{ props.buttonLabels?.skip || 'Skip' }}
-        </button>
+              <button
+                v-if="!props.hideSkip"
+                type="button"
+                @click.prevent="endTour"
+              >
+                {{ props.buttonLabels?.skip || 'Skip' }}
+              </button>
 
-        <button
-          type="button"
-          class="vjt-btn vjt-btn-next"
-          @click.prevent="nextStep"
-        >
-          {{ getNextLabel }}
-        </button>
+              <button type="button" @click.prevent="nextStep">
+                {{ getNextLabel }}
+              </button>
+            </div>
+          </slot>
+        </div>
       </div>
-    </slot>
-
-    <div v-if="!props.hideArrow" id="vjt-arrow" class="vjt-arrow" />
-  </div>
+    </div>
+  </Teleport>
 </template>
-
-<style scoped>
-.vjt-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.vjt-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.vjt-btn:hover {
-  background: #f5f5f5;
-}
-
-.vjt-btn-next {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
-}
-
-.vjt-btn-next:hover {
-  background: #0056b3;
-}
-
-.vjt-arrow {
-  width: 0;
-  height: 0;
-  position: absolute;
-}
-</style>

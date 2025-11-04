@@ -86,6 +86,9 @@ export interface VTourProps {
 
   /** Debounce timeout for resize events in milliseconds */
   readonly resizeTimeout?: number;
+
+  /** Default tooltip placement when step doesn't specify one */
+  readonly defaultPlacement?: NanoPopPosition;
 }
 
 /**

@@ -64,8 +64,7 @@
     "test:watch": "vitest --watch",
     "lint": "vue-tsc --noEmit && npm run type-check",
     "clean": "rm -rf dist node_modules/.vite",
-    "format": "prettier --write \"**/*.{js,ts,vue}\" --ignore-path .gitignore",
-    "prepare": "npm run build-only"
+    "format": "prettier --write \"**/*.{js,ts,vue}\" --ignore-path .gitignore"
   },
   "dependencies": {
     "jump.js": "^1.0.2",

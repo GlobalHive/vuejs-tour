@@ -24,6 +24,13 @@ export default defineConfig({
           nanopop: 'nanopop',
           'jump.js': 'jump',
         },
+        // Rename component CSS to avoid conflict with SCSS output
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'component-styles.css';
+          }
+          return '[name].[ext]';
+        },
       },
     },
     minify: 'esbuild',
@@ -38,7 +45,7 @@ export default defineConfig({
     }) as Plugin,
   ],
   server: {
-    open: true,
+    open: false, // Don't auto-open browser
     port: 3000,
   },
   preview: {
