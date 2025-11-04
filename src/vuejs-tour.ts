@@ -10,7 +10,7 @@ export type {
   VTourExposedMethods,
   ButtonLabels,
   SaveToLocalStorage,
-} from './Types.d';
+} from './Types';
 
 // Re-export NanoPopPosition from nanopop for user convenience
 export type { NanoPopPosition } from 'nanopop';
