@@ -33,35 +33,6 @@
 > Looking for a nuxt version?
 > [Nuxt version (Special thanks to BayBreezy)](https://github.com/BayBreezy/nuxt-tour)
 
-> [!CAUTION]
-> As of version 2.0.1, VueJS Tour has been rewritten in TypeScript. The `VTour` component is now a named export and must be imported as such.
-> Please refer to the [Documentation](https://globalhive.github.io/vuejs-tour/) for more information on how to use VueJS Tour.
-
-<br><br><br><br>
-<ins>If you still want to use the old version, then this is the correct way to install it:</ins>
-
-* Step 1: Go to your project directory and install VueJS Tour using npm:
-
-```bash
-cd my-project
-npm install @globalhive/vuejs-tour
-```
-
-* Step 2: Import the plugin in your application entry point (typically `main.js`):
-
-```javascript
-import { createApp } from "vue";
-import App from "./App.vue";
-import VueJsTour from '@globalhive/vuejs-tour';
-import '@globalhive/vuejs-tour/dist/style.css';
-
-const app = createApp(App)
-  .use(VueJsTour)
-  .mount("#app");
-```
-Everything is ready! Now you can use VueJS Tour in your application.<br>
-Make sure to check out the [documentation](https://globalhive.github.io/vuejs-tour/) for more information.
-
 ## Create a tour
 
 Add the VueJS Tour component anywhere in your app. It is recommended to add it to `App.vue`

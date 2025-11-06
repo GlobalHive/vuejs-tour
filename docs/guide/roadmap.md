@@ -5,10 +5,18 @@
 🚧 = In Progress
 
 
-## 2.4.0 (TBA) 🚧
+## 2.5.0 (2025-11-06) ✔️
+Special thanks to @AdamDrewsTR
 
-* **Step:** Adding `arrow️` option
-* **VTour:** Adding `showProgress` prop
+### Features
+
+* **VTour:** Adding `jumpOptions` prop ✔️
+* **VTour:** Adding accessibility ✔️
+
+### Documentation
+
+* **Documentation:** Adding [Jump Options](/guide/jump-options) page ✔️
+* **Documentation:** Adding [Accessibility](/guide/accessibility) page ✔️
 
 ## 2.2.0 [2.3.0] (2024-08-13) [Delayed: 23.09.2024] ✔️
 

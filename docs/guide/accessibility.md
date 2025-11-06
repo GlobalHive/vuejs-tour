@@ -4,7 +4,7 @@
 
 VueJS Tour now includes comprehensive WCAG 2.1 AA accessibility features, including keyboard navigation, ARIA attributes, focus management, and screen reader support.
 
-**⚠️ Note:** Accessibility features are **disabled by default** (as of v2.4.3) pending further testing and validation. Enable them by setting `enableA11y: true` on the component.
+**⚠️ Note:** Accessibility features are **disabled by default** (as of v2.5.0) pending further testing and validation. Enable them by setting `enableA11y: true` on the component.
 
 ## Implemented Accessibility Features
 

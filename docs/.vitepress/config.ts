@@ -19,7 +19,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/what-is-vuejs-tour' },
       {
-        text: '2.4.3',
+        text: '2.5.0',
         items: [
           {
             text: 'Changelog',
@@ -98,6 +98,8 @@ export default defineConfig({
             { text: 'Skipping a Tour', link: '/guide/skipping-a-tour' },
             { text: 'Button Labels', link: '/guide/button-labels' },
             { text: 'Multiple Tours', link: '/guide/multiple-tours' },
+            { text: 'Jump Options', link: '/guide/jump-options' },
+            { text: 'Accessibility', link: '/guide/accessibility' },
             {
               text: 'Styling',
               items: [
