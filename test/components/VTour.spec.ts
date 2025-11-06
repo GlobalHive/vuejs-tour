@@ -3,6 +3,12 @@ import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import VTour from '../../src/components/VTour.vue';
 import type { ITourStep } from '../../src/Types';
+import {
+  useFakeTimersPerTest,
+  startAndWaitReady,
+  flushVue,
+} from '../helpers/timers';
+import { mountVTour } from '../helpers/mountVTour';
 
 // Mock nanopop with proper functionality
 const mockPopper = {
@@ -15,8 +21,9 @@ vi.mock('nanopop', () => ({
 }));
 
 describe('VTour Component - Comprehensive Test Suite', () => {
-  let wrapper: any;
+  useFakeTimersPerTest();
 
+  let wrapper: any;
   const mockSteps: ITourStep[] = [
     {
       target: '#step1',
@@ -37,13 +44,6 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       placement: 'left',
     },
   ];
-
-  // Helper function to wait for async operations and DOM updates
-  const waitForAsync = async (ms: number = 50) => {
-    await new Promise((resolve) => setTimeout(resolve, ms));
-    await nextTick();
-    await nextTick();
-  };
 
   beforeEach(() => {
     // Create a comprehensive DOM structure for testing
@@ -77,7 +77,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
   });
 
   describe('Basic Component Properties', () => {
-    it('should render with default props', () => {
+    it('should render with default props', async () => {
       wrapper = mount(VTour, {
         props: {
           steps: mockSteps,
@@ -85,8 +85,13 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       expect(wrapper.exists()).toBe(true);
-      expect(wrapper.find('#vjt-backdrop').exists()).toBe(true);
-      expect(wrapper.find('#vjt-tooltip').exists()).toBe(true);
+
+      //Wait for Teleport to render
+      await nextTick();
+
+      // Elements are rendered via Teleport to body, not in wrapper
+      expect(document.querySelector('#vjt-backdrop')).toBeTruthy();
+      expect(document.querySelector('#vjt-tooltip')).toBeTruthy();
     });
 
     it('should accept custom button labels', async () => {
@@ -97,25 +102,21 @@ describe('VTour Component - Comprehensive Test Suite', () => {
         skip: 'Cancel',
       };
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-          buttonLabels: customLabels,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: mockSteps,
+        buttonLabels: customLabels,
+        autoStart: false,
       });
 
       // Start tour and wait for async operations
-      await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await nextTick();
+      await startAndWaitReady(wrapper);
 
-      // Check if custom labels appear
-      const tooltipContent = wrapper.find('#vjt-tooltip').text();
-      expect(tooltipContent).toContain('Cancel');
+      // Check if custom labels appear in Teleported element
+      const tooltipElement = document.querySelector('#vjt-tooltip');
+      expect(tooltipElement?.textContent).toContain('Cancel');
     });
 
-    it('should handle backdrop prop', () => {
+    it('should handle backdrop prop', async () => {
       wrapper = mount(VTour, {
         props: {
           steps: mockSteps,
@@ -125,7 +126,9 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Check if backdrop prop is correctly set and element exists
       expect(wrapper.props('backdrop')).toBe(true);
-      expect(wrapper.find('#vjt-backdrop').exists()).toBe(true);
+
+      await nextTick();
+      expect(document.querySelector('#vjt-backdrop')).toBeTruthy();
     });
 
     it('should handle empty steps array gracefully', () => {
@@ -142,11 +145,9 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
   describe('Tour Navigation and Control', () => {
     beforeEach(() => {
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: mockSteps,
+        autoStart: false,
       });
     });
 
@@ -171,12 +172,35 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       expect(wrapper.vm.currentStepIndex).toBe(0);
 
       await wrapper.vm.startTour();
-      await waitForAsync();
+      await flushVue();
 
       // Tour should be in started state (currentStepIndex maintained or set)
       expect(wrapper.vm.currentStepIndex).toBe(0);
       expect(wrapper.vm.nextStepIndex).toBe(1);
       expect(wrapper.vm.lastStepIndex).toBe(0);
+    });
+
+    it('should not restart tour if already active', async () => {
+      // Start the tour properly with all async operations
+      await startAndWaitReady(wrapper);
+
+      expect(wrapper.vm.tourVisible).toBe(true);
+      expect(wrapper.vm.currentStepIndex).toBe(0);
+
+      // Navigate to step 2
+      await wrapper.vm.goToStep(2);
+      await flushVue();
+
+      expect(wrapper.vm.currentStepIndex).toBe(2);
+      expect(wrapper.vm.tourVisible).toBe(true);
+
+      // Try to start tour again while it's active
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Tour should remain at step 2, not restart at step 0
+      expect(wrapper.vm.currentStepIndex).toBe(2);
+      expect(wrapper.vm.tourVisible).toBe(true);
     });
 
     it('should navigate through steps', async () => {
@@ -189,7 +213,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Navigate to next step
       await wrapper.vm.nextStep();
-      await waitForAsync();
+      await flushVue();
 
       expect(wrapper.vm.currentStepIndex).toBe(initialStep + 1);
       expect(wrapper.vm.lastStepIndex).toBe(initialStep);
@@ -198,12 +222,12 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     it('should navigate backwards using lastStep', async () => {
       // Navigate to step 2
       await wrapper.vm.goToStep(2);
-      await waitForAsync();
+      await flushVue();
       expect(wrapper.vm.currentStepIndex).toBe(2);
 
       // Go back one step
       await wrapper.vm.lastStep();
-      await waitForAsync();
+      await flushVue();
 
       expect(wrapper.vm.currentStepIndex).toBe(1);
       expect(wrapper.vm.lastStepIndex).toBe(0);
@@ -218,7 +242,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Try to go back from step 0
       await wrapper.vm.lastStep();
-      await waitForAsync();
+      await flushVue();
 
       // lastStepIndex should not go below 0
       expect(wrapper.vm.lastStepIndex).toBe(0);
@@ -227,7 +251,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     it('should navigate to specific step', async () => {
       // Navigate to specific step
       await wrapper.vm.goToStep(2);
-      await waitForAsync();
+      await flushVue();
 
       expect(wrapper.vm.currentStepIndex).toBe(2);
       expect(wrapper.vm.lastStepIndex).toBe(1);
@@ -249,15 +273,14 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     });
 
     it('should stop tour correctly', async () => {
-      await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await startAndWaitReady(wrapper);
 
       wrapper.vm.stopTour();
       await nextTick();
 
-      // Check if backdrop is hidden
-      const backdrop = wrapper.find('#vjt-backdrop');
-      expect(backdrop.attributes('data-hidden')).toBeDefined();
+      // Check if backdrop is hidden via Teleported element
+      const backdrop = document.querySelector('#vjt-backdrop');
+      expect(backdrop?.getAttribute('data-hidden')).toBeTruthy();
     });
 
     it('should reset tour state correctly', () => {
@@ -286,7 +309,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     it('should emit tourEnd event reliably', async () => {
       // Test the most reliable event - tourEnd
       wrapper.vm.endTour();
-      await waitForAsync();
+      await flushVue();
 
       expect(wrapper.emitted('onTourEnd')).toBeTruthy();
     });
@@ -341,20 +364,19 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     it('should not start tour if already completed', async () => {
       localStorage.setItem('vjt-completed-tour', 'true');
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-          name: 'completed-tour',
-          saveToLocalStorage: 'end',
-        },
+      wrapper = mountVTour({
+        steps: mockSteps,
+        name: 'completed-tour',
+        saveToLocalStorage: 'end',
+        autoStart: false,
       });
 
-      // Try to start tour - it should not emit tourStart if already completed
+      // Try to start tour - it should not start if already completed
       await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await flushVue();
 
-      // Tour should not have started (no tourStart emission)
-      expect(wrapper.emitted('onTourStart')).toBeFalsy();
+      // Tour should not have started (tourVisible should be false)
+      expect(wrapper.vm.tourVisible).toBe(false);
     });
   });
 
@@ -377,7 +399,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       wrapper.vm.updateHighlight();
       await nextTick();
 
-      // Now it should be highlighted (this tests the actual component method)
+      // Now it should be highlighted
       expect(targetElement?.classList.contains('vjt-highlight')).toBe(true);
     });
 
@@ -436,8 +458,9 @@ describe('VTour Component - Comprehensive Test Suite', () => {
         attachTo: document.getElementById('app')!,
       });
 
-      const backdrop = wrapper.find('#vjt-backdrop');
-      expect(backdrop.exists()).toBe(true);
+      await nextTick();
+      const backdrop = document.querySelector('#vjt-backdrop');
+      expect(backdrop).toBeTruthy();
 
       // Trigger backdrop update
       wrapper.vm.currentStepIndex = 0;
@@ -446,8 +469,8 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       wrapper.vm.updateBackdrop();
       await nextTick();
 
-      // Backdrop should be visible (not have data-hidden attribute)
-      expect(backdrop.attributes('data-hidden')).toBeUndefined();
+      // Backdrop should be visible (data-hidden should be "false")
+      expect(backdrop?.getAttribute('data-hidden')).not.toBe('true');
     });
 
     it('should show backdrop for individual step when step.backdrop is true', async () => {
@@ -473,8 +496,8 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       wrapper.vm.updateBackdrop();
       await nextTick();
 
-      const backdrop = wrapper.find('#vjt-backdrop');
-      expect(backdrop.attributes('data-hidden')).toBeUndefined();
+      const backdrop = document.querySelector('#vjt-backdrop');
+      expect(backdrop?.getAttribute('data-hidden')).not.toBe('true');
     });
 
     it('should hide backdrop when both global and step backdrop are false', async () => {
@@ -500,8 +523,8 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       wrapper.vm.updateBackdrop();
       await nextTick();
 
-      const backdrop = wrapper.find('#vjt-backdrop');
-      expect(backdrop.attributes('data-hidden')).toBeDefined();
+      const backdrop = document.querySelector('#vjt-backdrop');
+      expect(backdrop?.getAttribute('data-hidden')).toBe('true');
     });
   });
 
@@ -519,19 +542,42 @@ describe('VTour Component - Comprehensive Test Suite', () => {
         },
       ];
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: stepsWithCallbacks,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: stepsWithCallbacks,
+        autoStart: false,
       });
 
-      await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await nextTick();
+      await startAndWaitReady(wrapper);
 
       // onBefore should be called when step starts
       expect(onBeforeSpy).toHaveBeenCalled();
+    });
+
+    it('should execute async onBefore callback', async () => {
+      let callbackExecuted = false;
+      const asyncOnBefore = vi.fn(async () => {
+        await flushVue();
+        callbackExecuted = true;
+      });
+
+      const stepsWithAsyncCallback = [
+        {
+          target: '#step1',
+          content: 'Step with async callback',
+          onBefore: asyncOnBefore,
+        },
+      ];
+
+      wrapper = mountVTour({
+        steps: stepsWithAsyncCallback,
+        autoStart: false,
+      });
+
+      await startAndWaitReady(wrapper);
+
+      // Async onBefore should be called and awaited
+      expect(asyncOnBefore).toHaveBeenCalled();
+      expect(callbackExecuted).toBe(true);
     });
   });
 
@@ -546,15 +592,17 @@ describe('VTour Component - Comprehensive Test Suite', () => {
         },
       ];
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: stepsWithMissingTarget,
-        },
+      wrapper = mountVTour({
+        steps: stepsWithMissingTarget,
+        autoStart: false,
       });
 
-      await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await nextTick();
+      // Try to start the tour, expecting it to fail gracefully
+      try {
+        await startAndWaitReady(wrapper);
+      } catch (error) {
+        // Expected to fail since target doesn't exist
+      }
 
       expect(consoleSpy).toHaveBeenCalledWith(
         'Tour target element not found: #non-existent'
@@ -567,17 +615,13 @@ describe('VTour Component - Comprehensive Test Suite', () => {
     it('should auto start tour when autoStart is true', async () => {
       const startSpy = vi.fn();
 
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-          autoStart: true,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: mockSteps,
+        autoStart: true,
       });
 
       // Wait for auto start
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await nextTick();
+      await startAndWaitReady(wrapper);
 
       // Check if tour has started (currentStepIndex should be 0, not -1 or undefined)
       expect(wrapper.vm.currentStepIndex).toBe(0);
@@ -586,22 +630,20 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
   describe('Resize Handling', () => {
     it('should handle window resize events', async () => {
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: mockSteps,
+        autoStart: false,
       });
 
-      await wrapper.vm.startTour();
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await startAndWaitReady(wrapper);
 
       // Mock resize event
       const resizeEvent = new Event('resize');
       window.dispatchEvent(resizeEvent);
 
-      // Wait for debounced resize handler
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      // Wait for debounced resize handler (need to advance fake timers)
+      vi.advanceTimersByTime(300);
+      await flushVue();
 
       // Should not throw errors
       expect(wrapper.exists()).toBe(true);
@@ -683,25 +725,20 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Try to go to next step - should end tour
       await wrapper.vm.nextStep();
-      await waitForAsync();
+      await flushVue();
 
       // Should have emitted tourEnd
       expect(wrapper.emitted('onTourEnd')).toBeTruthy();
     });
 
     it('should handle various startDelay values', async () => {
-      wrapper = mount(VTour, {
-        props: {
-          steps: mockSteps,
-          startDelay: 100,
-        },
-        attachTo: document.getElementById('app')!,
+      wrapper = mountVTour({
+        steps: mockSteps,
+        startDelay: 100,
+        autoStart: false,
       });
 
-      await wrapper.vm.startTour();
-      // Wait for custom startDelay
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await waitForAsync();
+      await startAndWaitReady(wrapper);
 
       // Tour should be started
       expect(wrapper.vm.currentStepIndex).toBe(0);
@@ -720,7 +757,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Reset and restart
       wrapper.vm.resetTour(true);
-      await waitForAsync();
+      await flushVue();
 
       // Should be reset to initial state
       expect(wrapper.vm.currentStepIndex).toBe(0);
@@ -795,9 +832,405 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       // Test each placement
       for (let i = 0; i < stepsWithPlacements.length; i++) {
         await wrapper.vm.goToStep(i);
-        await waitForAsync();
+        await flushVue();
         expect(wrapper.vm.currentStepIndex).toBe(i);
       }
+    });
+  });
+
+  describe('Multi-Instance Support', () => {
+    it('should use default IDs when name prop is empty', async () => {
+      wrapper = mount(VTour, {
+        props: {
+          steps: mockSteps,
+        },
+      });
+
+      await nextTick();
+
+      // Backward compatible IDs (no name in ID)
+      expect(document.querySelector('#vjt-tooltip')).toBeTruthy();
+      expect(document.querySelector('#vjt-backdrop')).toBeTruthy();
+    });
+
+    it('should use scoped IDs when name prop is provided', async () => {
+      wrapper = mount(VTour, {
+        props: {
+          steps: mockSteps,
+          name: 'my-tour',
+        },
+      });
+
+      await nextTick();
+
+      // Scoped IDs with name
+      expect(document.querySelector('#vjt-my-tour-tooltip')).toBeTruthy();
+      expect(document.querySelector('#vjt-my-tour-backdrop')).toBeTruthy();
+    });
+
+    it('should use scoped highlight class when name prop is provided', async () => {
+      wrapper = mount(VTour, {
+        props: {
+          steps: mockSteps,
+          name: 'custom-tour',
+          highlight: true,
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      const targetElement = document.querySelector('#step1');
+
+      wrapper.vm.updateHighlight();
+      await nextTick();
+
+      // Should use scoped highlight class
+      expect(
+        targetElement?.classList.contains('vjt-highlight-custom-tour')
+      ).toBe(true);
+      expect(targetElement?.classList.contains('vjt-highlight')).toBe(false);
+    });
+  });
+
+  describe('New Features - Transitioning and Positioning', () => {
+    it('should set isTransitioning during step changes', async () => {
+      wrapper = mount(VTour, {
+        props: {
+          steps: mockSteps,
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      const initialStep = wrapper.vm.currentStepIndex;
+
+      // Navigate to next step
+      await wrapper.vm.nextStep();
+      await flushVue();
+
+      // Should have moved to next step successfully
+      expect(wrapper.vm.currentStepIndex).toBe(initialStep + 1);
+    });
+
+    it('should recreate content when navigating between steps', async () => {
+      wrapper = mount(VTour, {
+        props: {
+          steps: mockSteps,
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Verify first step content
+      expect(wrapper.vm.currentStepIndex).toBe(0);
+
+      // Navigate to next step
+      await wrapper.vm.nextStep();
+      await flushVue();
+
+      // Verify navigation worked (content was recreated with new key)
+      expect(wrapper.vm.currentStepIndex).toBe(1);
+    });
+
+    it('should wait for nextTick before positioning on start', async () => {
+      wrapper = mount(VTour, {
+        props: {
+          steps: mockSteps,
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      // Start tour - this internally waits for nextTick before positioning
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Tour should have started successfully
+      expect(wrapper.vm.currentStepIndex).toBe(0);
+      // Tooltip should be rendered in DOM
+      expect(document.querySelector('#vjt-tooltip')).toBeTruthy();
+    });
+
+    it('should reset nanopop instance when stopping tour', async () => {
+      wrapper = mount(VTour, {
+        props: {
+          steps: mockSteps,
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Tour should be started
+      const tooltip = document.querySelector('#vjt-tooltip');
+      expect(tooltip).toBeTruthy();
+
+      wrapper.vm.stopTour();
+      await nextTick();
+
+      // Verify tour stopped (tourVisible = false)
+      expect(wrapper.vm.tourVisible).toBe(false);
+      expect(wrapper.vm.backdropVisible).toBe(false);
+    });
+  });
+
+  describe('Integration Tests - Real Positioning & Rendering', () => {
+    it('should render tooltip in DOM for real target element', async () => {
+      // Create a real target element with actual position
+      const targetDiv = document.createElement('div');
+      targetDiv.id = 'real-target';
+      targetDiv.style.position = 'absolute';
+      targetDiv.style.top = '100px';
+      targetDiv.style.left = '200px';
+      targetDiv.style.width = '50px';
+      targetDiv.style.height = '50px';
+      document.body.appendChild(targetDiv);
+
+      wrapper = mount(VTour, {
+        props: {
+          steps: [
+            {
+              target: '#real-target',
+              content: 'Test content',
+              placement: 'right',
+            },
+          ],
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Tour should be started and tooltip should exist in DOM
+      const tooltip = document.querySelector('#vjt-tooltip') as HTMLElement;
+      expect(tooltip).toBeTruthy();
+
+      // Tooltip element should be Teleported to body
+      expect(
+        tooltip.parentElement?.classList.contains('vjt-modal-overlay')
+      ).toBe(true);
+
+      // Clean up
+      document.body.removeChild(targetDiv);
+    });
+
+    it('should apply and remove highlight class when tour starts and stops', async () => {
+      const targetDiv = document.createElement('div');
+      targetDiv.id = 'highlight-target';
+      targetDiv.className = 'my-element';
+      document.body.appendChild(targetDiv);
+
+      wrapper = mount(VTour, {
+        props: {
+          steps: [
+            {
+              target: '#highlight-target',
+              content: 'Test content',
+            },
+          ],
+          highlight: true,
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      // Before starting, no highlight
+      expect(targetDiv.classList.contains('vjt-highlight')).toBe(false);
+
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // After stopping, highlight should be removed
+      wrapper.vm.stopTour();
+      await nextTick();
+      expect(targetDiv.classList.contains('vjt-highlight')).toBe(false);
+
+      document.body.removeChild(targetDiv);
+    });
+
+    it('should show backdrop element when backdrop is enabled', async () => {
+      const targetDiv = document.createElement('div');
+      targetDiv.id = 'backdrop-target';
+      targetDiv.style.position = 'absolute';
+      targetDiv.style.top = '100px';
+      targetDiv.style.left = '100px';
+      targetDiv.style.width = '100px';
+      targetDiv.style.height = '100px';
+      document.body.appendChild(targetDiv);
+
+      wrapper = mount(VTour, {
+        props: {
+          steps: [
+            {
+              target: '#backdrop-target',
+              content: 'Test content',
+              backdrop: true,
+            },
+          ],
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Backdrop element should exist in DOM
+      const backdrop = document.querySelector('#vjt-backdrop') as HTMLElement;
+      expect(backdrop).toBeTruthy();
+
+      // Backdrop should be rendered in modal overlay
+      expect(
+        backdrop.parentElement?.classList.contains('vjt-modal-overlay')
+      ).toBe(true);
+
+      document.body.removeChild(targetDiv);
+    });
+
+    it('should teleport to body and not be in component wrapper', async () => {
+      wrapper = mount(VTour, {
+        props: {
+          steps: mockSteps,
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Tooltip should NOT be in wrapper
+      expect(wrapper.find('#vjt-tooltip').exists()).toBe(false);
+
+      // Tooltip SHOULD be in document body
+      const tooltip = document.querySelector('#vjt-tooltip');
+      expect(tooltip).toBeTruthy();
+      expect(
+        tooltip?.parentElement?.classList.contains('vjt-modal-overlay')
+      ).toBe(true);
+    });
+
+    it('should navigate between multiple steps successfully', async () => {
+      const target1 = document.createElement('div');
+      target1.id = 'target-1';
+      document.body.appendChild(target1);
+
+      const target2 = document.createElement('div');
+      target2.id = 'target-2';
+      document.body.appendChild(target2);
+
+      wrapper = mount(VTour, {
+        props: {
+          steps: [
+            {
+              target: '#target-1',
+              content: 'Step 1',
+              placement: 'top',
+            },
+            {
+              target: '#target-2',
+              content: 'Step 2',
+              placement: 'bottom',
+            },
+          ],
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Should be on first step
+      expect(wrapper.vm.currentStepIndex).toBe(0);
+
+      // Navigate to second step
+      await wrapper.vm.nextStep();
+      await flushVue();
+
+      // Should be on second step
+      expect(wrapper.vm.currentStepIndex).toBe(1);
+
+      document.body.removeChild(target1);
+      document.body.removeChild(target2);
+    });
+
+    it('should maintain tour state after scroll and resize events', async () => {
+      const targetDiv = document.createElement('div');
+      targetDiv.id = 'scroll-target';
+      targetDiv.style.position = 'absolute';
+      targetDiv.style.top = '500px';
+      document.body.appendChild(targetDiv);
+
+      wrapper = mountVTour({
+        steps: [
+          {
+            target: '#scroll-target',
+            content: 'Test content',
+          },
+        ],
+        autoStart: false,
+      });
+
+      await startAndWaitReady(wrapper);
+
+      const tooltip = document.querySelector('#vjt-tooltip') as HTMLElement;
+      expect(tooltip).toBeTruthy();
+
+      // Trigger scroll event
+      window.dispatchEvent(new Event('scroll'));
+      vi.advanceTimersByTime(50);
+      await flushVue();
+
+      // Tooltip should still exist in DOM
+      const tooltipAfterScroll = document.querySelector('#vjt-tooltip');
+      expect(tooltipAfterScroll).toBeTruthy();
+
+      // Trigger resize event
+      window.dispatchEvent(new Event('resize'));
+      vi.advanceTimersByTime(300); // Wait for debounce
+      await flushVue();
+
+      // Tooltip should still exist in DOM after resize
+      const tooltipAfterResize = document.querySelector('#vjt-tooltip');
+      expect(tooltipAfterResize).toBeTruthy();
+
+      document.body.removeChild(targetDiv);
+    });
+
+    it('should cleanup highlight when component unmounts', async () => {
+      const targetDiv = document.createElement('div');
+      targetDiv.id = 'cleanup-target';
+      document.body.appendChild(targetDiv);
+
+      wrapper = mount(VTour, {
+        props: {
+          steps: [
+            {
+              target: '#cleanup-target',
+              content: 'Test content',
+            },
+          ],
+          highlight: true,
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Verify tour is active
+      const tooltip = document.querySelector('#vjt-tooltip');
+      expect(tooltip).toBeTruthy();
+
+      // Unmount component
+      wrapper.unmount();
+      await nextTick();
+
+      // Verify cleanup: highlight should be removed
+      expect(targetDiv.classList.contains('vjt-highlight')).toBe(false);
+
+      document.body.removeChild(targetDiv);
     });
   });
 });

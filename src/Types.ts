@@ -1,6 +1,32 @@
 import type { NanoPopPosition } from 'nanopop';
 
 /**
+ * Scroll animation options for jump.js
+ * @see https://github.com/callmecavs/jump.js
+ */
+export interface JumpOptions {
+  /** Duration of scroll animation in milliseconds (default: 500) */
+  readonly duration?: number;
+
+  /** Vertical offset in pixels from target element (default: -100) */
+  readonly offset?: number;
+
+  /** Callback function to execute after scroll completes */
+  readonly callback?: () => void;
+
+  /**
+   * Easing function name (default: 'easeInOutQuad')
+   * Valid values: 'easeInQuad', 'easeOutQuad', 'easeInOutQuad', 'easeInCubic',
+   * 'easeOutCubic', 'easeInOutCubic', 'easeInQuart', 'easeOutQuart', 'easeInOutQuart',
+   * 'easeInQuint', 'easeOutQuint', 'easeInOutQuint'
+   */
+  readonly easing?: string;
+
+  /** Whether to focus the element for accessibility (default: false) */
+  readonly a11y?: boolean;
+}
+
+/**
  * Configuration for a single step in a tour
  */
 export interface ITourStep {
@@ -27,6 +53,12 @@ export interface ITourStep {
 
   /** Whether to disable auto-scrolling for this step */
   readonly noScroll?: boolean;
+
+  /** Custom scroll animation options for this step (overrides global jumpOptions) */
+  readonly jumpOptions?: Partial<JumpOptions>;
+
+  /** Descriptive label for screen readers (e.g., "User Profile Settings") */
+  readonly ariaLabel?: string;
 }
 
 /**
@@ -86,6 +118,24 @@ export interface VTourProps {
 
   /** Debounce timeout for resize events in milliseconds */
   readonly resizeTimeout?: number;
+
+  /** Default tooltip placement when step doesn't specify one */
+  readonly defaultPlacement?: NanoPopPosition;
+
+  /** Default scroll animation options (can be overridden per step) */
+  readonly jumpOptions?: Partial<JumpOptions>;
+
+  /** Enable accessibility features including keyboard navigation and ARIA attributes (default: true) */
+  readonly enableA11y?: boolean;
+
+  /** Enable keyboard navigation with Arrow keys, Enter, and Escape (default: true) */
+  readonly keyboardNav?: boolean;
+
+  /** Custom ARIA label for the tour dialog (default: "Guided tour") */
+  readonly ariaLabel?: string;
+
+  /** Delay in milliseconds to wait for Vue Teleport to render DOM elements (default: 100) */
+  readonly teleportDelay?: number;
 }
 
 /**
