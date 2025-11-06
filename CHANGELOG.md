@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.5.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.4.3...v2.5.0) (2025-11-06)
+
+
+### Features
+
+* Add comprehensive accessibility tests for VTour component ([28a7fd1](https://github.com/GlobalHive/vuejs-tour/commit/28a7fd16667f3433199894e79817ccf922ea743a))
+* Enhance jump options with customizable easing functions and improve accessibility support ([e295b99](https://github.com/GlobalHive/vuejs-tour/commit/e295b99dbf30f0e6d1a2495212904aab6730c759))
+* enhance VTour component with default tooltip placement and multi-instance support ([f3ef42b](https://github.com/GlobalHive/vuejs-tour/commit/f3ef42b3f3004f959bd065a4caceb279d5415c56))
+
+
+### Miscellaneous Chores
+
+* release 2.5.0 ([ba4c32d](https://github.com/GlobalHive/vuejs-tour/commit/ba4c32d5eda2b0208f5a611d7a8c854e83ecefaf))
+
 ## [2.4.3](https://github.com/GlobalHive/vuejs-tour/compare/v2.4.2...v2.4.3) (2025-10-12)
 
 
