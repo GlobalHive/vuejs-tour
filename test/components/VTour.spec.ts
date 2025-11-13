@@ -7,6 +7,7 @@ import {
   useFakeTimersPerTest,
   startAndWaitReady,
   flushVue,
+  waitForStepTransition,
 } from '../helpers/timers';
 import { mountVTour } from '../helpers/mountVTour';
 
@@ -203,6 +204,52 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       expect(wrapper.vm.tourVisible).toBe(true);
     });
 
+    it('should restart tour when name prop changes while visible (hot-switch)', async () => {
+      // Start the tour and move off the first step to verify reset behavior
+      await startAndWaitReady(wrapper);
+      await wrapper.vm.goToStep(2);
+      await flushVue();
+      expect(wrapper.vm.currentStepIndex).toBe(2);
+
+      // Change name prop to simulate switching tours
+      await wrapper.setProps({ name: 'tour-2' });
+
+      // Call startTour again — backward-compat should force a clean restart
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Should restart to first step of the new tour
+      expect(wrapper.vm.currentStepIndex).toBe(0);
+
+      // Tooltip/backdrop IDs should now be scoped by the new name
+      expect(document.querySelector('#vjt-tour-2-tooltip')).toBeTruthy();
+      expect(document.querySelector('#vjt-tour-2-backdrop')).toBeTruthy();
+    });
+
+    it('should restart tour when steps reference changes while visible (hot-switch)', async () => {
+      // Start and navigate to prove we are mid-tour
+      await startAndWaitReady(wrapper);
+      await wrapper.vm.goToStep(1);
+      await flushVue();
+      expect(wrapper.vm.currentStepIndex).toBe(1);
+
+      // Provide a new array reference for steps (content can be same or different)
+      const newSteps = [
+        { target: '#step1', content: 'Welcome to step 1 (alt)' },
+        { target: '#step2', content: 'Step 2 (alt)' },
+      ];
+      await wrapper.setProps({ steps: newSteps });
+
+      // Call startTour again — should stop and restart with new steps
+      await wrapper.vm.startTour();
+      await flushVue();
+
+      // Restarted at index 0 for the new steps set
+      expect(wrapper.vm.currentStepIndex).toBe(0);
+      // Verify tooltip exists for the restarted run
+      expect(document.querySelector('#vjt-tooltip')).toBeTruthy();
+    });
+
     it('should navigate through steps', async () => {
       // Start from known state
       wrapper.vm.currentStepIndex = 0;
@@ -348,6 +395,49 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       expect(localStorage.getItem('vjt-test-tour')).toBe('1');
     });
 
+    it('should keep separate step progress per tour name when saveToLocalStorage="step"', async () => {
+      wrapper = mount(VTour, {
+        props: {
+          steps: [
+            { target: '#step1', content: 'A1' },
+            { target: '#step2', content: 'A2' },
+          ],
+          name: 'tourA',
+          saveToLocalStorage: 'step',
+          autoStart: false,
+          noScroll: true, // Disable scrolling to avoid jump.js timing issues
+        },
+        attachTo: document.getElementById('app')!,
+      });
+
+      // Start and advance one step; this should save index 1 under vjt-tourA
+      await startAndWaitReady(wrapper);
+      await wrapper.vm.nextStep();
+      await waitForStepTransition(wrapper);
+      expect(localStorage.getItem('vjt-tourA')).toBe('1');
+
+      // While visible, switch to a different tour name and steps
+      const stepsB = [
+        { target: '#step1', content: 'B1' },
+        { target: '#step2', content: 'B2' },
+      ];
+      await wrapper.setProps({ name: 'tourB', steps: stepsB, noScroll: true });
+
+      // The watcher will automatically restart the tour with new props
+      // Wait for the automatic restart to complete
+      await startAndWaitReady(wrapper);
+
+      // New tour should start from its own saved index (none yet) -> 0
+      expect(wrapper.vm.currentStepIndex).toBe(0);
+      // Progress for tourA remains intact
+      expect(localStorage.getItem('vjt-tourA')).toBe('1');
+
+      // Advance in tourB and ensure it saves separately
+      await wrapper.vm.nextStep();
+      await waitForStepTransition(wrapper);
+      expect(localStorage.getItem('vjt-tourB')).toBe('1');
+    });
+
     it('should save completion when saveToLocalStorage is "end"', () => {
       wrapper = mount(VTour, {
         props: {
@@ -446,6 +536,33 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       // Restore original querySelectorAll
       document.querySelectorAll = originalQuerySelectorAll;
     });
+  });
+
+  it('should remove old highlight and apply new scoped highlight after hot-switch name change', async () => {
+    wrapper = mount(VTour, {
+      props: {
+        steps: [{ target: '#step1', content: 'S1', highlight: true }],
+        name: 'alpha',
+        highlight: true,
+        autoStart: false,
+        noScroll: true, // Disable scrolling to avoid jump.js timing issues
+      },
+      attachTo: document.getElementById('app')!,
+    });
+
+    await startAndWaitReady(wrapper);
+    const el = document.querySelector('#step1') as HTMLElement;
+    expect(el.classList.contains('vjt-highlight-alpha')).toBe(true);
+
+    // Switch to another tour name - the watcher will automatically restart
+    await wrapper.setProps({ name: 'beta', noScroll: true });
+
+    // Wait for the automatic restart to complete
+    await startAndWaitReady(wrapper);
+
+    // Old class removed, new applied
+    expect(el.classList.contains('vjt-highlight-alpha')).toBe(false);
+    expect(el.classList.contains('vjt-highlight-beta')).toBe(true);
   });
 
   describe('Backdrop Functionality', () => {

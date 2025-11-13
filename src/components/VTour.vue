@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { createPopper, type NanoPop } from 'nanopop';
-import { computed, nextTick, onMounted, onUnmounted, reactive, ref } from 'vue';
+import {
+  computed,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  watch,
+} from 'vue';
 import jump from 'jump.js';
 import type {
   VTourProps,
@@ -11,7 +19,10 @@ import type {
 import { easeInOutQuad, easingFunctions } from '../easing';
 
 // Props with defaults
-const props = withDefaults(defineProps<VTourProps>(), {
+// Note: widen the local type so this compiles even if VTourProps isn't updated yet.
+type LocalVTourProps = VTourProps & { restartOnPropChange?: boolean };
+
+const props = withDefaults(defineProps<LocalVTourProps>(), {
   name: '',
   backdrop: false,
   autoStart: false,
@@ -28,6 +39,8 @@ const props = withDefaults(defineProps<VTourProps>(), {
   keyboardNav: true,
   ariaLabel: 'Guided tour',
   teleportDelay: 100,
+  // New flag to control hot-switch behavior (on by default for backward compatibility)
+  restartOnPropChange: true,
 });
 
 // Emit definitions using standardized VTourEmits type
@@ -102,12 +115,29 @@ const isTourCompleted = (): boolean => {
   return localStorage.getItem(saveKey.value) === 'true';
 };
 
+// Track the props used when the tour last started, to allow hot-switch restarts
+const lastStarted = reactive<{
+  name: string | undefined;
+  stepsRef: unknown | null;
+}>({
+  name: undefined,
+  stepsRef: null,
+});
+
 const startTour = async (): Promise<void> => {
   if (isTourCompleted()) return;
 
-  // If tour is already active, do nothing (prevents restart)
+  // If tour is visible, allow "hot-switch" restart only when incoming props changed
   if (tourVisible.value) {
-    return;
+    const nameChanged = props.name !== lastStarted.name;
+    const stepsChanged = props.steps !== lastStarted.stepsRef;
+    if (!(nameChanged || stepsChanged)) {
+      // No meaningful change -> no-op for backward behavior
+      return;
+    }
+    // Cleanly stop current tour, then proceed to start with new props
+    stopTour();
+    await nextTick();
   }
 
   if (props.saveToLocalStorage === 'step') {
@@ -146,6 +176,7 @@ const startTour = async (): Promise<void> => {
       teleportDelayTimer = setTimeout(resolve, props.teleportDelay);
     });
 
+    // Vue ref is preferred, but if not yet bound, fall back to query (defensive)
     if (!_Tooltip.value) {
       _Tooltip.value = document.querySelector(
         `#${tooltipId.value}`
@@ -175,8 +206,8 @@ const startTour = async (): Promise<void> => {
     // Wait for Vue to render the content in the DOM with proper dimensions
     await nextTick();
 
-    if (!vTour.value) {
-      // Calculate margin: use prop margin, or increase to 14px if highlighting is enabled
+    // (Re)create popper for this run
+    {
       const shouldHighlight = props.highlight || currentStepData.highlight;
       const calculatedMargin = props.margin || (shouldHighlight ? 14 : 8);
 
@@ -197,6 +228,10 @@ const startTour = async (): Promise<void> => {
       _Tooltip.value?.focus();
     }
 
+    // Record the props used for this start so we can detect future hot-switches
+    lastStarted.name = props.name;
+    lastStarted.stepsRef = props.steps;
+
     emit('onTourStart');
   }, props.startDelay);
 };
@@ -207,7 +242,6 @@ const stopTour = (): void => {
   clearTimeout(teleportDelayTimer);
 
   // Hide tour and backdrop immediately
-  // Both must be set to prevent CSS visibility conflicts with fixed-position elements
   tourVisible.value = false;
   backdropVisible.value = false;
   isTransitioning.value = false;
@@ -228,6 +262,7 @@ const stopTour = (): void => {
     previousFocus = null;
   }
 };
+
 const resetTour = (shouldRestart = false): void => {
   stopTour();
   currentStepIndex.value = 0;
@@ -306,6 +341,7 @@ const goToStep = async (stepIndex: number): Promise<void> => {
   // Show tooltip after positioning is complete
   isTransitioning.value = false;
 };
+
 const beforeStep = async (step: number): Promise<void> => {
   const stepData = props.steps[step];
   if (stepData?.onBefore) {
@@ -338,8 +374,6 @@ const updateTooltipPosition = (): void => {
   updateBackdrop();
 
   // Update popper position and set placement attribute
-  // Nanopop automatically handles viewport edge detection and will flip placement if needed
-  // Nanopop v2.x returns the actual placement but doesn't automatically set the data-arrow attribute
   const actualPlacement = vTour.value.update({
     reference: targetElement,
     position: currentStepData.placement || props.defaultPlacement,
@@ -558,6 +592,33 @@ onUnmounted(() => {
     stopTour();
   }
 });
+
+// Seamless auto-switching, gated by restartOnPropChange
+watch(
+  () => [props.name, props.steps, props.restartOnPropChange],
+  async ([newName, newSteps, enabled], [oldName, oldSteps]) => {
+    if (!enabled) return; // opt-out supported
+    if (!tourVisible.value) return; // only when tour is currently visible
+
+    const nameChanged = newName !== oldName;
+    const stepsChanged = newSteps !== oldSteps;
+    if (!(nameChanged || stepsChanged)) return;
+
+    // Clean up old highlights manually if name changed
+    if (nameChanged && oldName !== undefined) {
+      const oldHighlightClass = oldName
+        ? `vjt-highlight-${oldName}`
+        : 'vjt-highlight';
+      document
+        .querySelectorAll(`.${oldHighlightClass}`)
+        .forEach((element) => element.classList.remove(oldHighlightClass));
+    }
+
+    stopTour();
+    await nextTick();
+    startTour(); // uses current props
+  }
+);
 
 // Expose public API
 defineExpose<VTourExposedMethods>({
