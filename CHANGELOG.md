@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.5.0...v2.6.0) (2025-11-16)
+
+
+### Features
+
+* Re-implement hot-switching for tour name and steps in VTour component ([7cbb2e0](https://github.com/GlobalHive/vuejs-tour/commit/7cbb2e0df16bbfbeb090e9655d04c4bed3a4dd80))
+
 ## [2.5.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.4.3...v2.5.0) (2025-11-06)
 
 
