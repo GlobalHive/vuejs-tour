@@ -411,6 +411,8 @@ const updateHighlight = (): void => {
 
   // Check if highlighting is disabled or no step data
   if (!currentStepData || (!props.highlight && !currentStepData.highlight)) {
+    // Reset clip-path when highlighting is disabled
+    getClipPath.value = '';
     return;
   }
 

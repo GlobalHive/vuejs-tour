@@ -67,7 +67,9 @@
   },
   "dependencies": {
     "jump.js": "^1.0.2",
-    "nanopop": "^2.4.2",
+    "nanopop": "^2.4.2"
+  },
+  "peerDependencies": {
     "vue": "^3.5.22"
   },
   "devDependencies": {
