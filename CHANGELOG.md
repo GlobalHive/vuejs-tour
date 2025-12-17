@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.6.1](https://github.com/GlobalHive/vuejs-tour/compare/v2.6.0...v2.6.1) (2025-12-17)
+
+
+### Bug Fixes
+
+* move vue to peerDependencies in package-lock.json ([0d8fbab](https://github.com/GlobalHive/vuejs-tour/commit/0d8fbab221a65111cfa3d4a7cd3bd0c574d6f64d))
+* reset clip-path when highlighting is disabled in VTour component ([f0dc1f0](https://github.com/GlobalHive/vuejs-tour/commit/f0dc1f0923a966c0d1305b3b73f73993490ec27c))
+
 ## [2.6.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.5.0...v2.6.0) (2025-11-16)
 
 
