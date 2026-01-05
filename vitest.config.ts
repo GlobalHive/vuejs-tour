@@ -11,11 +11,6 @@ export default defineConfig({
     environment: 'happy-dom',
     setupFiles: ['./test/setup.ts', './test/setup/transition.ts'],
     pool: 'threads',
-    poolOptions: {
-      threads: {
-        singleThread: true,
-      },
-    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],

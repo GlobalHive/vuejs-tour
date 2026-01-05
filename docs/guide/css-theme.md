@@ -6,11 +6,26 @@ To customize the look and feel of the tour, you can create your own styles and r
 The default theme is defined in the `'@globalhive/vuejs-tour/dist/style.css'` file.
 
 ```css
-[data-hidden] {
-  display: none;
+[data-hidden=true] {
+  visibility: hidden;
+  pointer-events: none;
 }
 
-#vjt-backdrop {
+[data-hidden=false] {
+  visibility: visible;
+}
+
+.vjt-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+[id$=-backdrop] {
   position: fixed;
   top: 0;
   left: 0;
@@ -19,8 +34,11 @@ The default theme is defined in the `'@globalhive/vuejs-tour/dist/style.css'` fi
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9998;
 }
+[id$=-backdrop]:not([data-hidden=true]) {
+  pointer-events: auto;
+}
 
-#vjt-tooltip {
+[id$=-tooltip] {
   background-color: #333;
   color: #fff;
   padding: 0.5rem;
@@ -29,35 +47,36 @@ The default theme is defined in the `'@globalhive/vuejs-tour/dist/style.css'` fi
   z-index: 9999;
   max-width: 300px;
   position: absolute;
+  pointer-events: auto;
 }
 
-#vjt-tooltip[data-arrow^=t] #vjt-arrow {
+[id$=-tooltip][data-arrow^=t] [id$=-arrow] {
   bottom: -4px;
   right: 50%;
 }
 
-#vjt-tooltip[data-arrow^=b] #vjt-arrow {
+[id$=-tooltip][data-arrow^=b] [id$=-arrow] {
   top: -4px;
   right: 50%;
 }
 
-#vjt-tooltip[data-arrow^=l] #vjt-arrow {
+[id$=-tooltip][data-arrow^=l] [id$=-arrow] {
   right: -4px;
   top: 50%;
 }
 
-#vjt-tooltip[data-arrow^=r] #vjt-arrow {
+[id$=-tooltip][data-arrow^=r] [id$=-arrow] {
   left: -4px;
   top: 50%;
 }
 
-#vjt-arrow {
+[id$=-arrow] {
   width: 8px;
   height: 8px;
   position: absolute;
   z-index: -1;
 }
-#vjt-arrow::before {
+[id$=-arrow]::before {
   content: "";
   width: 8px;
   height: 8px;
@@ -66,12 +85,11 @@ The default theme is defined in the `'@globalhive/vuejs-tour/dist/style.css'` fi
   position: absolute;
 }
 
-.vjt-highlight {
+[class*=vjt-highlight-] {
   outline: 2px solid #0ea5e9;
   outline-offset: 4px;
   border-radius: 1px;
   position: relative;
-  z-index: 9999;
 }
 
 .vjt-actions {
@@ -97,6 +115,18 @@ The default theme is defined in the `'@globalhive/vuejs-tour/dist/style.css'` fi
   background-color: #000;
   color: #fff;
 }
+
+.vjt-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
 ```
 
 ## Light Theme
@@ -104,96 +134,126 @@ The default theme is defined in the `'@globalhive/vuejs-tour/dist/style.css'` fi
 Here is an example of a light theme for the [New CSS File](#new-css-file) approach:
 
 ```css
-[data-hidden] {
-    display: none;
+[data-hidden=true] {
+  visibility: hidden;
+  pointer-events: none;
 }
 
-#vjt-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* [!code ++] */
-    z-index: 9998;
+[data-hidden=false] {
+  visibility: visible;
 }
 
-#vjt-tooltip {
-    background-color: rgb(241 245 249); /* [!code ++:2] */
-    color: rgb(15 23 42);
-    padding: 0.5rem;
-    border-radius: 4px;
-    font-size: 13px;
-    z-index: 9999;
-    max-width: 300px;
-    position: absolute;
+.vjt-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
 }
 
-#vjt-tooltip[data-arrow^=t] #vjt-arrow {
-    bottom: -4px;
-    right: 50%;
+[id$=-backdrop] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* [!code ++] */
+  z-index: 9998;
+}
+[id$=-backdrop]:not([data-hidden=true]) {
+  pointer-events: auto;
 }
 
-#vjt-tooltip[data-arrow^=b] #vjt-arrow {
-    top: -4px;
-    right: 50%;
+[id$=-tooltip] {
+  background-color: rgb(241 245 249); /* [!code ++:2] */
+  color: rgb(15 23 42);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 9999;
+  max-width: 300px;
+  position: absolute;
+  pointer-events: auto;
 }
 
-#vjt-tooltip[data-arrow^=l] #vjt-arrow {
-    right: -4px;
-    top: 50%;
+[id$=-tooltip][data-arrow^=t] [id$=-arrow] {
+  bottom: -4px;
+  right: 50%;
 }
 
-#vjt-tooltip[data-arrow^=r] #vjt-arrow {
-    left: -4px;
-    top: 50%;
+[id$=-tooltip][data-arrow^=b] [id$=-arrow] {
+  top: -4px;
+  right: 50%;
 }
 
-#vjt-arrow {
-    width: 8px;
-    height: 8px;
-    position: absolute;
-    z-index: -1;
-}
-#vjt-arrow::before {
-    content: "";
-    width: 8px;
-    height: 8px;
-    background-color: rgb(241 245 249); /* [!code ++] */
-    transform: rotate(45deg);
-    position: absolute;
+[id$=-tooltip][data-arrow^=l] [id$=-arrow] {
+  right: -4px;
+  top: 50%;
 }
 
-.vjt-highlight {
-    outline: 2px solid #0ea5e9;
-    outline-offset: 4px;
-    border-radius: 1px;
-    position: relative;
-    z-index: 9999;
+[id$=-tooltip][data-arrow^=r] [id$=-arrow] {
+  left: -4px;
+  top: 50%;
+}
+
+[id$=-arrow] {
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  z-index: -1;
+}
+[id$=-arrow]::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: rgb(241 245 249); /* [!code ++] */
+  transform: rotate(45deg);
+  position: absolute;
+}
+
+[class*=vjt-highlight-] {
+  outline: 2px solid #0ea5e9;
+  outline-offset: 4px;
+  border-radius: 1px;
+  position: relative;
 }
 
 .vjt-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 0.5rem;
-    gap: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  gap: 0.5rem;
 }
 .vjt-actions button {
-    width: 100%;
-    padding: 0.25rem 1rem;
-    border: 1px solid rgb(15 23 42); /* [!code ++] */
-    border-radius: 4px;
-    background-color: transparent;
-    color: rgb(15 23 42); /* [!code ++] */
-    font-size: 13px;
-    font-weight: 500;
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
+  width: 100%;
+  padding: 0.25rem 1rem;
+  border: 1px solid rgb(15 23 42); /* [!code ++] */
+  border-radius: 4px;
+  background-color: transparent;
+  color: rgb(15 23 42); /* [!code ++] */
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 .vjt-actions button:hover {
-    background-color: rgb(15 23 42); /* [!code ++:2] */
-    color: rgb(241 245 249);
+  background-color: rgb(15 23 42); /* [!code ++:2] */
+  color: rgb(241 245 249);
+}
+
+.vjt-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 ```
 
@@ -212,11 +272,11 @@ Change the theme by adding a style block to your component.
 </template>
 
 <style> /* Light Theme */
-  #vjt-tooltip { /* [!code ++:15] */
+  [id$=-tooltip] { /* [!code ++:15] */
     background-color: rgb(241 245 249);
     color: rgb(15 23 42);
   }
-  #vjt-arrow::before {
+  [id$=-arrow]::before {
     background-color: rgb(241 245 249);
   }
   .vjt-actions button {
