@@ -537,6 +537,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       wrapper = mount(VTour, {
         props: {
           steps: mockSteps,
+          name: '', // Empty name should produce 'vjt-highlight' class
           highlight: true,
           autoStart: false,
         },
@@ -553,10 +554,15 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       await flushVue();
       
       expect(wrapper.vm.tourVisible).toBe(true);
-      // Default name is 'tour', so class is 'vjt-highlight-tour'
-      // CSS selector [class*="vjt-highlight"] should match this
-      expect(targetElement.classList.contains('vjt-highlight-tour')).toBe(true);
+      // Empty name produces 'vjt-highlight' class (no hyphen suffix)
+      expect(targetElement.classList.contains('vjt-highlight')).toBe(true);
 
+      // CRITICAL: Verify CSS selector [class*="vjt-highlight"] matches 'vjt-highlight'
+      // This will FAIL if selector is [class*="vjt-highlight-"] (with trailing dash)
+      const computedStyle = window.getComputedStyle(targetElement);
+      expect(computedStyle.outline).toBeTruthy();
+      expect(computedStyle.outline).not.toBe('none');
+      
       // Verify actual CSS is loaded in document
       const styles = Array.from(document.querySelectorAll('style'));
       const hasHighlightCSS = styles.some(s => s.textContent?.includes('vjt-highlight'));
