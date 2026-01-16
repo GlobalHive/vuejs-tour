@@ -510,7 +510,6 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       wrapper = mount(VTour, {
         props: {
           steps: mockSteps,
-          name: '', // Empty string for backward-compatible class
           highlight: true,
           autoStart: false,
         },
@@ -520,7 +519,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       const targetElement = document.querySelector('#step1');
 
       // Initially, element should not be highlighted
-      expect(targetElement?.classList.contains('vjt-highlight')).toBe(false);
+      expect(targetElement?.classList.contains('vjt-highlight-tour')).toBe(false);
 
       // Start tour which will apply highlight
       await startAndWaitReady(wrapper);
@@ -529,16 +528,15 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       await nextTick();
       await flushVue();
 
-      // Now it should be highlighted
+      // Now it should be highlighted (default name is 'tour', so class is 'vjt-highlight-tour')
       expect(wrapper.vm.tourVisible).toBe(true);
-      expect(targetElement?.classList.contains('vjt-highlight')).toBe(true);
+      expect(targetElement?.classList.contains('vjt-highlight-tour')).toBe(true);
     });
 
     it('should have CSS selector that matches highlight class without name', async () => {
       wrapper = mount(VTour, {
         props: {
           steps: mockSteps,
-          name: '', // Empty string for backward-compatible class
           highlight: true,
           autoStart: false,
         },
@@ -555,7 +553,9 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       await flushVue();
       
       expect(wrapper.vm.tourVisible).toBe(true);
-      expect(targetElement.classList.contains('vjt-highlight')).toBe(true);
+      // Default name is 'tour', so class is 'vjt-highlight-tour'
+      // CSS selector [class*="vjt-highlight"] should match this
+      expect(targetElement.classList.contains('vjt-highlight-tour')).toBe(true);
 
       // Verify actual CSS is loaded in document
       const styles = Array.from(document.querySelectorAll('style'));
@@ -589,7 +589,6 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       wrapper = mount(VTour, {
         props: {
           steps: mockSteps,
-          name: '', // Empty string for backward-compatible class
           highlight: true,
           autoStart: false,
         },
@@ -605,9 +604,9 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       await nextTick();
       await flushVue();
       
-      // Verify the component added the highlight
+      // Verify the component added the highlight (default name 'tour' = 'vjt-highlight-tour')
       expect(wrapper.vm.tourVisible).toBe(true);
-      expect(targetElement.classList.contains('vjt-highlight')).toBe(true);
+      expect(targetElement.classList.contains('vjt-highlight-tour')).toBe(true);
 
       // Mock querySelectorAll to work properly in test environment
       // This ensures stopTour can find and remove the highlighted elements
@@ -1248,7 +1247,6 @@ describe('VTour Component - Comprehensive Test Suite', () => {
               content: 'Test content',
             },
           ],
-          name: '', // Empty name for backward-compatible class
           highlight: true,
           autoStart: false,
         },
@@ -1256,19 +1254,20 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       // Before starting, no highlight
-      expect(targetDiv.classList.contains('vjt-highlight')).toBe(false);
+      expect(targetDiv.classList.contains('vjt-highlight-tour')).toBe(false);
 
       await startAndWaitReady(wrapper);
       await nextTick(); // Ensure highlight is applied
 
       // IMPORTANT: Verify actual DOM manipulation - highlight class on real element
       // This tests real behavior, not mocked state
-      expect(targetDiv.classList.contains('vjt-highlight')).toBe(true);
+      // Default name is 'tour', so class is 'vjt-highlight-tour'
+      expect(targetDiv.classList.contains('vjt-highlight-tour')).toBe(true);
 
       // After stopping, highlight should be removed
       wrapper.vm.stopTour();
       await nextTick();
-      expect(targetDiv.classList.contains('vjt-highlight')).toBe(false);
+      expect(targetDiv.classList.contains('vjt-highlight-tour')).toBe(false);
 
       document.body.removeChild(targetDiv);
     });

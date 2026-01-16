@@ -85,7 +85,7 @@ The default theme is defined in the `'@globalhive/vuejs-tour/dist/style.css'` fi
   position: absolute;
 }
 
-[class*=vjt-highlight-] {
+[class*=vjt-highlight] {
   outline: 2px solid #0ea5e9;
   outline-offset: 4px;
   border-radius: 1px;
@@ -213,7 +213,7 @@ Here is an example of a light theme for the [New CSS File](#new-css-file) approa
   position: absolute;
 }
 
-[class*=vjt-highlight-] {
+[class*=vjt-highlight] {
   outline: 2px solid #0ea5e9;
   outline-offset: 4px;
   border-radius: 1px;
