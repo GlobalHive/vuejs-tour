@@ -23,7 +23,7 @@ import { easeInOutQuad, easingFunctions } from '../easing';
 type LocalVTourProps = VTourProps & { restartOnPropChange?: boolean };
 
 const props = withDefaults(defineProps<LocalVTourProps>(), {
-  name: '',
+  name: 'tour',
   backdrop: false,
   autoStart: false,
   startDelay: 0,
