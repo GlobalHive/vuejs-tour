@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.2](https://github.com/GlobalHive/vuejs-tour/compare/v2.6.1...v2.6.2) (2026-01-16)
+
+
+### Bug Fixes
+
+* **VTour:** set default name prop to 'tour' [#113](https://github.com/GlobalHive/vuejs-tour/issues/113) ([d52a164](https://github.com/GlobalHive/vuejs-tour/commit/d52a1644c828f201df748da585fd516c51f1ac39))
+
 ## [2.6.1](https://github.com/GlobalHive/vuejs-tour/compare/v2.6.0...v2.6.1) (2025-12-17)
 
 
