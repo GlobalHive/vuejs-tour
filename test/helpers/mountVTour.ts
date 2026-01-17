@@ -14,12 +14,12 @@ export function mountVTour(overrides: any = {}) {
     // Disable scrolling in tests to avoid timing issues with jump.js
     noScroll: overrides.noScroll ?? true,
   };
-  
+
   // Create a mount point that doesn't interfere with target elements
   const mountPoint = document.createElement('div');
   mountPoint.id = 'vtour-mount';
   document.body.appendChild(mountPoint);
-  
+
   return mount(VTour, {
     props: { ...base, ...overrides },
     attachTo: mountPoint,

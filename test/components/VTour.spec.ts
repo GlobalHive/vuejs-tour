@@ -67,10 +67,10 @@ describe('VTour Component - Comprehensive Test Suite', () => {
         </div>
       </div>
     `;
-    
+
     // Remove any previous test structure
     document.querySelector('#app')?.remove();
-    
+
     // Append new test structure
     document.body.insertAdjacentHTML('beforeend', testStructure);
 
@@ -89,11 +89,11 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       const mountPoint = document.createElement('div');
       mountPoint.id = 'vtour-mount';
       document.body.appendChild(mountPoint);
-      
+
       wrapper = mount(VTour, {
         props: {
           steps: mockSteps,
-          autoStart: false,  // Start manually so we have control
+          autoStart: false, // Start manually so we have control
           startDelay: 0,
           teleportDelay: 0,
         },
@@ -109,7 +109,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Manually start and wait for tour to be ready
       const tip = await startAndWaitReady(wrapper);
-      
+
       // Verify tour is started by checking internal state AND DOM
       expect(wrapper.vm.tourVisible).toBe(true);
       expect(tip).toBeTruthy(); // startAndWaitReady returns the tooltip element
@@ -141,12 +141,12 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       const mountPoint = document.createElement('div');
       mountPoint.id = 'vtour-mount';
       document.body.appendChild(mountPoint);
-      
+
       wrapper = mount(VTour, {
         props: {
           steps: mockSteps,
           backdrop: true,
-          autoStart: false,  // Start manually
+          autoStart: false, // Start manually
           startDelay: 0,
           teleportDelay: 0,
         },
@@ -163,7 +163,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Manually start and wait for tour to be ready
       await startAndWaitReady(wrapper);
-      
+
       // Check backdrop visibility state
       expect(wrapper.vm.backdropVisible).toBe(true);
     });
@@ -519,18 +519,22 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       const targetElement = document.querySelector('#step1');
 
       // Initially, element should not be highlighted
-      expect(targetElement?.classList.contains('vjt-highlight-tour')).toBe(false);
+      expect(targetElement?.classList.contains('vjt-highlight-tour')).toBe(
+        false
+      );
 
       // Start tour which will apply highlight
       await startAndWaitReady(wrapper);
-      
+
       // Wait for highlight to be applied
       await nextTick();
       await flushVue();
 
       // Now it should be highlighted (default name is 'tour', so class is 'vjt-highlight-tour')
       expect(wrapper.vm.tourVisible).toBe(true);
-      expect(targetElement?.classList.contains('vjt-highlight-tour')).toBe(true);
+      expect(targetElement?.classList.contains('vjt-highlight-tour')).toBe(
+        true
+      );
     });
 
     it('should have CSS selector that matches highlight class without name', async () => {
@@ -545,14 +549,14 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       const targetElement = document.querySelector('#step1') as HTMLElement;
-      
+
       // Start tour to apply highlight
       await startAndWaitReady(wrapper);
-      
+
       // Wait for highlight to be applied
       await nextTick();
       await flushVue();
-      
+
       expect(wrapper.vm.tourVisible).toBe(true);
       // Empty name produces 'vjt-highlight' class (no hyphen suffix)
       expect(targetElement.classList.contains('vjt-highlight')).toBe(true);
@@ -562,10 +566,12 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       const computedStyle = window.getComputedStyle(targetElement);
       expect(computedStyle.outline).toBeTruthy();
       expect(computedStyle.outline).not.toBe('none');
-      
+
       // Verify actual CSS is loaded in document
       const styles = Array.from(document.querySelectorAll('style'));
-      const hasHighlightCSS = styles.some(s => s.textContent?.includes('vjt-highlight'));
+      const hasHighlightCSS = styles.some((s) =>
+        s.textContent?.includes('vjt-highlight')
+      );
       expect(hasHighlightCSS).toBe(true);
     });
 
@@ -583,11 +589,15 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       wrapper.vm.updateHighlight();
       await nextTick();
 
-      expect(targetElement.classList.contains('vjt-highlight-custom-tour')).toBe(true);
+      expect(
+        targetElement.classList.contains('vjt-highlight-custom-tour')
+      ).toBe(true);
 
       // Verify CSS is loaded in document
       const styles = Array.from(document.querySelectorAll('style'));
-      const hasHighlightCSS = styles.some(s => s.textContent?.includes('vjt-highlight'));
+      const hasHighlightCSS = styles.some((s) =>
+        s.textContent?.includes('vjt-highlight')
+      );
       expect(hasHighlightCSS).toBe(true);
     });
 
@@ -605,11 +615,11 @@ describe('VTour Component - Comprehensive Test Suite', () => {
 
       // Start tour to apply highlight
       await startAndWaitReady(wrapper);
-      
+
       // Wait for highlight to be applied
       await nextTick();
       await flushVue();
-      
+
       // Verify the component added the highlight (default name 'tour' = 'vjt-highlight-tour')
       expect(wrapper.vm.tourVisible).toBe(true);
       expect(targetElement.classList.contains('vjt-highlight-tour')).toBe(true);
@@ -677,7 +687,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       });
 
       await startAndWaitReady(wrapper);
-      
+
       // Backdrop should be visible
       expect(wrapper.vm.backdropVisible).toBe(true);
 
@@ -1308,7 +1318,7 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       expect(wrapper.vm.backdropVisible).toBe(true);
       // Note: Backdrop is teleported to body, so checking vm state is appropriate
       // The actual rendering is tested by the component's template logic
-      
+
       document.body.removeChild(targetDiv);
     });
 
@@ -1482,7 +1492,9 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       expect(wrapper.vm.currentPlacement).toBeDefined();
       // Verify the component's positioning logic updated the placement
       // This tests real behavior: component queries DOM, calls positioning, updates state
-      expect(['top', 'bottom', 'left', 'right']).toContain(wrapper.vm.currentPlacement);
+      expect(['top', 'bottom', 'left', 'right']).toContain(
+        wrapper.vm.currentPlacement
+      );
 
       // Verify component is in correct state after positioning
       expect(wrapper.vm.tourVisible).toBe(true);

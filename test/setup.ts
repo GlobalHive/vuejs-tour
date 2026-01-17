@@ -54,7 +54,7 @@ beforeEach(() => {
     const head = document.createElement('head');
     document.documentElement.insertBefore(head, document.body);
   }
-  
+
   // Re-inject compiled CSS for each test
   if (compiledCSS) {
     const style = document.createElement('style');
