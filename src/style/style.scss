@@ -93,7 +93,7 @@
 }
 
 // Support multiple tour instances with dynamic highlight classes
-[class*="vjt-highlight-"] {
+[class*="vjt-highlight"] {
   outline: $vjt__highlight_outline;
   outline-offset: $vjt__highlight_offset;
   border-radius: $vjt__highlight_outline_radius;
