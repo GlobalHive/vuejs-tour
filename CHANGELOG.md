@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.0.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.6.2...v3.0.0) (2026-01-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* **VTour:** CSS changes, check your custom designs
+    * Prefix tooltip and backdrop IDs with 'vjt-' for consistency
+    * Adjust highlight class naming for better clarity
+
+### Bug Fixes
+
+* **VTour:** update dynamic IDs for tooltips and backdrops ([3898479](https://github.com/GlobalHive/vuejs-tour/commit/3898479755ae705af7c70eb78d141bc28383627d))
+
 ## [2.6.2](https://github.com/GlobalHive/vuejs-tour/compare/v2.6.1...v2.6.2) (2026-01-16)
 
 
