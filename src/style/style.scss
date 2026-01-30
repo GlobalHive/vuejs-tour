@@ -21,7 +21,7 @@
 }
 
 // Support multiple tour instances with dynamic IDs
-[id$="-backdrop"]{
+[id$="-vjt-backdrop"]{
   position: fixed;
   top: 0;
   left: 0;
@@ -35,7 +35,7 @@
   }
 }
 
-[id$="-tooltip"] {
+[id$="-vjt-tooltip"] {
   background-color: $vjt__tooltip_background;
   color: $vjt__tooltip_color;
   padding: 0.5rem;
@@ -48,35 +48,35 @@
 }
 
 
-[id$="-tooltip"][data-arrow^='t'] {
-  [id$="-arrow"] {
+[id$="-vjt-tooltip"][data-arrow^='t'] {
+  [id$="-vjt-arrow"] {
     bottom: math.div(-$vjt__tooltip_arrow_size, 2);
     right: 50%;
   }
 }
 
-[id$="-tooltip"][data-arrow^='b'] {
-  [id$="-arrow"] {
+[id$="-vjt-tooltip"][data-arrow^='b'] {
+  [id$="-vjt-arrow"] {
     top: math.div(-$vjt__tooltip_arrow_size, 2);
     right: 50%;
   }
 }
 
-[id$="-tooltip"][data-arrow^='l'] {
-  [id$="-arrow"] {
+[id$="-vjt-tooltip"][data-arrow^='l'] {
+  [id$="-vjt-arrow"] {
     right: math.div(-$vjt__tooltip_arrow_size, 2);
     top: 50%;
   }
 }
 
-[id$="-tooltip"][data-arrow^='r'] {
-  [id$="-arrow"] {
+[id$="-vjt-tooltip"][data-arrow^='r'] {
+  [id$="-vjt-arrow"] {
     left: math.div(-$vjt__tooltip_arrow_size, 2);
     top: 50%;
   }
 }
 
-[id$="-arrow"] {
+[id$="-vjt-arrow"] {
   width: $vjt__tooltip_arrow_size;
   height: $vjt__tooltip_arrow_size;
   position: absolute;
@@ -93,7 +93,7 @@
 }
 
 // Support multiple tour instances with dynamic highlight classes
-[class*="vjt-highlight-"] {
+[class*="vjt-highlight"] {
   outline: $vjt__highlight_outline;
   outline-offset: $vjt__highlight_offset;
   border-radius: $vjt__highlight_outline_radius;

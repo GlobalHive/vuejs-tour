@@ -90,11 +90,11 @@ const isTransitioning = ref(false); // Hide tooltip during step transitions
 // Empty name = backward compatible IDs (vjt-tooltip, vjt-backdrop)
 // Non-empty name = scoped IDs (vjt-myname-tooltip, vjt-myname-backdrop)
 const tourId = computed(() => (props.name ? `vjt-${props.name}` : 'vjt'));
-const tooltipId = computed(() => `${tourId.value}-tooltip`);
-const backdropId = computed(() => `${tourId.value}-backdrop`);
-const arrowId = computed(() => `${tourId.value}-arrow`);
+const tooltipId = computed(() => `${tourId.value}-vjt-tooltip`);
+const backdropId = computed(() => `${tourId.value}-vjt-backdrop`);
+const arrowId = computed(() => `${tourId.value}-vjt-arrow`);
 const highlightClass = computed(() =>
-  props.name ? `vjt-highlight-${props.name}` : 'vjt-highlight'
+  props.name ? `${props.name}vjt-highlight` : 'vjt-highlight'
 );
 
 // Cache DOM element references (populated after Teleport renders)
