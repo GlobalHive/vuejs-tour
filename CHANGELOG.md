@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/GlobalHive/vuejs-tour/compare/v3.0.0...v3.0.1) (2026-03-17)
+
+
+### Bug Fixes
+
+* **stale:** add required write permissions to stale workflow ([f54e703](https://github.com/GlobalHive/vuejs-tour/commit/f54e703d2812555a05546d67ef817eae604f2846))
+
 ## [3.0.0](https://github.com/GlobalHive/vuejs-tour/compare/v2.6.2...v3.0.0) (2026-01-30)
 
 
