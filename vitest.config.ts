@@ -8,9 +8,15 @@ export default defineConfig({
   plugins: [vue()],
   test: {
     globals: true,
-    environment: 'happy-dom',
+    environment: 'jsdom',
     setupFiles: ['./test/setup.ts', './test/setup/transition.ts'],
-    pool: 'threads',
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true,
+      },
+    },
+    css: true,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],

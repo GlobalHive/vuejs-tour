@@ -1,5 +1,19 @@
 import '@testing-library/jest-dom';
-import { beforeEach, vi } from 'vitest';
+import { beforeAll, beforeEach, vi } from 'vitest';
+import * as sass from 'sass';
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Compile SCSS once before all tests
+let compiledCSS = '';
+beforeAll(() => {
+  const scssPath = path.resolve(__dirname, '../src/style/style.scss');
+  const scssContent = fs.readFileSync(scssPath, 'utf-8');
+  const compiled = sass.compileString(scssContent, {
+    loadPaths: [path.resolve(__dirname, '../src/style')],
+  });
+  compiledCSS = compiled.css;
+});
 
 // Mock nanopop to avoid real DOM positioning
 vi.mock('nanopop', () => ({
@@ -9,9 +23,14 @@ vi.mock('nanopop', () => ({
   })),
 }));
 
-// Mock jump.js if still used
+// Mock jump.js - it takes options with a callback
 vi.mock('jump.js', () => ({
-  default: vi.fn(() => Promise.resolve()),
+  default: vi.fn((target: any, options: any) => {
+    // Call the callback immediately if provided
+    if (options && options.callback) {
+      options.callback();
+    }
+  }),
 }));
 
 // Global test setup
@@ -22,9 +41,26 @@ beforeEach(() => {
   // Reset all mocks
   vi.clearAllMocks();
 
-  // Clean up DOM
-  document.body.innerHTML = '';
-  document.head.innerHTML = '';
+  // Clean up DOM but ensure body exists for Teleport
+  if (document.body) {
+    document.body.innerHTML = '';
+  } else {
+    const body = document.createElement('body');
+    document.documentElement.appendChild(body);
+  }
+  if (document.head) {
+    document.head.innerHTML = '';
+  } else {
+    const head = document.createElement('head');
+    document.documentElement.insertBefore(head, document.body);
+  }
+
+  // Re-inject compiled CSS for each test
+  if (compiledCSS) {
+    const style = document.createElement('style');
+    style.textContent = compiledCSS;
+    document.head.appendChild(style);
+  }
 });
 
 // Mock scrollTo for smooth scrolling tests
