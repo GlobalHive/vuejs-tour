@@ -1,17 +1,20 @@
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - master
   push:
     branches:
       - master
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
 
 name: 1 Release Please
 jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: google-github-actions/release-please-action@e4dc86ba9405554aeba3c6bb2d169500e7d3b4ee
+      - uses: googleapis/release-please-action@v4
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
