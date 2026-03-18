@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
 
       - name: Build
         run : |
@@ -18,7 +18,7 @@ jobs:
           npm run docs:build
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: docs/.vitepress/dist/
         env:

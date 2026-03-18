@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           registry-url: https://registry.npmjs.org/
 
@@ -20,7 +20,7 @@ jobs:
           npm run build-only
 
       - name: Build Sass
-        uses: gha-utilities/sass-build@c15aba209f1cfe51f43e319f2724558112cd9336
+        uses: gha-utilities/sass-build@v0.6.1
         with:
           source: src/style/style.scss
           destination: dist/style.css
