@@ -58,6 +58,29 @@ const getCurrentStep = computed(() => props.steps[currentStepIndex.value]);
 const getLastStep = computed(() => props.steps[lastStepIndex.value]);
 const getNextStep = computed(() => props.steps[nextStepIndex.value]);
 
+const findNextEnabledStep = (startIndex: number): number | undefined => {
+  for (let index = startIndex; index < props.steps.length; index++) {
+    if (props.steps[index]?.enabled !== false) return index;
+  }
+};
+
+const findPreviousEnabledStep = (startIndex: number): number | undefined => {
+  for (let index = startIndex; index >= 0; index--) {
+    if (props.steps[index]?.enabled !== false) return index;
+  }
+};
+
+const getStepNumber = (stepIndex: number): number =>
+  props.steps.slice(0, stepIndex + 1).filter((step) => step.enabled !== false)
+    .length;
+
+const setCurrentStep = (stepIndex: number): void => {
+  currentStepIndex.value = stepIndex;
+  lastStepIndex.value = findPreviousEnabledStep(stepIndex - 1) ?? stepIndex;
+  nextStepIndex.value =
+    findNextEnabledStep(stepIndex + 1) ?? props.steps.length;
+};
+
 // Reactive data structure for compatibility
 const _CurrentStep: VTourData = reactive({
   currentStep: currentStepIndex,
@@ -69,7 +92,10 @@ const _CurrentStep: VTourData = reactive({
 });
 
 const isLastStep = computed(
-  () => currentStepIndex.value === props.steps.length - 1
+  () => findNextEnabledStep(currentStepIndex.value + 1) === undefined
+);
+const enabledStepCount = computed(
+  () => props.steps.filter((step) => step.enabled !== false).length
 );
 
 const getNextLabel = computed(() => {
@@ -140,17 +166,22 @@ const startTour = async (): Promise<void> => {
     await nextTick();
   }
 
+  const firstEnabledStep = findNextEnabledStep(0);
+  if (firstEnabledStep === undefined) {
+    console.warn('No enabled tour steps available');
+    return;
+  }
+
+  let startingStep = firstEnabledStep;
   if (props.saveToLocalStorage === 'step') {
     const savedStep = localStorage.getItem(saveKey.value);
-    currentStepIndex.value = parseInt(savedStep || '0', 10);
-
-    if (currentStepIndex.value > 0) {
-      lastStepIndex.value = Math.max(currentStepIndex.value - 1, 0);
-      nextStepIndex.value = currentStepIndex.value + 1;
-    }
-  } else {
-    currentStepIndex.value = 0;
+    const savedStepIndex = Number.parseInt(savedStep || '0', 10);
+    startingStep =
+      findNextEnabledStep(
+        Number.isFinite(savedStepIndex) ? Math.max(savedStepIndex, 0) : 0
+      ) ?? firstEnabledStep;
   }
+  setCurrentStep(startingStep);
 
   startDelayTimer = setTimeout(async () => {
     await beforeStep(currentStepIndex.value);
@@ -273,20 +304,18 @@ const resetTour = (shouldRestart = false): void => {
 };
 
 const nextStep = async (): Promise<void> => {
-  await beforeStep(nextStepIndex.value);
-
-  // Hide tooltip during transition to prevent content flash
-  isTransitioning.value = true;
-
-  lastStepIndex.value = currentStepIndex.value;
-  currentStepIndex.value++;
-
-  if (currentStepIndex.value > props.steps.length - 1) {
+  const stepIndex = findNextEnabledStep(currentStepIndex.value + 1);
+  if (stepIndex === undefined) {
     endTour();
     return;
   }
 
-  nextStepIndex.value = currentStepIndex.value + 1;
+  await beforeStep(stepIndex);
+
+  // Hide tooltip during transition to prevent content flash
+  isTransitioning.value = true;
+
+  setCurrentStep(stepIndex);
   await updatePosition();
 
   // Show tooltip after positioning is complete
@@ -294,20 +323,15 @@ const nextStep = async (): Promise<void> => {
 };
 
 const lastStep = async (): Promise<void> => {
-  await beforeStep(lastStepIndex.value);
+  const stepIndex = findPreviousEnabledStep(currentStepIndex.value - 1);
+  if (stepIndex === undefined) return;
+
+  await beforeStep(stepIndex);
 
   // Hide tooltip during transition to prevent content flash
   isTransitioning.value = true;
 
-  currentStepIndex.value = lastStepIndex.value;
-  lastStepIndex.value = Math.max(lastStepIndex.value - 1, 0);
-
-  if (currentStepIndex.value < 0) {
-    endTour();
-    return;
-  }
-
-  nextStepIndex.value = currentStepIndex.value + 1;
+  setCurrentStep(stepIndex);
   await updatePosition();
 
   // Show tooltip after positioning is complete
@@ -327,15 +351,17 @@ const goToStep = async (stepIndex: number): Promise<void> => {
     console.warn(`Invalid step index: ${stepIndex}`);
     return;
   }
+  if (props.steps[stepIndex]?.enabled === false) {
+    console.warn(`Cannot navigate to disabled step index: ${stepIndex}`);
+    return;
+  }
 
   await beforeStep(stepIndex);
 
   // Hide tooltip during transition to prevent content flash
   isTransitioning.value = true;
 
-  currentStepIndex.value = stepIndex;
-  lastStepIndex.value = Math.max(stepIndex - 1, 0);
-  nextStepIndex.value = stepIndex + 1;
+  setCurrentStep(stepIndex);
   await updatePosition();
 
   // Show tooltip after positioning is complete
@@ -668,7 +694,8 @@ defineExpose<VTourExposedMethods>({
             aria-atomic="true"
             class="vjt-sr-only"
           >
-            Step {{ currentStepIndex + 1 }} of {{ props.steps.length }}
+            Step {{ getStepNumber(currentStepIndex) }} of
+            {{ enabledStepCount }}
           </div>
 
           <div :id="arrowId" v-if="!hideArrow"></div>
@@ -699,7 +726,7 @@ defineExpose<VTourExposedMethods>({
                 @click.prevent="lastStep"
                 :aria-label="
                   enableA11y
-                    ? `Go to previous step, step ${currentStepIndex} of ${props.steps.length}`
+                    ? `Go to previous step, step ${getStepNumber(lastStepIndex)} of ${enabledStepCount}`
                     : undefined
                 "
               >
@@ -722,7 +749,7 @@ defineExpose<VTourExposedMethods>({
                   enableA11y
                     ? isLastStep
                       ? 'Finish tour'
-                      : `Go to next step, step ${nextStepIndex + 1} of ${props.steps.length}`
+                      : `Go to next step, step ${getStepNumber(nextStepIndex)} of ${enabledStepCount}`
                     : undefined
                 "
               >

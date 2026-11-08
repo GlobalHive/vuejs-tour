@@ -11,6 +11,21 @@ export interface ITourStep {
     onAfter?: () => Promise<void>; // Called after the step is shown
     highlight?: boolean; // Highlight the target element
     backdrop?: boolean; // Show a backdrop if set
+    enabled?: boolean; // Include the step in the tour (defaults to true)
     noScroll?: boolean; // Disable scrolling if set
 }
+```
+
+Use `enabled` to conditionally include a step in the tour. Disabled steps are skipped during navigation:
+
+```typescript
+const shouldShowAccountStep = await loadAccountStatus();
+const steps = [
+    { target: '#welcome', content: 'Welcome!' },
+    {
+        target: '#account',
+        content: 'Review your account',
+        enabled: shouldShowAccountStep,
+    },
+];
 ```
