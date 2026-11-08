@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.0](https://github.com/GlobalHive/vuejs-tour/compare/v3.0.1...v3.1.0) (2026-11-08)
+
+
+### Features
+
+* **VTour:** add support for enabling/disabling steps in the tour ([3eb049c](https://github.com/GlobalHive/vuejs-tour/commit/3eb049c248fe75d640024355b204ad075d497e66))
+* **VTour:** add support for enabling/disabling steps in the tour ([7b079cb](https://github.com/GlobalHive/vuejs-tour/commit/7b079cb315ffea28681e2e520ed9e057d9eb5ce1))
+
 ## [3.0.1](https://github.com/GlobalHive/vuejs-tour/compare/v3.0.0...v3.0.1) (2026-03-17)
 
 
