@@ -51,6 +51,9 @@ export interface ITourStep {
   /** Whether to show backdrop for this step */
   readonly backdrop?: boolean;
 
+  /** Whether this step is included in tour navigation (defaults to true) */
+  readonly enabled?: boolean;
+
   /** Whether to disable auto-scrolling for this step */
   readonly noScroll?: boolean;
 

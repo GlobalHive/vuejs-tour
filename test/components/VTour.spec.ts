@@ -266,6 +266,44 @@ describe('VTour Component - Comprehensive Test Suite', () => {
       expect(wrapper.vm.lastStepIndex).toBe(initialStep);
     });
 
+    it('should skip disabled steps in both navigation directions', async () => {
+      const steps: ITourStep[] = [
+        { target: '#step1', content: 'First' },
+        { target: '#step2', content: 'Disabled', enabled: false },
+        { target: '#step3', content: 'Last' },
+      ];
+      await wrapper.setProps({ steps, noScroll: true });
+
+      await startAndWaitReady(wrapper);
+      expect(wrapper.vm.currentStepIndex).toBe(0);
+
+      await wrapper.vm.nextStep();
+      await waitForStepTransition(wrapper);
+      expect(wrapper.vm.currentStepIndex).toBe(2);
+      expect(
+        document.querySelector('#vjt-tour-tooltip')?.textContent
+      ).toContain('Last');
+
+      await wrapper.vm.lastStep();
+      await waitForStepTransition(wrapper);
+      expect(wrapper.vm.currentStepIndex).toBe(0);
+    });
+
+    it('should start at the first enabled step', async () => {
+      const steps: ITourStep[] = [
+        { target: '#step1', content: 'Disabled', enabled: false },
+        { target: '#step2', content: 'Visible' },
+      ];
+      await wrapper.setProps({ steps, noScroll: true });
+
+      await startAndWaitReady(wrapper);
+
+      expect(wrapper.vm.currentStepIndex).toBe(1);
+      expect(
+        document.querySelector('#vjt-tour-tooltip')?.textContent
+      ).toContain('Visible');
+    });
+
     it('should navigate backwards using lastStep', async () => {
       // Navigate to step 2
       await wrapper.vm.goToStep(2);
